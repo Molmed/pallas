@@ -46,4 +46,25 @@ If you are re-training or validating PALLAS, you can optionally provide a tab-se
 
 ## Training
 
-1. Split your dataset by running: `python training/split.py --features_path=/path/to/preprocessed/counts.csv --target_path=/path/to/pheno.tsv --output_dir=/path/to/output_dir`
+### Splitting data
+
+Split your known-subtype dataset into training and test subsets by running:
+`python training/split.py --features_path=/path/to/preprocessed/counts.csv --target_path=/path/to/pheno.tsv --output_dir=/path/to/output_dir`
+
+For further information about the parameters:
+`python training/split.py --help`
+
+### Configure MLflow
+
+To upload your PALLAS training runs to an MLflow instance of your choice:
+
+1. Copy `training/mlflow.env.example` to `training/mlflow.env` and edit it with your own values
+1. Specify the `--enable-mlflow` parameter when training the models (see below)
+
+### Train
+
+Train a model with e.g.:
+`python training/split.py --input_dir=/path/to/split/data/dir --output_dir=/path/to/output_dir --hiclass-classifier=LocalClassifierPerNode --local-classifier=RandomForestClassifier --enable-mlflow`
+
+For further information about the parameters:
+`python training/train.py --help`

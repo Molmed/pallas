@@ -1,4 +1,3 @@
-import os
 import argparse
 import pandas
 from sklearn.model_selection import train_test_split
