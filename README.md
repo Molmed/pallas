@@ -46,6 +46,4 @@ If you are re-training or validating PALLAS, you can optionally provide a tab-se
 
 ## Training
 
-1. Split your dataset by running: `python training/split.py --features_path=/home/mariya/Data/pallas/processed/stjude_cloud.pallas.counts.transposed.csv --target_path=/home/mariya/Data/pallas/processed/stjude_cloud.pallas.pheno.tsv --output_dir=/home/mariya/Data/pallas/processed`
-
-You can re-run the training scripts with `python -m training.EXPERIMENT_NAME`
+1. Split your dataset by running: `python training/split.py --features_path=/path/to/preprocessed/counts.csv --target_path=/path/to/pheno.tsv --output_dir=/path/to/output_dir`
