@@ -26,8 +26,7 @@ description = """
 Trains a hiclass classifier on GEX or DNAm data.
 """
 
-modality_help = f"""
-Modality of the data. Accepted values are: {', '.join(MODALITIES)}."""
+modality_help = """Modality of the data."""
 
 input_dir_help = """
 Path to directory containing the following files:
@@ -37,9 +36,7 @@ pallas.test.X.csv, pallas.test.y.tsv"""
 output_dir_help = """
 Directory to save the trained models."""
 
-hiclass_classifier_help = f"""
-Name of hiclass classifier to use. Accepted values are:
-{(',').join(HICLASS_CLASSIFIER_NAMES)}."""
+hiclass_classifier_help = """Name of hiclass classifier to use."""
 
 local_classifier_help = f"""
 Name of local classifier to use at each node of the hiclass classifier.
@@ -53,6 +50,13 @@ The file `mlflow.env` must exist in the 'training' directory."""
 
 def parse_args():
     parser = argparse.ArgumentParser(description=description)
+    parser.add_argument(
+        "--modality",
+        type=str,
+        required=True,
+        choices=MODALITIES,
+        help=modality_help,
+    )
     parser.add_argument(
         "--input_dir",
         type=str,
@@ -69,12 +73,14 @@ def parse_args():
         "--hiclass-classifier",
         type=str,
         required=True,
+        choices=HICLASS_CLASSIFIER_NAMES,
         help=hiclass_classifier_help,
     )
     parser.add_argument(
         "--local-classifier",
         type=str,
         required=True,
+        choices=LOCAL_CLASSIFIER_NAMES,
         help=local_classifier_help,
     )
     parser.add_argument(
@@ -87,6 +93,7 @@ def parse_args():
 
 
 def train_hiclass_classifier(
+        modality,
         input_dir,
         output_dir,
         hiclass_classifier,
@@ -94,6 +101,7 @@ def train_hiclass_classifier(
         enable_mlflow):
 
     print("Training hiclass with the following arguments:")
+    print(f"Modality: {modality}")
     print(f"Input directory: {input_dir}")
     print(f"Output directory: {output_dir}")
     print(f"Hiclass classifier: {hiclass_classifier}")
@@ -112,18 +120,6 @@ def train_hiclass_classifier(
         raise FileNotFoundError(
             f"Output directory {output_dir} does not exist.")
 
-    # Check that hiclass classifier is valid
-    if hiclass_classifier not in HICLASS_CLASSIFIER_NAMES:
-        raise ValueError(
-            f"Hiclass classifier {hiclass_classifier} is not valid. "
-            f"Accepted values are: {(',').join(HICLASS_CLASSIFIER_NAMES)}.")
-
-    # Check that local classifier is valid
-    if local_classifier not in LOCAL_CLASSIFIER_NAMES:
-        raise ValueError(
-            f"Local classifier {local_classifier} is not valid. "
-            f"Accepted values are: {(',').join(LOCAL_CLASSIFIER_NAMES)}.")
-
     # If mlflow is enabled, check that the mlflow.env file exists
     if enable_mlflow:
         mlflow_env_path = os.path.join(os.path.dirname(__file__), "mlflow.env")
@@ -135,6 +131,7 @@ def train_hiclass_classifier(
 def main():
     args = parse_args()
     train_hiclass_classifier(
+        modality=args.modality,
         input_dir=args.input_dir,
         output_dir=args.output_dir,
         hiclass_classifier=args.hiclass_classifier,
