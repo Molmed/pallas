@@ -1,5 +1,26 @@
 import argparse
 import os
+import pandas as pd
+from dotenv import load_dotenv
+import pickle
+
+# MLflow
+import mlflow
+from mlflow.models import infer_signature
+from mlflow import MlflowClient
+
+# Classifiers
+from hiclass import LocalClassifierPerNode, \
+    LocalClassifierPerParentNode, LocalClassifierPerLevel
+from xgboost import XGBClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
+
+# Preprocessors
+from sklearn.preprocessing import LabelEncoder
+
+# Metrics
+from hiclass.metrics import precision, recall, f1
 
 MODALITIES = ["GEX", "DNAm"]
 
@@ -121,11 +142,107 @@ def train_hiclass_classifier(
             f"Output directory {output_dir} does not exist.")
 
     # If mlflow is enabled, check that the mlflow.env file exists
+    mlflow_env_path = None
     if enable_mlflow:
         mlflow_env_path = os.path.join(os.path.dirname(__file__), "mlflow.env")
         if not os.path.exists(mlflow_env_path):
             raise FileNotFoundError(
                 f"MLflow environment file {mlflow_env_path} does not exist.")
+
+    # Set up model name
+    model_name = f"pallas_{modality}_{hiclass_classifier}_{local_classifier}"
+
+    X_train = f'{input_dir}/pallas.train.X.csv'
+    y_train = f'{input_dir}/pallas.train.y.tsv'
+    X_test = f'{input_dir}/pallas.test.X.csv'
+    y_test = f'{input_dir}/pallas.test.y.tsv'
+
+    # Read the features and target data
+    X_train = pd.read_csv(X_train, header=0, index_col=0)
+    y_train = pd.read_csv(y_train, sep="\t", header=0, index_col=0)
+    X_test = pd.read_csv(X_test, header=0, index_col=0)
+    y_test = pd.read_csv(y_test, sep="\t", header=0, index_col=0)
+
+    # Instantiate the local model
+    model_class = globals()[local_classifier]
+
+    # If xgboost, we need to encode the labels
+    label_encoder = None
+    params = {}
+    if local_classifier == "XGBClassifier":
+        label_encoder = LabelEncoder()
+        y_train = label_encoder.fit_transform(y_train)
+        params = {
+            "objective": "multi:softmax",
+            "num_class": len(label_encoder.classes_),
+        }
+        le_pkl = f'{output_dir}/{model_name}.label_encoder.pkl'
+        with open(le_pkl, 'wb') as f:
+            pickle.dump(label_encoder, f)
+
+    # Instantiate the local model
+    model = model_class(**params)
+
+    hiclass_classifier_class = globals()[hiclass_classifier]
+    classifier = hiclass_classifier_class(
+        local_classifier=model,
+        verbose=True)
+
+    classifier.fit(X_train, y_train)
+
+    classifier_pkl = f'{output_dir}/{model_name}.classifier.pkl'
+    with open(classifier_pkl, 'wb') as f:
+        pickle.dump(classifier, f)
+
+    # Get the metrics
+    predictions = classifier.predict(X_test)
+
+    # Decode if necessary
+    if label_encoder is not None:
+        predictions = label_encoder.inverse_transform(predictions)
+
+    precision_score = precision(y_test, predictions)
+    recall_score = recall(y_test, predictions)
+    f1_score = f1(y_test, predictions)
+
+    print(f"Precision: {precision_score}")
+    print(f"Recall: {recall_score}")
+    print(f"F1: {f1_score}")
+
+    # Start an MLflow run
+    if enable_mlflow:
+        load_dotenv(dotenv_path=mlflow_env_path)
+
+        with mlflow.start_run():
+            # Log the hyperparameters
+            mlflow.log_params(model.get_params())
+
+            # Log the loss metric
+            mlflow.log_metric("precision", precision_score)
+            mlflow.log_metric("recall", recall_score)
+            mlflow.log_metric("f1", f1_score)
+
+            mlflow.set_tag("modality", modality)
+            mlflow.set_tag("hiclass_classifier", hiclass_classifier)
+            mlflow.set_tag("local_classifier", local_classifier)
+
+            # Infer the model signature
+            signature = infer_signature(X_train, classifier.predict(X_train))
+
+            # Log the model
+            mlflow.sklearn.log_model(
+                sk_model=classifier,
+                artifact_path="model",
+                signature=signature,
+                input_example=X_train,
+                registered_model_name=model_name,
+            )
+
+            if label_encoder is not None:
+                mlflow.log_artifact(
+                    local_path=le_pkl,
+                    artifact_path="label_encoder",
+                )
 
 
 def main():
