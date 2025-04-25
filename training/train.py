@@ -163,6 +163,14 @@ def train_hiclass_classifier(
     X_test = pd.read_csv(X_test, header=0, index_col=0)
     y_test = pd.read_csv(y_test, sep="\t", header=0, index_col=0)
 
+    # Split the labels into lists
+    y_train = y_train['y'].apply(lambda x: x.split(','))
+    y_test = y_test['y'].apply(lambda x: x.split(','))
+
+    # Get just the y col
+    y_train = y_train.values
+    y_test = y_test.values
+
     # Instantiate the local model
     model_class = globals()[local_classifier]
 
