@@ -7,7 +7,6 @@ import pickle
 # MLflow
 import mlflow
 from mlflow.models import infer_signature
-from mlflow import MlflowClient
 
 # Classifiers
 from hiclass import LocalClassifierPerNode, \
@@ -15,9 +14,6 @@ from hiclass import LocalClassifierPerNode, \
 from xgboost import XGBClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
-
-# Preprocessors
-from sklearn.preprocessing import LabelEncoder
 
 # Metrics
 from hiclass.metrics import precision, recall, f1
@@ -210,20 +206,7 @@ def train_hiclass_classifier(
 
     # Instantiate the local model
     model_class = globals()[local_classifier]
-
-    # If xgboost, we need to encode the labels
-    label_encoder = None
     params = {}
-    if local_classifier == "XGBClassifier":
-        label_encoder = LabelEncoder()
-        y_train = label_encoder.fit_transform(y_train)
-        params = {
-            "objective": "multi:softmax",
-            "num_class": len(label_encoder.classes_),
-        }
-        le_pkl = f'{output_dir}/{model_name}.label_encoder.pkl'
-        with open(le_pkl, 'wb') as f:
-            pickle.dump(label_encoder, f)
 
     # Instantiate the local model
     model = model_class(**params)
@@ -233,7 +216,7 @@ def train_hiclass_classifier(
         local_classifier=model,
         verbose=True)
 
-    classifier.fit(X_train, y_train)
+    classifier.fit(X_train, y_train, sample_weight=None)
 
     classifier_pkl = f'{output_dir}/{model_name}.classifier.pkl'
     with open(classifier_pkl, 'wb') as f:
@@ -241,11 +224,6 @@ def train_hiclass_classifier(
 
     # Get the metrics
     predictions = classifier.predict(X_test)
-
-    # Decode if necessary
-    if label_encoder is not None:
-        predictions = label_encoder.inverse_transform(predictions)
-
     precision_score = precision(y_test, predictions)
     recall_score = recall(y_test, predictions)
     f1_score = f1(y_test, predictions)
@@ -282,12 +260,6 @@ def train_hiclass_classifier(
                 input_example=X_train,
                 registered_model_name=model_name,
             )
-
-            if label_encoder is not None:
-                mlflow.log_artifact(
-                    local_path=le_pkl,
-                    artifact_path="label_encoder",
-                )
 
 
 def main():
