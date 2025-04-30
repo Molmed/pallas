@@ -126,6 +126,13 @@ def train_hiclass_classifiers(
     if local_classifier is not None:
         local_classifiers = [local_classifier]
 
+    # XGBoost classifier only compatible with LocalClassifierPerNode
+    if local_classifier == "XGBClassifier" and \
+            "LocalClassifierPerNode" not in hiclass_classifiers:
+        err = """XGBoost classifier is only compatible
+        with LocalClassifierPerNode."""
+        raise ValueError(err)
+
     print("Training hiclass with the following arguments:")
     print(f"Modality: {modality}")
     print(f"Input directory: {input_dir}")
@@ -175,17 +182,23 @@ def train_hiclass_classifiers(
 
     for hiclass_classifier in hiclass_classifiers:
         for local_classifier in local_classifiers:
-            train_hiclass_classifier(
-                X_train=X_train,
-                y_train=y_train,
-                X_test=X_test,
-                y_test=y_test,
-                modality=modality,
-                output_dir=output_dir,
-                hiclass_classifier=hiclass_classifier,
-                local_classifier=local_classifier,
-                mlflow_env_path=mlflow_env_path,
-            )
+            do_train = True
+            if local_classifier == "XGBClassifier" and \
+                    hiclass_classifier != "LocalClassifierPerNode":
+                print(f"Skipping {hiclass_classifier} with {local_classifier}")
+                do_train = False
+            if do_train:
+                train_hiclass_classifier(
+                    X_train=X_train,
+                    y_train=y_train,
+                    X_test=X_test,
+                    y_test=y_test,
+                    modality=modality,
+                    output_dir=output_dir,
+                    hiclass_classifier=hiclass_classifier,
+                    local_classifier=local_classifier,
+                    mlflow_env_path=mlflow_env_path,
+                )
 
 
 def train_hiclass_classifier(
