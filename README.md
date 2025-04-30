@@ -63,8 +63,11 @@ To upload your PALLAS training runs to an MLflow instance of your choice:
 
 ### Train
 
-Train a model with e.g.:
-`python training/split.py --input_dir=/path/to/split/data/dir --output_dir=/path/to/output_dir --hiclass-classifier=LocalClassifierPerNode --local-classifier=RandomForestClassifier --enable-mlflow`
+To train all the available models, run:
+`python training/train.py --modality=DNAm --input_dir=/path/to/split/data/dir --output_dir=/path/to/output_dir --enable-mlflow`
+
+Train a single model run e.g.:
+`python training/train.py --modality=GEX --input_dir=/path/to/split/data/dir --output_dir=/path/to/output_dir --hiclass-classifier=LocalClassifierPerNode --local-classifier=RandomForestClassifier --enable-mlflow`
 
 For further information about the parameters:
 `python training/train.py --help`
