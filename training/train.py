@@ -235,8 +235,10 @@ def train_hiclass_classifier(
     # Start an MLflow run
     if mlflow_env_path is not None:
         load_dotenv(dotenv_path=mlflow_env_path)
+        timenow = pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S")
+        run_name = f"{model_name} {timenow}"
 
-        with mlflow.start_run():
+        with mlflow.start_run(run_name=run_name):
             # Log the hyperparameters
             mlflow.log_params(model.get_params())
 
