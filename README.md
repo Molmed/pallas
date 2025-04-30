@@ -71,3 +71,7 @@ Train a single model run e.g.:
 
 For further information about the parameters:
 `python training/train.py --help`
+
+### Get reports
+
+`python training/report.py --input_data_dir=/path/to/split/data/dir --input_models_dir=/path/to/trained/models/dir --output_dir=/path/to/output_dir`
