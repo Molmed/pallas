@@ -57,11 +57,12 @@ pallas.test.X.csv, pallas.test.y.tsv"""
 output_dir_help = """
 Directory to save the trained models."""
 
-hiclass_classifier_help = """Name of hiclass classifier to use."""
+hiclass_classifier_help = """Name of hiclass classifier to use.
+If not specified, will train all available hiclass classifiers."""
 
-local_classifier_help = f"""
+local_classifier_help = """
 Name of local classifier to use at each node of the hiclass classifier.
-Accepted values are: {(',').join(LOCAL_CLASSIFIER_NAMES)}."""
+If not specified, will train all available local classifiers."""
 
 enable_mlflow_help = """
 Enable MLflow logging. If set, the model will be logged to MLflow
@@ -93,14 +94,12 @@ def parse_args():
     parser.add_argument(
         "--hiclass-classifier",
         type=str,
-        required=True,
         choices=HICLASS_CLASSIFIER_NAMES,
         help=hiclass_classifier_help,
     )
     parser.add_argument(
         "--local-classifier",
         type=str,
-        required=True,
         choices=LOCAL_CLASSIFIER_NAMES,
         help=local_classifier_help,
     )
@@ -113,7 +112,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def train_hiclass_classifier(
+def train_hiclass_classifiers(
         modality,
         input_dir,
         output_dir,
@@ -121,12 +120,22 @@ def train_hiclass_classifier(
         local_classifier,
         enable_mlflow):
 
+    # hiclass classifiers to train
+    hiclass_classifiers = HICLASS_CLASSIFIER_NAMES
+    if hiclass_classifier is not None:
+        hiclass_classifiers = [hiclass_classifier]
+
+    # local classifiers to train
+    local_classifiers = LOCAL_CLASSIFIER_NAMES
+    if local_classifier is not None:
+        local_classifiers = [local_classifier]
+
     print("Training hiclass with the following arguments:")
     print(f"Modality: {modality}")
     print(f"Input directory: {input_dir}")
     print(f"Output directory: {output_dir}")
-    print(f"Hiclass classifier: {hiclass_classifier}")
-    print(f"Local classifier: {local_classifier}")
+    print(f"Hiclass classifier(s): {', '.join(hiclass_classifiers)}")
+    print(f"Local classifier(s): {', '.join(local_classifiers)}")
     print(f"Enable MLflow: {enable_mlflow}")
 
     # Test that all required files exist
@@ -149,9 +158,6 @@ def train_hiclass_classifier(
             raise FileNotFoundError(
                 f"MLflow environment file {mlflow_env_path} does not exist.")
 
-    # Set up model name
-    model_name = f"pallas_{modality}_{hiclass_classifier}_{local_classifier}"
-
     X_train = f'{input_dir}/pallas.train.X.csv'
     y_train = f'{input_dir}/pallas.train.y.tsv'
     X_test = f'{input_dir}/pallas.test.X.csv'
@@ -170,6 +176,37 @@ def train_hiclass_classifier(
     # Get just the y col
     y_train = y_train.values
     y_test = y_test.values
+
+    for hiclass_classifier in hiclass_classifiers:
+        for local_classifier in local_classifiers:
+            train_hiclass_classifier(
+                X_train=X_train,
+                y_train=y_train,
+                X_test=X_test,
+                y_test=y_test,
+                modality=modality,
+                output_dir=output_dir,
+                hiclass_classifier=hiclass_classifier,
+                local_classifier=local_classifier,
+                mlflow_env_path=mlflow_env_path,
+            )
+
+
+def train_hiclass_classifier(
+        X_train,
+        y_train,
+        X_test,
+        y_test,
+        modality,
+        output_dir,
+        hiclass_classifier,
+        local_classifier,
+        mlflow_env_path):
+
+    # Set up model name
+    model_name = f"pallas_{modality}_{hiclass_classifier}_{local_classifier}"
+
+    print(f"Training model {model_name}...")
 
     # Instantiate the local model
     model_class = globals()[local_classifier]
@@ -218,7 +255,7 @@ def train_hiclass_classifier(
     print(f"F1: {f1_score}")
 
     # Start an MLflow run
-    if enable_mlflow:
+    if mlflow_env_path is not None:
         load_dotenv(dotenv_path=mlflow_env_path)
 
         with mlflow.start_run():
@@ -255,7 +292,7 @@ def train_hiclass_classifier(
 
 def main():
     args = parse_args()
-    train_hiclass_classifier(
+    train_hiclass_classifiers(
         modality=args.modality,
         input_dir=args.input_dir,
         output_dir=args.output_dir,
