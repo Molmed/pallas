@@ -145,7 +145,7 @@ def train_hiclass_classifiers(
     ]
     REQUIRED_X_FILE_SUFFIXES = [
         "csv",
-        "tsv",
+        "pkl",
     ]
     REQUIRED_Y_FILES = [
         "pallas.train.y.tsv",
