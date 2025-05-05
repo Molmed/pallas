@@ -7,10 +7,10 @@ description = """
 Split data into train and test sets."""
 
 features_path_help = """
-Path to the features file (CSV), indexed by column 'id'."""
+Path to the features file (.csv or .pkl), indexed by column 'id'."""
 
 target_path_help = """
-Path to the hierarchical target file (TSV), containing columns 'id'
+Path to the hierarchical target file (.tsv), containing columns 'id'
 and hierarchical, comma-separated 'y'."""
 
 output_dir_help = """
@@ -85,7 +85,21 @@ def split_data(features_path,
     print(f"Random state: {random_state}")
 
     # Read the features and target data
-    features = pandas.read_csv(features_path, header=0, index_col=0)
+
+    # Check if the features file is in CSV format or pkl format
+    features_format = None
+    if features_path.endswith('.pkl'):
+        features = pandas.read_pickle(features_path)
+        features_format = 'pkl'
+    elif features_path.endswith('.csv'):
+        features = pandas.read_csv(features_path, header=0, index_col=0)
+        features_format = 'csv'
+    else:
+        raise ValueError("Features file must be in CSV or pkl format.")
+
+    # Check if the target file is in tsv format, otherwise raise an error
+    if not target_path.endswith('.tsv'):
+        raise ValueError("Target file must be in .tsv format.")
     target = pandas.read_csv(target_path, sep="\t", header=0, index_col=0)
 
     # Merge the features and target data on the index
@@ -111,8 +125,14 @@ def split_data(features_path,
         stratify=y)
 
     # Save train and test data
-    X_train.to_csv(f'{output_dir}/pallas.train.X.csv')
-    X_test.to_csv(f'{output_dir}/pallas.test.X.csv')
+    if features_format == 'csv':
+        X_train.to_csv(f'{output_dir}/pallas.train.X.csv')
+        X_test.to_csv(f'{output_dir}/pallas.test.X.csv')
+    elif features_format == 'pkl':
+        X_train.to_pickle(f'{output_dir}/pallas.train.X.pkl')
+        X_test.to_pickle(f'{output_dir}/pallas.test.X.pkl')
+    else:
+        raise ValueError("Unsupported features format.")
     y_train.to_csv(f'{output_dir}/pallas.train.y.tsv', sep='\t')
     y_test.to_csv(f'{output_dir}/pallas.test.y.tsv', sep='\t')
 

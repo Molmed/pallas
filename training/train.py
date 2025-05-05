@@ -20,13 +20,6 @@ from hiclass.metrics import precision, recall, f1
 
 MODALITIES = ["GEX", "DNAm"]
 
-REQUIRED_FILES = [
-    "pallas.train.X.csv",
-    "pallas.train.y.tsv",
-    "pallas.test.X.csv",
-    "pallas.test.y.tsv",
-]
-
 HICLASS_CLASSIFIER_NAMES = [
     "LocalClassifierPerNode",
     "LocalClassifierPerParentNode",
@@ -46,9 +39,7 @@ Trains a hiclass classifier on GEX or DNAm data.
 modality_help = """Modality of the data."""
 
 input_dir_help = """
-Path to directory containing the following files:
-pallas.train.X.csv, pallas.train.y.tsv,
-pallas.test.X.csv, pallas.test.y.tsv"""
+Path to directory containing files output by the split.py script."""
 
 output_dir_help = """
 Directory to save the trained models."""
@@ -142,11 +133,48 @@ def train_hiclass_classifiers(
     print(f"Enable MLflow: {enable_mlflow}")
 
     # Test that all required files exist
-    for file_name in REQUIRED_FILES:
+    features_format = None
+
+    def file_exists(file_name):
         file_path = f"{input_dir}/{file_name}"
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(
-                f"Required file {file_path} does not exist.")
+        return os.path.exists(file_path)
+
+    REQUIRED_X_FILE_PREFIXES = [
+        "pallas.train.X",
+        "pallas.test.X",
+    ]
+    REQUIRED_X_FILE_SUFFIXES = [
+        "csv",
+        "tsv",
+    ]
+    REQUIRED_Y_FILES = [
+        "pallas.train.y.tsv",
+        "pallas.test.y.tsv",
+    ]
+    all_required_files_exist = True
+
+    for file_name in REQUIRED_Y_FILES:
+        if not file_exists(file_name):
+            all_required_files_exist = False
+            print(f"Required file {file_name} does not exist.")
+
+    for prefix in REQUIRED_X_FILE_PREFIXES:
+        x_file_found = False
+        for suffix in REQUIRED_X_FILE_SUFFIXES:
+            file_name = f"{prefix}.{suffix}"
+            if file_exists(file_name):
+                x_file_found = True
+                features_format = suffix
+                break
+        if not x_file_found:
+            all_required_files_exist = False
+            print(f"""Required file
+                  {prefix}.[{(','.join(REQUIRED_X_FILE_SUFFIXES))}]
+                  does not exist.""")
+
+    if not all_required_files_exist:
+        raise FileNotFoundError(
+            f"Required files do not exist in {input_dir}.")
 
     # Check that output directory exists
     if not os.path.exists(output_dir):
@@ -161,16 +189,24 @@ def train_hiclass_classifiers(
             raise FileNotFoundError(
                 f"MLflow environment file {mlflow_env_path} does not exist.")
 
-    X_train = f'{input_dir}/pallas.train.X.csv'
+    X_train = f'{input_dir}/pallas.train.X.{features_format}'
     y_train = f'{input_dir}/pallas.train.y.tsv'
-    X_test = f'{input_dir}/pallas.test.X.csv'
+    X_test = f'{input_dir}/pallas.test.X.{features_format}'
     y_test = f'{input_dir}/pallas.test.y.tsv'
 
     # Read the features and target data
-    X_train = pd.read_csv(X_train, header=0, index_col=0)
     y_train = pd.read_csv(y_train, sep="\t", header=0, index_col=0)
-    X_test = pd.read_csv(X_test, header=0, index_col=0)
     y_test = pd.read_csv(y_test, sep="\t", header=0, index_col=0)
+
+    # Check if the features file is in CSV format or pkl format
+    if features_format == 'csv':
+        X_train = pd.read_csv(X_train, header=0, index_col=0)
+        X_test = pd.read_csv(X_test, header=0, index_col=0)
+    elif features_format == 'pkl':
+        X_train = pd.read_pickle(X_train)
+        X_test = pd.read_pickle(X_test)
+    else:
+        raise ValueError("Features file must be in CSV or pkl format.")
 
     # Split the labels into lists
     y_train = y_train['y'].apply(lambda x: x.split(','))
