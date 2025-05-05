@@ -308,7 +308,6 @@ def train_hiclass_classifier(
                 sk_model=classifier,
                 artifact_path="model",
                 signature=signature,
-                input_example=X_train,
                 registered_model_name=model_name,
             )
 
