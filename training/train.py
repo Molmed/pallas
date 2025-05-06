@@ -275,14 +275,25 @@ def train_hierarchical_classifier(
     model_class = globals()[local_classifier]
     params = {}
 
+    if local_classifier == "XGBClassifier":
+        params = {
+            "objective": "multi:softmax",
+            "use_label_encoder": False,
+        }
+
     # Instantiate the local model
     model = model_class(**params)
+
+    def flatten_labels(y_list):
+        # return disease (item at index 1) and subtype (last item)
+        # joined by underscore
+        return ["_".join([y[1], y[-1]]) for y in y_list]
 
     if hierarchical_classifier == FLAT_CLASSIFIER_NAME:
         classifier = model
         # Collapse the lists of labels into a single label
-        y_train = [','.join(y) for y in y_train]
-        y_test = [','.join(y) for y in y_test]
+        y_train = flatten_labels(y_train)
+        y_test = flatten_labels(y_test)
     else:
         hierarchical_classifier_class = globals()[hierarchical_classifier]
         classifier = hierarchical_classifier_class(
