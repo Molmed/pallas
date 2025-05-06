@@ -20,7 +20,10 @@ from hiclass.metrics import precision, recall, f1
 
 MODALITIES = ["GEX", "DNAm"]
 
-HICLASS_CLASSIFIER_NAMES = [
+FLAT_CLASSIFIER_NAME = "FlatClassifier"
+
+HIERARCHICAL_CLASSIFIER_NAMES = [
+    FLAT_CLASSIFIER_NAME,
     "LocalClassifierPerNode",
     "LocalClassifierPerParentNode",
     "LocalClassifierPerLevel",
@@ -44,8 +47,8 @@ Path to directory containing files output by the split.py script."""
 output_dir_help = """
 Directory to save the trained models."""
 
-hiclass_classifier_help = """Name of hiclass classifier to use.
-If not specified, will train all available hiclass classifiers."""
+hierarchical_classifier_help = """Name of hierarchical classifier to use.
+If not specified, will train all available hierarchical classifiers."""
 
 local_classifier_help = """
 Name of local classifier to use at each node of the hiclass classifier.
@@ -82,10 +85,10 @@ def parse_args():
         help=output_dir_help,
     )
     parser.add_argument(
-        "--hiclass-classifier",
+        "--hierarchical-classifier",
         type=str,
-        choices=HICLASS_CLASSIFIER_NAMES,
-        help=hiclass_classifier_help,
+        choices=HIERARCHICAL_CLASSIFIER_NAMES,
+        help=hierarchical_classifier_help,
     )
     parser.add_argument(
         "--local-classifier",
@@ -108,37 +111,30 @@ def parse_args():
     return parser.parse_args()
 
 
-def train_hiclass_classifiers(
+def train_hierarchical_classifiers(
         modality,
         input_dir,
         output_dir,
-        hiclass_classifier,
+        hierarchical_classifier,
         local_classifier,
         enable_mlflow,
         force):
 
     # hiclass classifiers to train
-    hiclass_classifiers = HICLASS_CLASSIFIER_NAMES
-    if hiclass_classifier is not None:
-        hiclass_classifiers = [hiclass_classifier]
+    hierarchical_classifiers = HIERARCHICAL_CLASSIFIER_NAMES
+    if hierarchical_classifier is not None:
+        hierarchical_classifiers = [hierarchical_classifier]
 
     # local classifiers to train
     local_classifiers = LOCAL_CLASSIFIER_NAMES
     if local_classifier is not None:
         local_classifiers = [local_classifier]
 
-    # XGBoost classifier only compatible with LocalClassifierPerNode
-    if local_classifier == "XGBClassifier" and \
-            "LocalClassifierPerNode" not in hiclass_classifiers:
-        err = """XGBoost classifier is only compatible
-        with LocalClassifierPerNode."""
-        raise ValueError(err)
-
     print("Training hiclass with the following arguments:")
     print(f"Modality: {modality}")
     print(f"Input directory: {input_dir}")
     print(f"Output directory: {output_dir}")
-    print(f"Hiclass classifier(s): {', '.join(hiclass_classifiers)}")
+    print(f"Hierarchical classifier(s): {', '.join(hierarchical_classifiers)}")
     print(f"Local classifier(s): {', '.join(local_classifiers)}")
     print(f"Enable MLflow: {enable_mlflow}")
     print(f"Force overwrite: {force}")
@@ -227,17 +223,19 @@ def train_hiclass_classifiers(
     y_train = y_train.values
     y_test = y_test.values
 
-    for hiclass_classifier in hiclass_classifiers:
+    for hierarchical_classifier in hierarchical_classifiers:
         for local_classifier in local_classifiers:
             # Set up model name and path
-            model_name = f"""pallas_{modality}_{hiclass_classifier}_{
+            model_name = f"""pallas_{modality}_{hierarchical_classifier}_{
                 local_classifier}"""
             model_path = f"{output_dir}/{model_name}.classifier.pkl"
 
             do_train = True
             if local_classifier == "XGBClassifier" and \
-                    hiclass_classifier != "LocalClassifierPerNode":
-                print(f"Skipping {hiclass_classifier} with {local_classifier}")
+                hierarchical_classifier != "LocalClassifierPerNode" and \
+                    hierarchical_classifier != "FlatClassifier":
+                print(f"""Skipping {
+                    hierarchical_classifier} with {local_classifier}""")
                 do_train = False
 
             if os.path.exists(model_path) and not force:
@@ -245,7 +243,7 @@ def train_hiclass_classifiers(
                 do_train = False
 
             if do_train:
-                train_hiclass_classifier(
+                train_hierarchical_classifier(
                     model_name=model_name,
                     model_path=model_path,
                     X_train=X_train,
@@ -253,13 +251,13 @@ def train_hiclass_classifiers(
                     X_test=X_test,
                     y_test=y_test,
                     modality=modality,
-                    hiclass_classifier=hiclass_classifier,
+                    hierarchical_classifier=hierarchical_classifier,
                     local_classifier=local_classifier,
                     mlflow_env_path=mlflow_env_path,
                 )
 
 
-def train_hiclass_classifier(
+def train_hierarchical_classifier(
         model_name,
         model_path,
         X_train,
@@ -267,7 +265,7 @@ def train_hiclass_classifier(
         X_test,
         y_test,
         modality,
-        hiclass_classifier,
+        hierarchical_classifier,
         local_classifier,
         mlflow_env_path):
 
@@ -280,10 +278,16 @@ def train_hiclass_classifier(
     # Instantiate the local model
     model = model_class(**params)
 
-    hiclass_classifier_class = globals()[hiclass_classifier]
-    classifier = hiclass_classifier_class(
-        local_classifier=model,
-        verbose=True)
+    if hierarchical_classifier == FLAT_CLASSIFIER_NAME:
+        classifier = model
+        # Collapse the lists of labels into a single label
+        y_train = [','.join(y) for y in y_train]
+        y_test = [','.join(y) for y in y_test]
+    else:
+        hierarchical_classifier_class = globals()[hierarchical_classifier]
+        classifier = hierarchical_classifier_class(
+            local_classifier=model,
+            verbose=True)
 
     classifier.fit(X_train, y_train, sample_weight=None)
 
@@ -292,6 +296,8 @@ def train_hiclass_classifier(
 
     # Get the metrics
     predictions = classifier.predict(X_test)
+    print(f"Predictions: {predictions}")
+    print(f"y_test: {y_test}")
     precision_score = precision(y_test, predictions)
     recall_score = recall(y_test, predictions)
     f1_score = f1(y_test, predictions)
@@ -316,7 +322,7 @@ def train_hiclass_classifier(
             mlflow.log_metric("f1", f1_score)
 
             mlflow.set_tag("modality", modality)
-            mlflow.set_tag("hiclass_classifier", hiclass_classifier)
+            mlflow.set_tag("hierarchical_classifier", hierarchical_classifier)
             mlflow.set_tag("local_classifier", local_classifier)
 
             # Infer the model signature
@@ -333,11 +339,11 @@ def train_hiclass_classifier(
 
 def main():
     args = parse_args()
-    train_hiclass_classifiers(
+    train_hierarchical_classifiers(
         modality=args.modality,
         input_dir=args.input_dir,
         output_dir=args.output_dir,
-        hiclass_classifier=args.hiclass_classifier,
+        hierarchical_classifier=args.hierarchical_classifier,
         local_classifier=args.local_classifier,
         enable_mlflow=args.enable_mlflow,
         force=args.force,
