@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from dotenv import load_dotenv
 import pickle
+from sklearn.preprocessing import LabelEncoder
 
 # MLflow
 import mlflow
@@ -271,14 +272,18 @@ def train_hierarchical_classifier(
 
     print(f"Training model {model_name} at {model_path}...")
 
+    is_flat_xbg_classifier = False
+    if local_classifier == "XGBClassifier" and \
+            hierarchical_classifier == FLAT_CLASSIFIER_NAME:
+        is_flat_xbg_classifier = True
+
     # Instantiate the local model
     model_class = globals()[local_classifier]
     params = {}
 
-    if local_classifier == "XGBClassifier":
+    if is_flat_xbg_classifier:
         params = {
             "objective": "multi:softmax",
-            "use_label_encoder": False,
         }
 
     # Instantiate the local model
@@ -291,7 +296,6 @@ def train_hierarchical_classifier(
 
     if hierarchical_classifier == FLAT_CLASSIFIER_NAME:
         classifier = model
-        # Collapse the lists of labels into a single label
         y_train = flatten_labels(y_train)
         y_test = flatten_labels(y_test)
     else:
@@ -300,6 +304,15 @@ def train_hierarchical_classifier(
             local_classifier=model,
             verbose=True)
 
+    le_path = None
+    if is_flat_xbg_classifier:
+        le = LabelEncoder()
+        y_train = le.fit_transform(y_train)
+        y_test = le.transform(y_test)
+        le_path = model_path.replace(".classifier.", ".labelencoder.")
+        with open(le_path, 'wb') as f:
+            pickle.dump(le, f)
+
     classifier.fit(X_train, y_train, sample_weight=None)
 
     with open(model_path, 'wb') as f:
@@ -307,8 +320,6 @@ def train_hierarchical_classifier(
 
     # Get the metrics
     predictions = classifier.predict(X_test)
-    print(f"Predictions: {predictions}")
-    print(f"y_test: {y_test}")
     precision_score = precision(y_test, predictions)
     recall_score = recall(y_test, predictions)
     f1_score = f1(y_test, predictions)
@@ -346,6 +357,13 @@ def train_hierarchical_classifier(
                 signature=signature,
                 registered_model_name=model_name,
             )
+
+            # Log the label encoder
+            if is_flat_xbg_classifier:
+                mlflow.log_artifact(
+                    local_path=le_path,
+                    artifact_path="label_encoder",
+                )
 
 
 def main():
