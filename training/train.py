@@ -56,6 +56,9 @@ Enable MLflow logging. If set, the model will be logged to MLflow
 and the run will be registered in the MLflow tracking server.
 The file `mlflow.env` must exist in the 'training' directory."""
 
+force_help = """
+Force overwrite of existing models in the output directory."""
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description=description)
@@ -96,6 +99,12 @@ def parse_args():
         default=False,
         help=enable_mlflow_help,
     )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        default=False,
+        help=force_help,
+    )
     return parser.parse_args()
 
 
@@ -105,7 +114,8 @@ def train_hiclass_classifiers(
         output_dir,
         hiclass_classifier,
         local_classifier,
-        enable_mlflow):
+        enable_mlflow,
+        force):
 
     # hiclass classifiers to train
     hiclass_classifiers = HICLASS_CLASSIFIER_NAMES
@@ -131,6 +141,7 @@ def train_hiclass_classifiers(
     print(f"Hiclass classifier(s): {', '.join(hiclass_classifiers)}")
     print(f"Local classifier(s): {', '.join(local_classifiers)}")
     print(f"Enable MLflow: {enable_mlflow}")
+    print(f"Force overwrite: {force}")
 
     # Test that all required files exist
     features_format = None
@@ -218,19 +229,30 @@ def train_hiclass_classifiers(
 
     for hiclass_classifier in hiclass_classifiers:
         for local_classifier in local_classifiers:
+            # Set up model name and path
+            model_name = f"""pallas_{modality}_{hiclass_classifier}_{
+                local_classifier}"""
+            model_path = f"{output_dir}/{model_name}.classifier.pkl"
+
             do_train = True
             if local_classifier == "XGBClassifier" and \
                     hiclass_classifier != "LocalClassifierPerNode":
                 print(f"Skipping {hiclass_classifier} with {local_classifier}")
                 do_train = False
+
+            if os.path.exists(model_path) and not force:
+                print(f"Model {model_name} already exists. Skipping.")
+                do_train = False
+
             if do_train:
                 train_hiclass_classifier(
+                    model_name=model_name,
+                    model_path=model_path,
                     X_train=X_train,
                     y_train=y_train,
                     X_test=X_test,
                     y_test=y_test,
                     modality=modality,
-                    output_dir=output_dir,
                     hiclass_classifier=hiclass_classifier,
                     local_classifier=local_classifier,
                     mlflow_env_path=mlflow_env_path,
@@ -238,20 +260,18 @@ def train_hiclass_classifiers(
 
 
 def train_hiclass_classifier(
+        model_name,
+        model_path,
         X_train,
         y_train,
         X_test,
         y_test,
         modality,
-        output_dir,
         hiclass_classifier,
         local_classifier,
         mlflow_env_path):
 
-    # Set up model name
-    model_name = f"pallas_{modality}_{hiclass_classifier}_{local_classifier}"
-
-    print(f"Training model {model_name}...")
+    print(f"Training model {model_name} at {model_path}...")
 
     # Instantiate the local model
     model_class = globals()[local_classifier]
@@ -267,8 +287,7 @@ def train_hiclass_classifier(
 
     classifier.fit(X_train, y_train, sample_weight=None)
 
-    classifier_pkl = f'{output_dir}/{model_name}.classifier.pkl'
-    with open(classifier_pkl, 'wb') as f:
+    with open(model_path, 'wb') as f:
         pickle.dump(classifier, f)
 
     # Get the metrics
@@ -321,6 +340,7 @@ def main():
         hiclass_classifier=args.hiclass_classifier,
         local_classifier=args.local_classifier,
         enable_mlflow=args.enable_mlflow,
+        force=args.force,
     )
 
 
