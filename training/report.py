@@ -13,11 +13,6 @@ from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
 
-REQUIRED_FILES = [
-    "pallas.test.X.csv",
-    "pallas.test.y.tsv",
-]
-
 description = """
 Generates reports for the trained models.
 """
@@ -67,11 +62,13 @@ def generate_reports(
     print(f"Output directory: {output_dir}")
 
     # Test that all required files exist
-    for file_name in REQUIRED_FILES:
+    def file_exists(file_name):
         file_path = f"{input_data_dir}/{file_name}"
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(
-                f"Required file {file_path} does not exist.")
+        return os.path.exists(file_path)
+
+    if not file_exists("pallas.test.y.tsv"):
+        raise FileNotFoundError(
+            "Required file pallas.test.y.tsv does not exist.")
 
     # Check that input models directory exists
     # and contains at least one *.classifier.pkl file
@@ -95,11 +92,18 @@ def generate_reports(
         raise FileNotFoundError(
             f"Output directory {output_dir} does not exist.")
 
-    X_test = f'{input_data_dir}/pallas.test.X.csv'
-    y_test = f'{input_data_dir}/pallas.test.y.tsv'
+    if file_exists("pallas.test.X.csv"):
+        X_test = f'{input_data_dir}/pallas.test.X.csv'
+        X_test = pd.read_csv(X_test, header=0, index_col=0)
+    elif file_exists("pallas.test.X.pkl"):
+        X_test = f'{input_data_dir}/pallas.test.X.pkl'
+        X_test = pd.read_pickle(X_test)
+    else:
+        raise FileNotFoundError(
+            "Required file pallas.test.X.* does not exist.")
 
-    # Read the features and target data
-    X_test = pd.read_csv(X_test, header=0, index_col=0)
+    # Read the target data
+    y_test = f'{input_data_dir}/pallas.test.y.tsv'
     y_test = pd.read_csv(y_test, sep="\t", header=0, index_col=0)
 
     # Split the labels into lists
@@ -159,18 +163,13 @@ def generate_confusion_matrix(
     for y_row in y_test:
         # Remove empty strings
         y_row = [x for x in y_row if x]
-        print(y_row)
         y_row = f"{y_row[-1]} ({y_row[1]})"
         y_str.append(y_row)
 
     # get all unique values in y_str
     unique_y = list(set(y_str))
-    print(unique_y)
 
     cm = confusion_matrix(y_str, predictions_str, labels=unique_y)
-
-
-
     fig, ax = plt.subplots(figsize=(14, 10))  # Increase figure size
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=unique_y)
     disp.plot(cmap=plt.cm.Blues, ax=ax, colorbar=True)  # Add colorbar
