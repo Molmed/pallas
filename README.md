@@ -75,3 +75,7 @@ For further information about the parameters:
 ### Get reports
 
 `python training/report.py --input_data_dir=/path/to/split/data/dir --input_models_dir=/path/to/trained/models/dir --output_dir=/path/to/output_dir`
+
+### Generate predictions
+
+`python inference/predict.py --features_path=/path/to/features/csv/or/pkl --model_path=/path/to/trained/pkl/model --output_dir=/path/to/output_dir --target_path=/optional/path/to/targets/if/available`
