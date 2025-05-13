@@ -17,6 +17,8 @@ Path to the features dataset (.csv/.pkl)."""
 output_dir_help = """
 Dir to save the predictions."""
 
+target_path_help = """
+If targets are known and available, path to the targets tsv file."""
 
 def parse_args():
     parser = argparse.ArgumentParser(description=description)
@@ -38,13 +40,20 @@ def parse_args():
         required=True,
         help=output_dir_help,
     )
+    parser.add_argument(
+        "--target_path",
+        type=str,
+        required=False,
+        help=target_path_help,
+    )
     return parser.parse_args()
 
 
 def predict(
         model_path,
         features_path,
-        output_dir):
+        output_dir,
+        target_path=None):
 
     print("Generating predictions with the following arguments:")
     print(f"Model path: {model_path}")
@@ -80,13 +89,19 @@ def predict(
     else:
         features = pd.read_pickle(features_path)
 
+    targets = None
+    if target_path:
+        # Read tsv file with targets
+        if not os.path.isfile(target_path):
+            raise ValueError(f"Target path {target_path} is not a valid file.")
+        if not target_path.endswith(".tsv"):
+            raise ValueError(f"Target path {target_path} is not a valid tsv file.")
+        targets = pd.read_csv(target_path, sep="\t", index_col=0)
+
     # Load the model from pickl
     with open(model_path, "rb") as f:
         model = pickle.load(f)
         predictions = model.predict(features)
-
-        # Strip out first element of each prediction
-        predictions = [pred[1:] for pred in predictions]
 
         # Join all non empty elements of each prediction
         predictions = [",".join([str(x) for x in pred if x]) for pred in predictions]
@@ -94,6 +109,11 @@ def predict(
         # Join predictions with sample ids
         sample_ids = features.index
         predictions_df = pd.DataFrame(predictions, index=sample_ids, columns=["prediction"])
+
+        # If targets, join the df with predictions
+        if targets is not None:
+            targets = targets.loc[sample_ids]
+            predictions_df = predictions_df.join(targets, how="left")
 
         # Save predictions to csv
         predictions_df.to_csv(output_file_path, sep="\t", index=True)
@@ -104,7 +124,8 @@ def main():
     predict(
         model_path=args.model_path,
         features_path=args.features_path,
-        output_dir=args.output_dir
+        output_dir=args.output_dir,
+        target_path=args.target_path,
     )
 
 
