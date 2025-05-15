@@ -123,17 +123,32 @@ def predict(
         return output_file_path
 
 
-def pie_chart(output_path, predictions):
+def pie_chart(output_path, predictions, title="Predictions"):
     # Count the number of occurrences for each class in the 'prediction' column
     class_counts = predictions.value_counts()
+    total = class_counts.sum()
+    percentages = (class_counts / total * 100).round(1)
 
     # Plot a pie chart
     plt.figure(figsize=(8, 8))
-    plt.pie(class_counts,
-            labels=class_counts.index,
-            autopct='%1.1f%%',
-            startangle=140)
+    wedges, texts, autotexts = plt.pie(
+        class_counts,
+        labels=None,  # Turn off pie labels (we'll show everything in legend)
+        autopct='%1.1f%%',
+        startangle=140
+    )
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+    plt.title(title)
+
+    # Make a legend, putting percentages in the legend
+    legend_labels = [
+        f"{label} ({count}, {percent}%)"
+        for label, count, percent in zip(class_counts.index, class_counts, percentages)
+    ]
+    plt.legend(wedges, legend_labels, loc="upper right", fontsize=8)
+
+    # Make sure the chart fits in the figure
+    plt.tight_layout()
 
     # Save the pie chart
     plt.savefig(output_path)
@@ -167,7 +182,7 @@ def reports(csv_path, output_dir):
     disease_predictions = predictions[1]
     filename = f"{filename_prefix}.pie_chart.disease.png"
     file_path = os.path.join(output_dir, filename)
-    pie_chart(file_path, disease_predictions)
+    pie_chart(file_path, disease_predictions, "Disease predictions")
 
     # Column 0 is node, e.g. "Disease", drop it
     predictions = predictions.drop(columns=[0])
@@ -187,12 +202,12 @@ def reports(csv_path, output_dir):
 
     # Join disease and last_value columns and put in "prediction" column for each row
     predictions["prediction"] = predictions.apply(
-        lambda x: f"{x['last_value']} ({x['disease']})" if pd.notnull(x['last_value']) else None, axis=1
+        lambda x: f"{x['disease']}, {x['last_value']}" if pd.notnull(x['last_value']) else None, axis=1
     )
     subtype_predictions = predictions["prediction"]
     filename = f"{filename_prefix}.pie_chart.subtype.png"
     file_path = os.path.join(output_dir, filename)
-    pie_chart(file_path, subtype_predictions)
+    pie_chart(file_path, subtype_predictions, "Subtype predictions")
 
 
 def main():
