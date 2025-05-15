@@ -2,6 +2,8 @@ import argparse
 import os
 import pickle
 import pandas as pd
+from sklearn.metrics import classification_report
+import matplotlib.pyplot as plt
 
 description = """
 Runs selected models on a features dataset,
@@ -118,15 +120,50 @@ def predict(
         # Save predictions to csv
         predictions_df.to_csv(output_file_path, sep="\t", index=True)
 
+        return output_file_path
+
+
+def reports(csv_path, output_dir):
+    """
+    Generates reports for the predictions.
+    """
+    # Read the predictions
+    predictions = pd.read_csv(csv_path, sep="\t", index_col=0)
+
+    # Generate reports
+    # If y column is present, generate classification report
+    if "y" in predictions.columns:
+        y_true = predictions["y"]
+        y_pred = predictions["prediction"]
+        report = classification_report(y_true, y_pred, output_dict=True)
+        report_df = pd.DataFrame(report).transpose()
+        filename = f"{os.path.basename(csv_path)}.classification_report.csv"
+        report_df.to_csv(os.path.join(output_dir, filename), sep="\t")
+
+    # Count the number of occurrences for each class in the 'prediction' column
+    class_counts = predictions['prediction'].value_counts()
+
+    # Plot a pie chart
+    plt.figure(figsize=(8, 8))
+    plt.pie(class_counts, labels=class_counts.index, autopct='%1.1f%%', startangle=140)
+    plt.title('Prediction Distribution by Class')
+    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+
+    # Save the pie chart
+    pie_chart_path = os.path.join(output_dir, f"{os.path.basename(csv_path)}.pie_chart.png")
+    plt.savefig(pie_chart_path)
+    plt.close()
+
 
 def main():
     args = parse_args()
-    predict(
+    csv_path = predict(
         model_path=args.model_path,
         features_path=args.features_path,
         output_dir=args.output_dir,
         target_path=args.target_path,
     )
+    reports(csv_path, args.output_dir)
 
 
 if __name__ == "__main__":
