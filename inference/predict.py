@@ -123,12 +123,31 @@ def predict(
         return output_file_path
 
 
+def pie_chart(output_path, predictions):
+    # Count the number of occurrences for each class in the 'prediction' column
+    class_counts = predictions.value_counts()
+
+    # Plot a pie chart
+    plt.figure(figsize=(8, 8))
+    plt.pie(class_counts,
+            labels=class_counts.index,
+            autopct='%1.1f%%',
+            startangle=140)
+    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+
+    # Save the pie chart
+    plt.savefig(output_path)
+    plt.close()
+
+
 def reports(csv_path, output_dir):
     """
     Generates reports for the predictions.
     """
     # Read the predictions
     predictions = pd.read_csv(csv_path, sep="\t", index_col=0)
+
+    filename_prefix = os.path.basename(csv_path)
 
     # Generate reports
     # If y column is present, generate classification report
@@ -137,22 +156,18 @@ def reports(csv_path, output_dir):
         y_pred = predictions["prediction"]
         report = classification_report(y_true, y_pred, output_dict=True)
         report_df = pd.DataFrame(report).transpose()
-        filename = f"{os.path.basename(csv_path)}.classification_report.csv"
+        filename = f"{filename_prefix}.classification_report.csv"
         report_df.to_csv(os.path.join(output_dir, filename), sep="\t")
 
-    # Count the number of occurrences for each class in the 'prediction' column
-    class_counts = predictions['prediction'].value_counts()
+    # Split predictions by comma
+    predictions = predictions['prediction']
+    predictions = predictions.str.split(',', expand=True)
 
-    # Plot a pie chart
-    plt.figure(figsize=(8, 8))
-    plt.pie(class_counts, labels=class_counts.index, autopct='%1.1f%%', startangle=140)
-    plt.title('Prediction Distribution by Class')
-    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
-
-    # Save the pie chart
-    pie_chart_path = os.path.join(output_dir, f"{os.path.basename(csv_path)}.pie_chart.png")
-    plt.savefig(pie_chart_path)
-    plt.close()
+    # Disease-level predictions are in column 1
+    disease_predictions = predictions[1]
+    filename = f"{filename_prefix}.pie_chart.disease.png"
+    file_path = os.path.join(output_dir, filename)
+    pie_chart(file_path, disease_predictions)
 
 
 def main():
