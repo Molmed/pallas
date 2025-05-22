@@ -138,7 +138,8 @@ def pie_chart(output_path, predictions, title="Predictions"):
         class_counts,
         labels=None,  # Turn off pie labels (we'll show everything in legend)
         autopct='%1.1f%%',
-        startangle=140
+        startangle=140,
+        pctdistance=0.9,
     )
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
     plt.title(title)
