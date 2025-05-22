@@ -5,6 +5,9 @@ import pandas as pd
 from sklearn.metrics import classification_report
 import matplotlib.pyplot as plt
 
+# Set global font size for matplotlib
+plt.rcParams.update({'font.size': 16})
+
 description = """
 Runs selected models on a features dataset,
 generates predictions, and saves the results.
@@ -130,7 +133,7 @@ def pie_chart(output_path, predictions, title="Predictions"):
     percentages = (class_counts / total * 100).round(1)
 
     # Plot a pie chart
-    plt.figure(figsize=(8, 8))
+    plt.figure(figsize=(16, 16))
     wedges, texts, autotexts = plt.pie(
         class_counts,
         labels=None,  # Turn off pie labels (we'll show everything in legend)
@@ -212,6 +215,17 @@ def reports(csv_path, output_dir):
     filename = f"{filename_prefix}.pie_chart.subtype.png"
     file_path = os.path.join(output_dir, filename)
     pie_chart(file_path, subtype_predictions, "Subtype predictions")
+
+    # Break down the predictions by disease
+    # Column 1 is disease, break separate dataframes for each disease
+    diseases = predictions[1].unique()
+    for disease in diseases:
+        disease_predictions = predictions[predictions[1] == disease]
+        subtype_predictions = predictions_by_subtype(disease_predictions)
+        filename = f"{filename_prefix}.pie_chart.{disease}.png"
+        file_path = os.path.join(output_dir, filename)
+        pie_chart(file_path, subtype_predictions, f"Subtype predictions for {disease}")
+
 
 
 def main():
