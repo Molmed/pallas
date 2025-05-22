@@ -155,6 +155,30 @@ def pie_chart(output_path, predictions, title="Predictions"):
     plt.close()
 
 
+def predictions_by_subtype(predictions):
+    # Column 0 is node, e.g. "Disease", drop it
+    predictions = predictions.drop(columns=[0])
+
+    # Rename the new first column to "disease"
+    predictions = predictions.rename(columns={1: "disease"})
+
+    # Column 1 tells us the disease.
+    # Get the indices of the remaining columns
+    indices = predictions.columns[1:]
+
+    # Of the columns in indices, get the last value for each row that is not None
+    # and put it in the "last_value" column
+    predictions["last_value"] = predictions[indices].apply(
+        lambda x: x[x.notnull()].values[-1] if x.notnull().any() else None, axis=1
+    )
+
+    # Join disease and last_value columns and put in "prediction" column for each row
+    predictions["prediction"] = predictions.apply(
+        lambda x: f"{x['disease']}, {x['last_value']}" if pd.notnull(x['last_value']) else None, axis=1
+    )
+    return predictions["prediction"]
+
+
 def reports(csv_path, output_dir):
     """
     Generates reports for the predictions.
@@ -184,27 +208,7 @@ def reports(csv_path, output_dir):
     file_path = os.path.join(output_dir, filename)
     pie_chart(file_path, disease_predictions, "Disease predictions")
 
-    # Column 0 is node, e.g. "Disease", drop it
-    predictions = predictions.drop(columns=[0])
-
-    # Rename the new first column to "disease"
-    predictions = predictions.rename(columns={1: "disease"})
-
-    # Column 1 tells us the disease.
-    # Get the indices of the remaining columns
-    indices = predictions.columns[1:]
-
-    # Of the columns in indices, get the last value for each row that is not None
-    # and put it in the "last_value" column
-    predictions["last_value"] = predictions[indices].apply(
-        lambda x: x[x.notnull()].values[-1] if x.notnull().any() else None, axis=1
-    )
-
-    # Join disease and last_value columns and put in "prediction" column for each row
-    predictions["prediction"] = predictions.apply(
-        lambda x: f"{x['disease']}, {x['last_value']}" if pd.notnull(x['last_value']) else None, axis=1
-    )
-    subtype_predictions = predictions["prediction"]
+    subtype_predictions = predictions_by_subtype(predictions)
     filename = f"{filename_prefix}.pie_chart.subtype.png"
     file_path = os.path.join(output_dir, filename)
     pie_chart(file_path, subtype_predictions, "Subtype predictions")
