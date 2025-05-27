@@ -4,6 +4,7 @@ import pickle
 import pandas as pd
 from sklearn.metrics import classification_report
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Set global font size for matplotlib
 plt.rcParams.update({'font.size': 16})
@@ -132,6 +133,9 @@ def pie_chart(output_path, predictions, title="Predictions"):
     total = class_counts.sum()
     percentages = (class_counts / total * 100).round(1)
 
+    # Convert the Seaborn 'tab20' palette to a Matplotlib colormap
+    tab20_palette = sns.color_palette('tab20')
+
     # Plot a pie chart
     plt.figure(figsize=(16, 16))
     wedges, texts, autotexts = plt.pie(
@@ -140,6 +144,7 @@ def pie_chart(output_path, predictions, title="Predictions"):
         autopct='%1.1f%%',
         startangle=140,
         pctdistance=0.9,
+        colors=tab20_palette
     )
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
     plt.title(title)
@@ -149,7 +154,7 @@ def pie_chart(output_path, predictions, title="Predictions"):
         f"{label} ({count}, {percent}%)"
         for label, count, percent in zip(class_counts.index, class_counts, percentages)
     ]
-    plt.legend(wedges, legend_labels, loc="upper right", fontsize=8)
+    plt.legend(wedges, legend_labels, loc="upper right")
 
     # Make sure the chart fits in the figure
     plt.tight_layout()
