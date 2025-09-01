@@ -106,22 +106,31 @@ def silo_data(features_path,
     data = features.join(target)
 
     # Get all features that are in rare_and_unrecognized
+    y_rare_and_unrecognized = data['subtype'][data['subtype'].isin(
+        rare_and_unrecognized['subtype'])]
     rare_and_unrecognized = data[
         data['subtype'].isin(
             rare_and_unrecognized['subtype'])].drop(columns=['subtype'])
 
     # Get all features that are in unknown
+    y_unknown = data['subtype'][data['subtype'].isin(
+        unknown['subtype'])]
     unknown = data[
         data['subtype'].isin(
             unknown['subtype'])].drop(columns=['subtype'])
 
     # Get all features that are in recognized
+    y_known = data['subtype'][data['subtype'].isin(
+        known['subtype'])]
     known = data[
         data['subtype'].isin(
             known['subtype'])].drop(columns=['subtype'])
 
-    y = data['subtype']
-    y.to_csv(f'{output_dir}/pallas.y.tsv', sep='\t')
+    # Save all the y files
+    y_rare_and_unrecognized.to_csv(
+        f'{output_dir}/pallas.rare_and_unrecognized.y.tsv', sep='\t')
+    y_unknown.to_csv(f'{output_dir}/pallas.unknown.y.tsv', sep='\t')
+    y_known.to_csv(f'{output_dir}/pallas.known.y.tsv', sep='\t')
 
     # Save train and test data
     if features_format == 'csv':
