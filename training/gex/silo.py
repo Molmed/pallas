@@ -75,17 +75,20 @@ def silo_data(features_path,
     # Just keep subtype column in target
     target = target[['subtype']]
 
+    # Rename subtype to y
+    target = target.rename(columns={'subtype': 'y'})
+
     # Get all items where subtype starts with "UNRECOGNIZED"
-    unrecognized = target[target['subtype'].str.startswith("UNRECOGNIZED")]
+    unrecognized = target[target['y'].str.startswith("UNRECOGNIZED")]
 
     # Get all subtypes that have less than min_samples_per_class
-    rare = target[target['subtype'].map(target['subtype'].value_counts()) < min_samples_per_class]
+    rare = target[target['y'].map(target['y'].value_counts()) < min_samples_per_class]
 
     # Merge unrecognized and rare
     rare_and_unrecognized = pandas.concat([rare, unrecognized])
 
     # Get all items where subtype is "B-other" or "AML-other"
-    unknown = target[target['subtype'].str.contains("B-other|AML-other")]
+    unknown = target[target['y'].str.contains("B-other|AML-other")]
 
     # print all items not in unrecognized or unknown
     known = target[~target.index.isin(
@@ -106,25 +109,25 @@ def silo_data(features_path,
     data = features.join(target)
 
     # Get all features that are in rare_and_unrecognized
-    y_rare_and_unrecognized = data['subtype'][data['subtype'].isin(
-        rare_and_unrecognized['subtype'])]
+    y_rare_and_unrecognized = data['y'][data['y'].isin(
+        rare_and_unrecognized['y'])]
     rare_and_unrecognized = data[
-        data['subtype'].isin(
-            rare_and_unrecognized['subtype'])].drop(columns=['subtype'])
+        data['y'].isin(
+            rare_and_unrecognized['y'])].drop(columns=['y'])
 
     # Get all features that are in unknown
-    y_unknown = data['subtype'][data['subtype'].isin(
-        unknown['subtype'])]
+    y_unknown = data['y'][data['y'].isin(
+        unknown['y'])]
     unknown = data[
-        data['subtype'].isin(
-            unknown['subtype'])].drop(columns=['subtype'])
+        data['y'].isin(
+            unknown['y'])].drop(columns=['y'])
 
     # Get all features that are in recognized
-    y_known = data['subtype'][data['subtype'].isin(
-        known['subtype'])]
+    y_known = data['y'][data['y'].isin(
+        known['y'])]
     known = data[
-        data['subtype'].isin(
-            known['subtype'])].drop(columns=['subtype'])
+        data['y'].isin(
+            known['y'])].drop(columns=['y'])
 
     # Save all the y files
     y_rare_and_unrecognized.to_csv(
