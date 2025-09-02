@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 
 
 description = """
-Silo data into known subtype, misc subtype and unknown subtype."""
+Silo data into labeled diagnostic, labeled labeled_misc, and unlabeled datasets."""
 
 features_path_help = """
 Path to the features file (.csv or .pkl), indexed by column 'sample'."""
@@ -17,7 +17,7 @@ output_dir_help = """
 Directory to save the siloed sets."""
 
 min_samples_per_class_help = """
-Minimum number of samples per class to include in the known subtype set.
+Minimum number of samples per class to include in the "labeled diagnostic" set.
 Classes not reaching this threshold will be excluded
 from training (default: 5)."""
 
@@ -78,21 +78,35 @@ def silo_data(features_path,
     # Rename subtype to y
     target = target.rename(columns={'subtype': 'y'})
 
+    ### UNLABELED
+    unlabeled = target[target['y'].str.contains("B-other|AML-other")]
+
+    ### LABELED MISC
+    # Get all relapse samples. These are sample names that match one of the following patterns:
+    # - Start with "SJ" and end in "_R" or "_R" followed by a digit
+    # - Start with "ALL" and end in "_2" or "_3"
+    relapse = target[target.index.str.match(r'^(SJ.*_R\d*|ALL.*_(2|3))$')]
+
+    # Get replicate samples. These start with "ALL_" and end in "_r"
+    replicate = target[target.index.str.match(r'^ALL_.*_r$')]
+
     # Get all items where subtype starts with "UNRECOGNIZED"
     unrecognized = target[target['y'].str.startswith("UNRECOGNIZED")]
 
     # Get all subtypes that have less than min_samples_per_class
     rare = target[target['y'].map(target['y'].value_counts()) < min_samples_per_class]
 
-    # Merge unrecognized and rare
-    rare_and_unrecognized = pandas.concat([rare, unrecognized])
+    # Merge relapse, replicate, unrecognized and rare
+    labeled_misc = pandas.concat([relapse, replicate, unrecognized, rare])
 
-    # Get all items where subtype is "B-other" or "AML-other"
-    unknown = target[target['y'].str.contains("B-other|AML-other")]
+    # Remove any items that are also in unlabeled
+    labeled_misc = labeled_misc[~labeled_misc.index.isin(
+        unlabeled.index)]
 
-    # print all items not in unrecognized or unknown
-    known = target[~target.index.isin(
-        rare_and_unrecognized.index) & ~target.index.isin(unknown.index)]
+    ### LABELED DIAGNOSTIC
+    # print all items not in labeled_misc or unlabeled
+    labeled_diagnostic = target[~target.index.isin(
+        labeled_misc.index) & ~target.index.isin(unlabeled.index)]
 
     # Check if the features file is in CSV format or pkl format
     features_format = None
@@ -108,44 +122,35 @@ def silo_data(features_path,
     # Merge the features and target data on the index
     data = features.join(target)
 
-    # Get all features that are in rare_and_unrecognized
-    y_rare_and_unrecognized = data['y'][data['y'].isin(
-        rare_and_unrecognized['y'])]
-    rare_and_unrecognized = data[
-        data['y'].isin(
-            rare_and_unrecognized['y'])].drop(columns=['y'])
+    # Get all features that are in labeled_misc
+    y_labeled_misc = data.loc[data.index.isin(labeled_misc.index), 'y']
+    labeled_misc = data.loc[data.index.isin(labeled_misc.index)].drop(columns=['y'])
 
-    # Get all features that are in unknown
-    y_unknown = data['y'][data['y'].isin(
-        unknown['y'])]
-    unknown = data[
-        data['y'].isin(
-            unknown['y'])].drop(columns=['y'])
+    # Get all features that are in unlabeled
+    y_unlabeled = data.loc[data.index.isin(unlabeled.index), 'y']
+    unlabeled = data.loc[data.index.isin(unlabeled.index)].drop(columns=['y'])
 
     # Get all features that are in recognized
-    y_known = data['y'][data['y'].isin(
-        known['y'])]
-    known = data[
-        data['y'].isin(
-            known['y'])].drop(columns=['y'])
+    y_labeled_diagnostic = data.loc[data.index.isin(labeled_diagnostic.index), 'y']
+    labeled_diagnostic = data.loc[data.index.isin(labeled_diagnostic.index)].drop(columns=['y'])
 
     # Save all the y files
-    y_rare_and_unrecognized.to_csv(
-        f'{output_dir}/pallas.rare_and_unrecognized.y.tsv', sep='\t')
-    y_unknown.to_csv(f'{output_dir}/pallas.unknown.y.tsv', sep='\t')
-    y_known.to_csv(f'{output_dir}/pallas.known.y.tsv', sep='\t')
+    y_labeled_misc.to_csv(
+        f'{output_dir}/pallas.labeled_misc.y.tsv', sep='\t')
+    y_unlabeled.to_csv(f'{output_dir}/pallas.unlabeled.y.tsv', sep='\t')
+    y_labeled_diagnostic.to_csv(f'{output_dir}/pallas.labeled_diagnostic.y.tsv', sep='\t')
 
     # Save train and test data
     if features_format == 'csv':
-        rare_and_unrecognized.to_csv(
-            f'{output_dir}/pallas.rare_and_unrecognized.X.csv')
-        unknown.to_csv(f'{output_dir}/pallas.unknown.X.csv')
-        known.to_csv(f'{output_dir}/pallas.known.X.csv')
+        labeled_misc.to_csv(
+            f'{output_dir}/pallas.labeled_misc.X.csv')
+        unlabeled.to_csv(f'{output_dir}/pallas.unlabeled.X.csv')
+        labeled_diagnostic.to_csv(f'{output_dir}/pallas.labeled_diagnostic.X.csv')
     elif features_format == 'pkl':
-        rare_and_unrecognized.to_pickle(
-            f'{output_dir}/pallas.rare_and_unrecognized.X.pkl')
-        unknown.to_pickle(f'{output_dir}/pallas.unknown.X.pkl')
-        known.to_pickle(f'{output_dir}/pallas.known.X.pkl')
+        labeled_misc.to_pickle(
+            f'{output_dir}/pallas.labeled_misc.X.pkl')
+        unlabeled.to_pickle(f'{output_dir}/pallas.unlabeled.X.pkl')
+        labeled_diagnostic.to_pickle(f'{output_dir}/pallas.labeled_diagnostic.X.pkl')
     else:
         raise ValueError("Unsupported features format.")
 
