@@ -78,10 +78,10 @@ def silo_data(features_path,
     # Rename subtype to y
     target = target.rename(columns={'subtype': 'y'})
 
-    ### UNLABELED
-    unlabeled = target[target['y'].str.contains("B-other|AML-other")]
+    # UNLABELED
+    unlabeled = target[target['y'].str.contains("B-other|AML-other|ALLNOS")]
 
-    ### LABELED MISC
+    # LABELED MISC
     # Get all relapse samples. These are sample names that match one of the following patterns:
     # - Start with "SJ" and end in "_R" or "_R" followed by a digit
     # - Start with "ALL" and end in "_2" or "_3"
@@ -103,7 +103,7 @@ def silo_data(features_path,
     labeled_misc = labeled_misc[~labeled_misc.index.isin(
         unlabeled.index)]
 
-    ### LABELED DIAGNOSTIC
+    # LABELED DIAGNOSTIC
     # print all items not in labeled_misc or unlabeled
     labeled_diagnostic = target[~target.index.isin(
         labeled_misc.index) & ~target.index.isin(unlabeled.index)]
