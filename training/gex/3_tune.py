@@ -4,7 +4,7 @@ import joblib
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import SelectFromModel
 from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV, StratifiedShuffleSplit
+from sklearn.model_selection import RandomizedSearchCV, StratifiedShuffleSplit
 from sklearn.metrics import roc_auc_score, make_scorer
 from sklearn.feature_selection import VarianceThreshold
 
@@ -23,6 +23,9 @@ Directory to save results."""
 
 random_state_help = """
 Random state for reproducibility (default: None)."""
+
+n_threads_help = """
+Number of threads to use (default: unlimited)."""
 
 
 def parse_args():
@@ -51,19 +54,27 @@ def parse_args():
         default=None,
         help=random_state_help,
     )
+    parser.add_argument(
+        "--n_threads",
+        type=int,
+        default=-1,
+        help=n_threads_help,
+    )
     return parser.parse_args()
 
 
 def tune(features_path,
          target_path,
          output_dir,
-         random_state):
+         random_state,
+         n_threads):
 
     print("Tuning model with the following parameters:")
     print(f"Features path: {features_path}")
     print(f"Target path: {target_path}")
     print(f"Output directory: {output_dir}")
     print(f"Random state: {random_state}")
+    print(f"Number of threads: {n_threads}")
 
     # Read the features and target data
 
@@ -89,21 +100,21 @@ def tune(features_path,
         ("feature_selection", SelectFromModel(
             RandomForestClassifier(
                 n_estimators=100,  # small RF for initial selection
-                n_jobs=-1,
+                n_jobs=n_threads,
                 random_state=random_state
             ),
             threshold="median"
         )),
-        ("rf", RandomForestClassifier(n_jobs=-1, random_state=random_state))
+        ("rf", RandomForestClassifier(n_jobs=n_threads, random_state=random_state))
     ])
 
     # Step 2: Define parameter grid for hyperparameter tuning
     param_grid = {
-        "feature_selection__threshold": ["median", "1.25*median", "0.75*median"],
-        "rf__n_estimators": [200, 500],
-        "rf__max_depth": [None, 10, 20],
-        "rf__max_features": ["sqrt", "log2", 0.2],
-        "rf__min_samples_leaf": [1, 5, 10],
+        "feature_selection__threshold": ["0.50*median", "0.25*median"],
+        "rf__n_estimators": [200],
+        "rf__max_depth": [None, 20],
+        "rf__max_features": ["sqrt", "log2"],
+        "rf__min_samples_leaf": [1, 5],
         "rf__class_weight": ["balanced"]  # handle rare classes
     }
 
@@ -121,13 +132,15 @@ def tune(features_path,
     )
 
     # Step 5: Grid search with AUC as scoring
-    grid = GridSearchCV(
-        pipeline,
-        param_grid,
+    grid = RandomizedSearchCV(
+        estimator=pipeline,
+        param_distributions=param_grid,
+        n_iter=10,
         cv=cv,
         scoring=roc_auc_scorer,
-        n_jobs=-1,
-        verbose=2
+        n_jobs=n_threads,
+        verbose=2,
+        random_state=random_state
     )
 
     # Step 6. Fit the model
@@ -160,6 +173,28 @@ def tune(features_path,
     joblib.dump(best_pipeline, f'{output_dir}/best_pipeline.pkl')
     feature_importances.to_csv(f'{output_dir}/feature_importances.tsv', sep='\t', index=False)
 
+    # ==========================
+    # Step 9: Save full CV results
+    # ==========================
+    cv_results = pd.DataFrame(grid.cv_results_)
+
+    # Keep the most informative columns
+    cv_results = cv_results[
+        ["params", "mean_test_score", "std_test_score", "rank_test_score"]
+    ]
+
+    # Expand "params" dict into separate columns for readability
+    param_cols = cv_results["params"].apply(pd.Series)
+    cv_results_expanded = pd.concat([cv_results.drop(columns=["params"]), param_cols], axis=1)
+
+    # Sort by rank
+    cv_results_expanded = cv_results_expanded.sort_values("rank_test_score")
+
+    # Save all results
+    cv_results_expanded.to_csv(f"{output_dir}/cv_results.tsv", sep="\t", index=False)
+
+    print(f"Saved CV results to {output_dir}/cv_results.tsv")
+
 
 def main():
     args = parse_args()
@@ -167,7 +202,8 @@ def main():
         features_path=args.features_path,
         target_path=args.target_path,
         output_dir=args.output_dir,
-        random_state=args.random_state
+        random_state=args.random_state,
+        n_threads=args.n_threads
     )
 
 

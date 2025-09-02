@@ -13,3 +13,4 @@ dependencies:
     - hiclass
     - mlflow
     - python-dotenv
+    - gene_thesaurus
