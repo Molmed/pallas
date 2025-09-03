@@ -9,6 +9,9 @@ Run reports on the hyperparameter tuning."""
 reports_dir_help = """
 Path to the dir containing hypertuning reports."""
 
+prefix_help = """
+Prefix for report files (e.g. "dt" or "rf")."""
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description=description)
@@ -18,12 +21,19 @@ def parse_args():
         required=True,
         help=reports_dir_help,
     )
+    parser.add_argument(
+        "--prefix",
+        type=str,
+        required=True,
+        help=prefix_help,
+    )
     return parser.parse_args()
 
 
 def plot_cv_results(cv_results_df,
                     param_name,
                     output_dir,
+                    prefix,
                     score_col="mean_test_score"):
     """
     Plot cross-validation mean score vs. a single hyperparameter.
@@ -56,15 +66,16 @@ def plot_cv_results(cv_results_df,
     plt.title(f"CV AUC vs {param_name}")
     plt.xticks(rotation=45)
     plt.tight_layout()
-    plt.savefig(f"{output_dir}/{param_name}_cv_results.svg")
+    plt.savefig(f"{output_dir}/{prefix}.{param_name}_cv_results.svg")
 
 
-def report(reports_dir):
+def report(reports_dir, prefix):
     print("Reporting on hypertuning with the following parameters:")
     print(f"Reports directory: {reports_dir}")
+    print(f"Prefix: {prefix}")
 
     # Read in feature_importances.tsv
-    feature_importances = pd.read_csv(f"{reports_dir}/feature_importances.tsv", sep="\t")
+    feature_importances = pd.read_csv(f"{reports_dir}/{prefix}.feature_importances.tsv", sep="\t")
 
     # Translate the Gene column
     gt = GeneThesaurus()
@@ -73,23 +84,24 @@ def report(reports_dir):
                                     target='symbol')
     feature_importances["Symbol"] = feature_importances["Gene"].map(translated)
     # Save
-    feature_importances.to_csv(f"{reports_dir}/feature_importances_translated.tsv", sep="\t", index=False)
+    feature_importances.to_csv(f"{reports_dir}/{prefix}.feature_importances_translated.tsv", sep="\t", index=False)
 
 
     # Read in cv_results.tsv
-    cv_results = pd.read_csv(f"{reports_dir}/cv_results.tsv", sep="\t")
+    cv_results = pd.read_csv(f"{reports_dir}/{prefix}.cv_results.tsv", sep="\t")
 
     # Plot AUC vs. max_depth
-    plot_cv_results(cv_results, "rf__max_depth", reports_dir)
+    plot_cv_results(cv_results, f"{prefix}__max_depth", reports_dir, prefix)
 
     # Plot AUC vs. min_samples_leaf
-    plot_cv_results(cv_results, "rf__min_samples_leaf", reports_dir)
+    plot_cv_results(cv_results, f"{prefix}__min_samples_leaf", reports_dir, prefix)
 
 
 def main():
     args = parse_args()
     report(
-        reports_dir=args.reports_dir
+        reports_dir=args.reports_dir,
+        prefix=args.prefix
     )
 
 

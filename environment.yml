@@ -9,8 +9,6 @@ dependencies:
     - pandas
     - matplotlib
     - seaborn
-    - xgboost
-    - hiclass
     - mlflow
     - python-dotenv
     - gene_thesaurus
