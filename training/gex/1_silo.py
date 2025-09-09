@@ -84,8 +84,10 @@ def silo_data(features_path,
     # LABELED MISC
     # Get all relapse samples. These are sample names that match one of the following patterns:
     # - Start with "SJ" and end in "_R" or "_R" followed by a digit
+    # - Start with "SJ" and end in manually added prefix "_RELAPSE"
     # - Start with "ALL" and end in "_2" or "_3"
-    relapse = target[target.index.str.match(r'^(SJ.*_R\d*|ALL.*_(2|3))$')]
+    relapse = target[target.index.str.match(
+        r'^(SJ.*_R\d*|SJ.*_RELAPSE|ALL.*_(2|3))$')]
 
     # Get replicate samples. These start with "ALL_" and end in "_r"
     replicate = target[target.index.str.match(r'^ALL_.*_r$')]
