@@ -1,5 +1,7 @@
 # PALLAS v0.0.1 &#127963;
 
+## TODO: Document new workflow using nf-core-gexml and using .env files
+
 ## About
 
 PALLAS is a multimodal classifier of molecular subtypes in pediatric acute leukemias.

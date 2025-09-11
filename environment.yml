@@ -17,3 +17,4 @@ dependencies:
     - scikit-learn
     - hiclass
     - openpyxl
+    - python-dotenv
