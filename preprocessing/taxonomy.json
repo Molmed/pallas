@@ -90,7 +90,11 @@
                   },
                   {
                     "name": "hypodiploid",
-                    "aliases": ["hypodiploid", "Hypo", "Hypodiploid", "Hypodiploidy", "BALLHYPO", "Low hypodiploid", "Near haploid", "low HeH", "Low hyperdiploid"]
+                    "aliases": ["hypodiploid", "Hypo", "Hypodiploid", "Hypodiploidy", "BALLHYPO", "Low hypodiploid", "Near haploid"]
+                  },
+                  {
+                    "name": "low hyperdiploid",
+                    "aliases": ["low HeH", "Low hyperdiploid"]
                   },
                   {
                     "name": "iAMP21",
