@@ -85,6 +85,10 @@ samplesheet_df = samplesheet_df.rename(columns={'primary subtype': 'subtype'})
 # Rename library
 samplesheet_df = samplesheet_df.rename(columns={'RNA-seq library': 'batch'})
 
+# In batch, only keep the part of the string that is "total_RNA" or "mRNA"
+samplesheet_df['batch'] = samplesheet_df[
+    'batch'].str.extract('(total_RNA|mRNA)', expand=False)
+
 # Create a map of sample names to paths.
 # For each file in the raw data dir, extract everything
 # #before the first dot or underscore and see if it matches
