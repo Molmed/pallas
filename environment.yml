@@ -16,3 +16,4 @@ dependencies:
     - umap-learn
     - scikit-learn
     - hiclass
+    - openpyxl

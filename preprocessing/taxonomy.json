@@ -1,0 +1,183 @@
+[
+    {
+      "name": "Disease",
+      "children": [
+        {
+          "name": "Non-leukemic",
+          "aliases": ["Control"]
+        },
+        {
+            "name": "AML",
+            "children": [
+              {
+                "name": "AML-other",
+                "aliases": ["AMLNOS", "AMLCBFNOS"]
+              },
+              {
+                "name": "APL-PML::RARA",
+                "aliases": ["APLPMLRARA", "t(15;17)"]
+              },
+              {
+                "name": "RUNX1::RUNX1T1",
+                "aliases": ["AMLRUNX1RUNX1T1", "AMLRUNX1RUNX1T1L", "t(8;21)", "RUNX1-RUNX1T1"]
+              },
+              {
+                "name": "CBFB::MYH11",
+                "aliases": ["AMLCBFBMYH11", "inv(16)", "CBFB-MYH11"]
+              },
+              {
+                "name": "KMT2A-r",
+                "aliases": ["AMLKMT2A", "AMLKMT2APTD", "other 11q23/MLL", "t(9;11)", "t(10;11)","t(11;19)", "KMT2A-MLLT3", "KMT2A-MLLT10", "KMT2A-MLLT4", "KMT2A-ELL", "KMT2A-MLLT1", "KMT2A-SEPT6", "KMT2A-MLLT11", "KMT2A-MYO1F", "KMT2A-LASP1", "KMT2A-SEPT9", "KMT2A-ABI1", "KMT2A-USP2", "KMT2A-ARHGEF37", "KMT2A-MYOCD", "KMT2A-MLLT6", "KMT2A-DCP1A", "KMT2A-FNBP1", "KMT2A-AFF3", "KMT2A-CCNJL", "KMT2A-C9orf72", "KMT2A-SEPT2", "KMT2A-RARA", "KMT2A-PALM2.AKAP2", "KMT2A-AFF1", "KMT2A-PICALM", "KMT2A-EPS15", "KMT2A-LYN", "KMT2A-X"]
+              },
+              {
+                "name": "DEK::NUP214",
+                "aliases": ["DEK-NUP214", "AMLDEKNUP214", "DEK-NUP214"]
+              },
+              {
+                "name": "MECOM-r",
+                "aliases": ["AMLMECOM", "3q21q26", "MECOM", "RUNX1-MECOM", "C3orf27-MECOM", "MECOM-TBL1XR1"]
+              },
+              {
+                "name": "BCR::ABL1"
+              },
+              {
+                "name": "NPM1alt",
+                "aliases": ["AMLNPM1", "NPM1-MLF1", "NPM1-CCDC28A", "NPM1-RARA"]
+              },
+              {
+                "name": "CEBPAalt",
+                "aliases": ["AMLCEBPA"]
+              },
+              {
+                "name": "NUP98-r",
+                "aliases": ["NUP98::KDM5A", "NUP98-KDM5A", "NUP98::NSD1", "NUP98-NSD1", "NUP98-other", "AMLNUP98", "NUP98-PHF15", "NUP98-PRRX1", "NUP98-HOXA9", "NUP98-PHF23", "NUP98-HOXA13", "NUP98-HOXD13", "NUP98-BPTF"]
+              },
+              {
+                "name": "KAT6A-r",
+                "aliases": ["AMLKAT6A", "KAT6A-CREBBP"]
+              },
+              {
+                "name": "PICALM::MLLT10",
+                "aliases": ["AMLPICALMMLLT10", "PICALM-MLLT10", "MLLT10-PICALM"]
+              },
+              {
+                "name": "CBFA2T3::GLIS2",
+                "aliases": ["AMLCBFA2T3GLIS2", "CBFA2T3-GLIS2"]
+              },
+              {
+                "name": "ETV6-r",
+                "aliases": ["ETV6-MNX1", "ETV6(deletion)", "ETV6-FOXO1", "ETV6-LMBR1", "ETV6-NIPBL", "EP300-ETV6", "ETV6-MN1"]
+              },
+              {
+                "name": "FUS::ERG",
+                "aliases": ["FUS-ERG"]
+              }
+            ]
+        },
+        {
+          "name": "B-ALL",
+          "children": [
+            {
+                "name": "B-other",
+                "aliases": ["B-other, with fusion", "B-other, without fusion", "Others", "Other", "BALLNOS"]
+            },
+            {
+                "name": "aneuploidy",
+                "children": [
+                  {
+                    "name": "high hyperdiploid",
+                    "aliases": ["HeH", "Hyperdiploid", "High hyperdiploidy", "hyperdiploid", "HHD", "High hyperdiploid", "BALLHYPER"]
+                  },
+                  {
+                    "name": "hypodiploid",
+                    "aliases": ["hypodiploid", "Hypo", "Hypodiploid", "Hypodiploidy", "BALLHYPO", "Low hypodiploid", "Near haploid", "low HeH", "Low hyperdiploid"]
+                  },
+                  {
+                    "name": "iAMP21",
+                    "aliases": ["iamp21", "BALLIAMP21"]
+                  }
+                ]
+            },
+            {
+              "name": "BCR::ABL1-group",
+              "children": [
+                {
+                  "name": "BCR::ABL1",
+                  "aliases": ["t(9;22)","Ph","BCR-ABL1","Ph-pos", "BALLBCRABL1"]
+                },
+                {
+                  "name": "BCR::ABL1-like",
+                  "aliases": ["ph-like", "Ph-like_non CRLF2", "Ph-like_CRLF2", "Ph-like", "BCR-ABL1_or_like", "BCR-ABL1_or_like", "BALLBCRABL1L"]
+                }
+              ]
+            },
+            {
+              "name": "ETV6::RUNX1-group",
+              "children": [
+                {
+                  "name": "ETV6::RUNX1",
+                  "aliases": ["t(12;21)", "ETV6-RUNX1", "BALLETV6RUNX1"]
+                },
+                {
+                  "name": "ETV6::RUNX1-like",
+                  "aliases": ["t(12;21)-like", "ETV6-RUNX1-like", "ETV6-RUNX1_or_like", "BALLETV6RUNX1L"]
+                }
+              ]
+            },
+            {
+              "name": "DUX4-r",
+              "aliases": ["DUX4", "DUX4-rearranged", "DUX4-R", "DUX4-ERG", "DUX4-IGH", "BALLDUX4IGH", "BALLDUX4IGHL"]
+            },
+            {
+              "name": "PAX5alt",
+              "aliases": ["dic(9;20)", "PAX5_alteration", "BALLPAX5"]
+            },
+            {
+              "name": "KMT2A-r",
+              "aliases": ["11q23/MLL", "KMT2A", "KMT2A-like", "MLL", "KMT2A-R", "KMT2A Group", "BALLKMT2A", "BALLKMT2AL"]
+            },
+            {
+              "name": "ZNF384-r",
+              "aliases": ["ZNF384", "ZNF384-like", "ZNF384-R", "ZNF384 Group", "BALLZNF384", "BALLZNF384L"]
+            },
+            {
+              "name": "TCF3::PBX1",
+              "aliases": ["t(1;19)", "TCF3-PBX1", "BALLTCF3PBX1"]
+            },
+            {
+              "name": "MEF2D-r",
+              "aliases": ["MEF2D", "MEF2D-R", "BALLMEF2D"]
+            },
+            {
+              "name": "PAX5 P80R",
+              "aliases": ["PAX5 p.Pro80Arg", "PAX5_P80R", "BALLPAX5P80R"]
+            },
+            {
+              "name": "NUTM1-r",
+              "aliases": ["NUTM1", "NUTM1-R", "BALLNUTM1"]
+            },
+            {
+              "name": "MYC-r",
+              "aliases": ["BCL2/MYC", "BALLMYC"]
+            },
+            {
+              "name": "HLF-r",
+              "aliases": ["HLF"]
+            },
+            {
+              "name": "IKZF1 N159Y",
+              "aliases": ["BALLIKZF1"]
+            },
+            {
+              "name": "IGH::CEBPD",
+              "aliases": ["IGH-CEBPD", "BALLIGHCEBPD"]
+            }
+          ]
+        },
+        {
+          "name": "T-ALL",
+          "aliases": ["TALLNOS", "TALLBCL11B", "TALLHOXA", "TALLLMO2", "TALLLYL1", "TALLNKX2", "TALLTAL1", "TALLTLX1", "TALLTLX3", "T-other"]
+        }
+      ]
+    }
+  ]
