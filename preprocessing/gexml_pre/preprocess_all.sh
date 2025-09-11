@@ -18,7 +18,7 @@ python -m preprocessing.gexml_pre.tran
 # and saves only rows that contain 'labeled_diagnostic'
 # to 'nf-core-gexml-test-data/samplesheet.csv'.
 
-output="${PROCESSED_DATA_DIR}/samplesheet.csv"
+output="${PROCESSED_DATA_DIR}/samplesheet_labeled_diagnostic.csv"
 
 # Ensure output directory exists
 mkdir -p "$(dirname "$output")"
