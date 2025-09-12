@@ -39,9 +39,6 @@
                 "exclude": true
               },
               {
-                "name": "BCR::ABL1"
-              },
-              {
                 "name": "NPM1alt",
                 "aliases": ["AMLNPM1", "NPM1-MLF1", "NPM1-CCDC28A", "NPM1-RARA"]
               },
