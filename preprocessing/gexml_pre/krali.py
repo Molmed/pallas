@@ -131,6 +131,12 @@ samplesheet_df.loc[replicate_mask, 'data_silo'] = 'replicate'
 b_other_mask = samplesheet_df['subtype'].str.endswith('B-other')
 samplesheet_df.loc[b_other_mask, 'data_silo'] = 'unlabeled'
 
+# Everything prefaced with "EXCLUDED" should be set to excluded silo
+excluded_rows = samplesheet_df['subtype'].str.contains(
+    'EXCLUDED', na=False)
+if excluded_rows.any():
+    samplesheet_df.loc[excluded_rows, 'data_silo'] = 'excluded'
+
 samplesheet_df.loc[
     samplesheet_df['subtype'].str.endswith('B-other'), 'data_silo'
     ] = 'unlabeled'

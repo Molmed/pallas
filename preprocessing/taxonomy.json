@@ -35,7 +35,8 @@
               },
               {
                 "name": "MECOM-r",
-                "aliases": ["AMLMECOM", "3q21q26", "MECOM", "RUNX1-MECOM", "C3orf27-MECOM", "MECOM-TBL1XR1"]
+                "aliases": ["AMLMECOM", "3q21q26", "MECOM", "RUNX1-MECOM", "C3orf27-MECOM", "MECOM-TBL1XR1"],
+                "exclude": true
               },
               {
                 "name": "BCR::ABL1"
@@ -54,11 +55,13 @@
               },
               {
                 "name": "KAT6A-r",
-                "aliases": ["AMLKAT6A", "KAT6A-CREBBP"]
+                "aliases": ["AMLKAT6A", "KAT6A-CREBBP"],
+                "exclude": true
               },
               {
                 "name": "PICALM::MLLT10",
-                "aliases": ["AMLPICALMMLLT10", "PICALM-MLLT10", "MLLT10-PICALM"]
+                "aliases": ["AMLPICALMMLLT10", "PICALM-MLLT10", "MLLT10-PICALM"],
+                "exclude": true
               },
               {
                 "name": "CBFA2T3::GLIS2",
@@ -94,7 +97,8 @@
                   },
                   {
                     "name": "low hyperdiploid",
-                    "aliases": ["low HeH", "Low hyperdiploid"]
+                    "aliases": ["low HeH", "Low hyperdiploid"],
+                    "exclude": true
                   },
                   {
                     "name": "iAMP21",
@@ -174,7 +178,8 @@
             },
             {
               "name": "IGH::CEBPD",
-              "aliases": ["IGH-CEBPD", "BALLIGHCEBPD"]
+              "aliases": ["IGH-CEBPD", "BALLIGHCEBPD"],
+              "exclude": true
             }
           ]
         },

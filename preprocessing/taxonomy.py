@@ -4,6 +4,7 @@ import os
 
 class Taxonomy():
     UNRECOGNIZED_SUBTYPE_PREFIX = 'UNRECOGNIZED: '
+    EXCLUDED_SUBTYPE_PREFIX = 'EXCLUDED: '
 
     def __init__(self):
         current_path = os.path.dirname(os.path.realpath(__file__))
@@ -51,7 +52,7 @@ class Taxonomy():
                name,
                disease=None,
                join=False,
-               remove_unrecognized=True,
+               remove_unrecognized_and_excluded=True,
                abbreviate=True):
         # Trim whitespace from name
         name = name.strip()
@@ -64,10 +65,10 @@ class Taxonomy():
                 return ','.join([disease, lineage_list[-1]])
             return ','.join(lineage_list)
 
-        def format_unrecognized(disease=None):
-            if remove_unrecognized:
+        def format_unrecognized_and_excluded(prefix, disease=None):
+            if remove_unrecognized_and_excluded:
                 return None
-            str = f'{Taxonomy.UNRECOGNIZED_SUBTYPE_PREFIX}{name}'
+            str = f'{prefix}{name}'
             if disease:
                 return format_lineage_list([disease, str])
             return str
@@ -78,7 +79,14 @@ class Taxonomy():
             parents = self._tree
         lineage = Taxonomy._find_lineage(parents, name)
         if not lineage:
-            return format_unrecognized(disease)
+            return format_unrecognized_and_excluded(
+                Taxonomy.UNRECOGNIZED_SUBTYPE_PREFIX,
+                disease)
+        do_exclude = [node["exclude"] for node in lineage if "exclude" in node]
+        if do_exclude:
+            return format_unrecognized_and_excluded(
+                Taxonomy.EXCLUDED_SUBTYPE_PREFIX,
+                disease)
         result = [node["name"] for node in lineage]
         if join:
             return format_lineage_list(result, abbreviate)
@@ -88,7 +96,7 @@ class Taxonomy():
                                subtypes,
                                disease=None,
                                join=False,
-                               remove_unrecognized=False,
+                               remove_unrecognized_and_excluded=False,
                                abbreviate=True,
                                split_delimiter=None):
         translated = {}
@@ -98,25 +106,25 @@ class Taxonomy():
                 translated_split_subtypes = []
                 for x in split_subtypes:
                     translated_subtype = self.lookup(
-                        x, disease, join, remove_unrecognized, abbreviate)
+                        x, disease, join, remove_unrecognized_and_excluded, abbreviate)
                     translated_split_subtypes.append(translated_subtype)
                 translated[entry] = ','.join(translated_split_subtypes)
             else:
                 translated[entry] = self.lookup(
-                    entry, disease, join, remove_unrecognized, abbreviate)
+                    entry, disease, join, remove_unrecognized_and_excluded, abbreviate)
         return translated
 
     def translate_subtype_column(self,
                                  column,
                                  disease=None,
-                                 remove_unrecognized=False,
+                                 remove_unrecognized_and_excluded=False,
                                  abbreviate=False,
                                  split_delimiter=None):
         translated = self.translate_subtype_list(
             column,
             disease,
             join=True,
-            remove_unrecognized=remove_unrecognized,
+            remove_unrecognized_and_excluded=remove_unrecognized_and_excluded,
             abbreviate=abbreviate,
-            split_delimiter=None)
+            split_delimiter=split_delimiter)
         return column.replace(translated)

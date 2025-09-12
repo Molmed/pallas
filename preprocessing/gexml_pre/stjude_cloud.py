@@ -141,6 +141,12 @@ unrecognized_rows = samplesheet_df['subtype'].str.contains(
 if unrecognized_rows.any():
     add_to_silo(samplesheet_df[unrecognized_rows].index, 'unrecognized')
 
+# Everything prefaced with "EXCLUDED" should be set to excluded silo
+excluded_rows = samplesheet_df['subtype'].str.contains(
+    'EXCLUDED', na=False)
+if excluded_rows.any():
+    add_to_silo(samplesheet_df[excluded_rows].index, 'excluded')
+
 # Add remaining to labeled_diagnostic silo
 add_to_silo(
     samplesheet_df[samplesheet_df['data_silo'] == ''
