@@ -6,6 +6,9 @@ source preprocessing/.env
 echo "Reading from ${RAW_DATA_DIR}"
 echo "Writing to ${PROCESSED_DATA_DIR}"
 
+# Remove all samplesheet.csv items from the processed data directory
+find ${PROCESSED_DATA_DIR} -type f -name "samplesheet.csv" -delete
+
 python -m preprocessing.gexml_pre.diedrich
 python -m preprocessing.gexml_pre.heinaniemi
 python -m preprocessing.gexml_pre.krali
