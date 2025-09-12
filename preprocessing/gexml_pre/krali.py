@@ -122,6 +122,7 @@ mask = (samplesheet_df['subtype'].isna()) & (
 )
 samplesheet_df.loc[mask, 'subtype'] = "Control"
 samplesheet_df.loc[mask, 'batch'] = "ScriptSeq"
+samplesheet_df.loc[mask, 'data_silo'] = "labeled_diagnostic"
 
 # Get subtype translation
 tax = Taxonomy()
