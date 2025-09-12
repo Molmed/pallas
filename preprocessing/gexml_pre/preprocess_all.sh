@@ -12,6 +12,7 @@ python -m preprocessing.gexml_pre.krali
 python -m preprocessing.gexml_pre.stjude_cloud
 python -m preprocessing.gexml_pre.stjude_panALL
 python -m preprocessing.gexml_pre.tran
+python -m preprocessing.gexml_pre.lund
 
 # This script finds all 'samplesheet.csv' files in 'processed/',
 # concatenates them into one CSV while keeping only the first header,

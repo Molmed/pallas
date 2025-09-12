@@ -9,7 +9,7 @@ print(f"Processing {dataset_name}...")
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
-raw_data_path = f'{data_path}/EGAS00001001795.featurecount.tsv'
+raw_data_path = f'{data_path}/EGAS00001001795.salmon.merged.gene_counts.tsv'
 pheno_input_file = f'{data_path}/EGAS00001001795.pheno.csv'
 
 # OUTPUT FILES ########
@@ -39,19 +39,22 @@ samplesheet_df['subtype'] = tax.translate_subtype_column(samplesheet_df['subtype
 samplesheet_df['dataset'] = dataset_name
 
 # Set data silo to empty string
-samplesheet_df['data_silo'] = ''
+samplesheet_df['data_silo'] = 'labeled_diagnostic'
 
 # Convert index to string
 samplesheet_df.index = samplesheet_df.index.astype(str)
 
 # Prepend each sample id with "case_"
-samplesheet_df.index = "case_" + samplesheet_df.index
+samplesheet_df.index = "Case_" + samplesheet_df.index
 
 # PROCESS GEX ########
 # Break up the gene expression file
 gex_df = pd.read_csv(raw_data_path, index_col=0, delimiter='\t')
 
-# For each column:
+# Drop second column, it contains gene name in addition to gene id
+gex_df = gex_df.drop(columns=[gex_df.columns[0]])
+
+# For each remaining column:
 # Create a new file with the column name as the file name
 # The contents should contain the Gene and the counts for that column
 # delimited by a tab. No header, no index.
