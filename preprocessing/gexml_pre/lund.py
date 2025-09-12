@@ -38,8 +38,12 @@ samplesheet_df['subtype'] = tax.translate_subtype_column(samplesheet_df['subtype
 # Set 'dataset' column to dataset name
 samplesheet_df['dataset'] = dataset_name
 
-# Set data silo to empty string
+# Set data silo to default
 samplesheet_df['data_silo'] = 'labeled_diagnostic'
+
+# Set all items whose subtype ends in "B-other" to data_silo "unlabeled"
+b_other_mask = samplesheet_df['subtype'].str.endswith('B-other')
+samplesheet_df.loc[b_other_mask, 'data_silo'] = 'unlabeled'
 
 # Convert index to string
 samplesheet_df.index = samplesheet_df.index.astype(str)

@@ -55,21 +55,36 @@ subtype_col_name = samplesheet_df.columns[1]
 
 samplesheet_df = samplesheet_df[[subtype_col_name,
                                  'GEX dataset',
+                                 'DNAm dataset',
                                  'library'
                                  ]]
 
 # Rename cols
-samplesheet_df = samplesheet_df.rename(columns={subtype_col_name: 'subtype',
-                                                'GEX dataset': 'partition',
-                                                'library': 'batch'})
+samplesheet_df = samplesheet_df.rename(
+    columns={subtype_col_name: 'subtype',
+             'GEX dataset': 'partition',
+             'DNAm dataset': 'dnam_partition',
+             'library': 'batch'})
+
 # Rename index
 samplesheet_df.index.name = 'sample'
 
 # Only keep records where partition is not NaN
 samplesheet_df = samplesheet_df[samplesheet_df['partition'].notna()]
 
-# Keep only index, subtype and batch cols
-samplesheet_df = samplesheet_df[['subtype', 'batch']]
+# For samples that have overlapping GEX and DNAm data,
+# Put them in the validation data silo
+# # The samples with NaN dnam_partition can go in labeled_diagnostic
+# samplesheet_df.loc[
+#     samplesheet_df['dnam_partition'].notna(), 'data_silo'] = 'validation'
+# samplesheet_df.loc[
+#     samplesheet_df['dnam_partition'].isna(), 'data_silo'] = 'labeled_diagnostic'
+
+# For now, put everything in "labeled_diagnostic" by default
+samplesheet_df['data_silo'] = 'labeled_diagnostic'
+
+# Keep only necessary cols
+samplesheet_df = samplesheet_df[['subtype', 'batch', 'data_silo']]
 
 # Append replicates_df to samplesheet_df
 samplesheet_df = pd.concat([samplesheet_df, replicates_df], ignore_index=False)
@@ -116,9 +131,6 @@ samplesheet_df['subtype'] = tax.translate_subtype_column(
 # Set 'dataset' column to dataset name
 samplesheet_df['dataset'] = dataset_name
 
-# Set data silo to empty string
-samplesheet_df['data_silo'] = 'labeled_diagnostic'
-
 # If sample name ends in "_2" or "_3", set data_silo to "relapse"
 relapse_mask = samplesheet_df.index.str.endswith(("_2", "_3"))
 samplesheet_df.loc[relapse_mask, 'data_silo'] = 'relapse'
@@ -136,10 +148,6 @@ excluded_rows = samplesheet_df['subtype'].str.contains(
     'EXCLUDED', na=False)
 if excluded_rows.any():
     samplesheet_df.loc[excluded_rows, 'data_silo'] = 'excluded'
-
-samplesheet_df.loc[
-    samplesheet_df['subtype'].str.endswith('B-other'), 'data_silo'
-    ] = 'unlabeled'
 
 # remove all rows from spreadsheet without feature_counts
 samplesheet_df = samplesheet_df[samplesheet_df['feature_counts'].notna()]
