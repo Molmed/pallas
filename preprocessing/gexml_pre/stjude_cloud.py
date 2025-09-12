@@ -86,6 +86,16 @@ if not nos_samples_with_subtype.empty:
         else:
             print(f"Error: Could not extract subtype for sample {sample}. Please check the data.")
 
+# Drop all samples where sample_type is not "Diagnostic" or "Relapse"
+valid_sample_types = ['Diagnosis', 'Relapse']
+invalid_samples = samplesheet_df[
+    ~samplesheet_df['sample_type'].isin(valid_sample_types)].index
+if not invalid_samples.empty:
+    print("Warning: The following samples have invalid sample_type and will be removed:")
+    print(invalid_samples.tolist())
+    samplesheet_df = samplesheet_df[
+        samplesheet_df['sample_type'].isin(valid_sample_types)]
+
 # Set data_silo to "relapse" if any of the following is true:
 # - sample_type contains "Relapse"
 # - sample name ends with "_R"
