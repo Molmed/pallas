@@ -31,8 +31,7 @@
               },
               {
                 "name": "DEK::NUP214",
-                "aliases": ["DEK-NUP214", "AMLDEKNUP214", "DEK-NUP214"],
-                "exclude": true
+                "aliases": ["DEK-NUP214", "AMLDEKNUP214", "DEK-NUP214"]
               },
               {
                 "name": "MECOM-r",
@@ -45,7 +44,7 @@
               },
               {
                 "name": "CEBPAalt",
-                "aliases": ["AMLCEBPA"]
+                "aliases": ["AMLCEBPA","CEBPA ITD","CEBPA K313>KK;CEBPA P115_A118fs","CEBPA S21fs;CEBPA LOH"]
               },
               {
                 "name": "NUP98-r",

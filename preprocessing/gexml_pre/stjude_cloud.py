@@ -131,6 +131,39 @@ tax = Taxonomy()
 samplesheet_df['subtype'] = tax.translate_subtype_column(
     samplesheet_df['subtype'], split_delimiter=',')
 
+# Double-check "other" cases, there might be a biomarker that can be used
+# First, find all items whose subtype is "B-other" or "AML-other" or "ALLNOS"
+# but whose attr_subtype_biomarkers is not empty
+other_samples = samplesheet_df[
+    (samplesheet_df['subtype'].str.contains(
+        'B-other|AML-other|ALLNOS', na=False)) &
+    (~samplesheet_df['attr_subtype_biomarkers'].isna()) &
+    (samplesheet_df['attr_subtype_biomarkers'] != '') &
+    (samplesheet_df['attr_subtype_biomarkers'] != 'Not Available')
+]
+if not other_samples.empty:
+    print("Warning: The following 'other' samples have biomarkers that might help refine the subtype:")
+    print(other_samples.index.tolist())
+    # Print their biomarkers
+    for sample in other_samples.index:
+        biomarkers = samplesheet_df.at[sample, 'attr_subtype_biomarkers']
+        print(f"Sample {sample} has biomarkers: {biomarkers}")
+        # get sample disease, does subtype contain "AML" or "B-ALL" or "T-ALL"?
+        subtype = samplesheet_df.at[sample, 'subtype']
+        if 'AML' in subtype:
+            disease = 'AML'
+        elif 'B-' in subtype:
+            disease = 'B-ALL'
+        elif 'T-' in subtype:
+            disease = 'T-ALL'
+        translated = tax.lookup(biomarkers,
+                                disease,
+                                remove_unrecognized_and_excluded=False,
+                                join=True,
+                                abbreviate=False)
+        # Copy translation to subtype
+        samplesheet_df.at[sample, 'subtype'] = translated
+
 # Set all items whose subtype contains "B-other" or "AML-other" to data_silo "unlabeled"
 # but use the function to avoid overwriting existing silos
 unlabeled_rows = samplesheet_df['subtype'].str.contains(
