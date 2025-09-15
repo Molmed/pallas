@@ -69,8 +69,8 @@ def add_to_silo(items, silo_name):
 # If attr_diagnosis says the same is in relapse or remission remove it
 # it is unclear if this was the status when the sample was taken
 ambiguous_samples = samplesheet_df[
-    samplesheet_df['attr_diagnosis'].str.contains('Acute lymphoblastic leukemia \(ALL\) in relapse \(HCC\)', na=False) |
-    samplesheet_df['attr_diagnosis'].str.contains('Acute lymphoblastic leukemia \(ALL\) in remission \(HCC\)', na=False)
+    samplesheet_df['attr_diagnosis'].str.contains('in relapse', na=False) |
+    samplesheet_df['attr_diagnosis'].str.contains('in remission', na=False)
 ].index
 if not ambiguous_samples.empty:
     print("Warning: The following samples have ambiguous status (relapse or remission) and will be removed:")
@@ -194,6 +194,30 @@ if not multi_subtype_rows.empty:  # Check if the DataFrame is not empty
     samplesheet_df.loc[multi_subtype_rows.index, 'subtype'] = \
         samplesheet_df.loc[multi_subtype_rows.index, 'sj_associated_diagnoses']
 
+# Also some keywords in 'attr_diagnosis' indicate multiclass
+multiclass_keywords_attr = ['THERAPY-RELATED'
+                            ]
+multi_subtype_rows = samplesheet_df[
+    samplesheet_df['attr_diagnosis'].str.contains(
+        '|'.join(multiclass_keywords_attr), na=False)]
+if not multi_subtype_rows.empty:  # Check if the DataFrame is not empty
+    add_to_silo(multi_subtype_rows.index, 'multiclass')
+    # And copy the attr_diagnosis value to subtype
+    samplesheet_df.loc[multi_subtype_rows.index, 'subtype'] = \
+        samplesheet_df.loc[multi_subtype_rows.index, 'attr_diagnosis']
+
+# If attr_diagnosis contains "NUP98r" but the subtype does not,
+# then mark it as multiclass
+multi_subtype_rows = samplesheet_df[
+    samplesheet_df['attr_diagnosis'].str.contains('NUP98r', na=False) &
+    ~samplesheet_df['subtype'].str.contains('NUP98', na=False)
+]
+if not multi_subtype_rows.empty:
+    add_to_silo(multi_subtype_rows.index, 'multiclass')
+    # And copy the attr_diagnosis value to subtype
+    samplesheet_df.loc[multi_subtype_rows.index, 'subtype'] = \
+        samplesheet_df.loc[multi_subtype_rows.index, 'attr_diagnosis']
+
 # Finally, if there are any samples where 'sj_associated_diagnoses' contains
 # both "BALL" and "AML", then mark them as multiclass
 multi_subtype_rows = samplesheet_df[
@@ -267,7 +291,8 @@ if excluded_rows.any():
 # Manually add items that seem to have labeling inconsistencies
 # e.g. different subtypes specificed in different columns
 manual_exclusions = [
-    'SJ030210'  # Both KMT2A and NUP98
+    'SJ030210'  # Both KMT2A and NUP98,
+    'SJBALL032645_D1' # ALL and CML
     ]
 add_to_silo(manual_exclusions, 'excluded')
 
