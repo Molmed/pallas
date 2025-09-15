@@ -292,9 +292,29 @@ if excluded_rows.any():
 # e.g. different subtypes specificed in different columns
 manual_exclusions = [
     'SJ030210'  # Both KMT2A and NUP98,
-    'SJBALL032645_D1' # ALL and CML
+    'SJBALL032645_D1'  # ALL and CML
+    'SJAML061502_D1'  # KMT2A and CEBPA,
+    'SJAML073691_D1'  # KMT2A and CEBPA,
+    'SJBALL032304_D1'  # HeH and PAX5,
+    'SJBALL032020_D1'  # HeH and PAX5,
+    'SJBALL032489_D1'  # HeH and PAX5,
+    'SJBALL032630_D1'  # HeH and PAX5,
+    'SJBALL032755_D1'  # HeH and PAX5,
+    'SJBALL031979_D1'  # HeH and PAX5,
     ]
 add_to_silo(manual_exclusions, 'excluded')
+
+# For the ETV6-RUNX1 samples, ensure attr_subtype_biomarkers contains the fusion gene.
+# Find the one whose subtype *ends* in 'ETV6::RUNX1'
+etv6_runx1_rows = samplesheet_df[
+    samplesheet_df['subtype'].str.endswith('ETV6::RUNX1', na=False) &
+    ~samplesheet_df['attr_subtype_biomarkers'].str.contains('ETV6-RUNX1', na=False)
+]
+if not etv6_runx1_rows.empty:
+    print("Warning: The following ETV6-RUNX1 samples do not have the fusion in biomarkers and will be excluded:")
+    print(etv6_runx1_rows.index.tolist())
+    add_to_silo(etv6_runx1_rows.index, 'excluded')
+exit()
 
 # Set data_silo to "relapse" if any of the following is true:
 # - sample_type contains "Relapse"
