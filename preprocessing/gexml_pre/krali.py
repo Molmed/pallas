@@ -124,6 +124,10 @@ samplesheet_df.loc[mask, 'subtype'] = "Control"
 samplesheet_df.loc[mask, 'batch'] = "ScriptSeq"
 samplesheet_df.loc[mask, 'data_silo'] = "labeled_diagnostic"
 
+# Rename KMT2A's to avoid confusion with AML
+samplesheet_df['subtype'] = samplesheet_df['subtype'].str.replace(
+    'KMT2A-r', 'BALLKMT2A', regex=False)
+
 # Get subtype translation
 tax = Taxonomy()
 samplesheet_df['subtype'] = tax.translate_subtype_column(
