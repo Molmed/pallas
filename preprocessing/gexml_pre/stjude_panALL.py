@@ -11,7 +11,6 @@ print(f"Processing {dataset_name}...")
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
 raw_data_path = f'{data_path}/BALL-1988S-HTSeq'
 pheno_input_file = f'{data_path}/B-ALL-subtyping.xlsx'
-cloud_phenotype_file = f'{RAW_DATA_DIR}/SJC-DS-1009/SAMPLE_INFO.txt'
 
 # OUTPUT FILES ########
 processed_dir = f'{PROCESSED_DATA_DIR}/{dataset_name}'
@@ -62,13 +61,6 @@ if multi_subtype_rows.any():
         primary = samplesheet_df.at[idx, 'primary subtype']
         second = samplesheet_df.at[idx, '2nd subtype']
         samplesheet_df.at[idx, 'primary subtype'] = f'{primary},{second}'
-
-# If a sample is in both datasets, put it in the "replicate" silo
-# samplesheet_df['is_replicate'] = samplesheet_df.index.isin(
-#     cloud_data['sample_name'])
-# add_to_silo(
-#     samplesheet_df[samplesheet_df['is_replicate']].index, 'replicate')
-# samplesheet_df = samplesheet_df.drop(columns=['is_replicate'])
 
 # Rename index to sample
 samplesheet_df.index.name = 'sample'
