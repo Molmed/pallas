@@ -65,6 +65,18 @@ def add_to_silo(items, silo_name):
     samplesheet_df.loc[mask, 'data_silo'] = silo_name
 
 
+# FILTER OUT SUSPECT SAMPLES
+# If attr_diagnosis says the same is in relapse or remission remove it
+# it is unclear if this was the status when the sample was taken
+ambiguous_samples = samplesheet_df[
+    samplesheet_df['attr_diagnosis'].str.contains('Acute lymphoblastic leukemia \(ALL\) in relapse \(HCC\)', na=False) |
+    samplesheet_df['attr_diagnosis'].str.contains('Acute lymphoblastic leukemia \(ALL\) in remission \(HCC\)', na=False)
+].index
+if not ambiguous_samples.empty:
+    print("Warning: The following samples have ambiguous status (relapse or remission) and will be removed:")
+    print(ambiguous_samples.tolist())
+    samplesheet_df = samplesheet_df[~samplesheet_df.index.isin(ambiguous_samples)]
+
 # Detect down syndrome samples
 down_syndrome_samples = samplesheet_df[
     samplesheet_df['attr_diagnosis'].str.contains('DOWN SYNDROME', na=False) |
@@ -313,8 +325,11 @@ temp_df = temp_df[['sample_type', 'subtype', 'data_silo',
                    'sj_datasets', 'sj_disease_hierarchy_code',
                    'sj_disease_hierarchy_name']]
 
+# Only keep labeled_diagnostic silo
+temp_df = temp_df[temp_df['data_silo'] == 'labeled_diagnostic']
+
 # Dump this to a temporary CSV for manual checking
-temp_df.to_csv(f'{processed_dir}/temp_sjc_check.csv')
+temp_df.to_csv(f'{processed_dir}/sjc_full.csv')
 
 # Keep only the columns we need
 samplesheet_df = samplesheet_df[
