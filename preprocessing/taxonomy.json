@@ -71,6 +71,26 @@
               {
                 "name": "FUS::ERG",
                 "aliases": ["FUS-ERG"]
+              },
+              {
+                "name": "RBM15::MKL1",
+                "aliases": ["RBM15-MKL1", "AMLRBM15MKL1"],
+                "exclude": true
+              },
+              {
+                "name": "AMKL",
+                "aliases": ["AMKLCBFA2T3GLIS2","AMKLHOX","AMKLKMT2A"],
+                "exclude": true
+              },
+              {
+                "name": "AMML",
+                "aliases": ["AMMLKMT2A","AMMLNPM1"],
+                "exclude": true
+              },
+              {
+                "name": "AMOL",
+                "aliases": ["AMOLKMT2A"],
+                "exclude": true
               }
             ]
         },

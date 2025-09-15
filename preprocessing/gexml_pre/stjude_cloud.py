@@ -103,6 +103,35 @@ if not nos_samples_with_subtype.empty:
         else:
             print(f"Error: Could not extract subtype for sample {sample}. Please check the data.")
 
+# Sometimes a sample has a subtype lurking in sj_associated_diagnoses
+# For each NOS sample, check if sj_associated_diagnoses contains a known subtype
+nos_samples = samplesheet_df[
+    samplesheet_df['sj_diseases'].str.contains('NOS', na=False)]
+# The subtypes we care about are:
+known_subtypes = [
+    'BALLHYPO',
+    'BALLPAX5',
+    'BALLHYPER',
+    'AMLNUP98',
+    'AMLKMT2A',
+    'AMLNPM1',
+    'AMLPICALMMLLT10',
+    'AMLBCL11B',
+    'AMLMECOM',
+    'AMLDEKNUP214',
+    'AMLUBTF',
+    'AMMLKMT2A'
+]
+for sample in nos_samples.index:
+    associated_diagnoses = samplesheet_df.at[sample, 'sj_associated_diagnoses']
+    for subtype in known_subtypes:
+        # If sj associated diagnoses contains the subtype as substring
+        if subtype in associated_diagnoses:
+            print(f"Info: Sample {sample} has known subtype {subtype} in sj_associated_diagnoses.")
+            # Copy it to sj_diseases
+            samplesheet_df.at[sample, 'sj_diseases'] = subtype
+            break  # No need to check other subtypes
+
 # Drop all samples where sample_type is not "Diagnostic" or "Relapse"
 valid_sample_types = ['Diagnosis', 'Relapse']
 invalid_samples = samplesheet_df[
@@ -140,7 +169,9 @@ multiclass_keywords = ['Ganglioneuroblastoma',
                        'MBLWNT',
                        'THPA',
                        'TAML',
-                       'SCCNOS'
+                       'SCCNOS',
+                       'Epithelioid Sarcoma',
+                       'THERAPY-RELATED'
                        ]
 multi_subtype_rows = samplesheet_df[
     samplesheet_df['sj_associated_diagnoses'].str.contains(
