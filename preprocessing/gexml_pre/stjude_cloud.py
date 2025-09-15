@@ -314,7 +314,6 @@ if not etv6_runx1_rows.empty:
     print("Warning: The following ETV6-RUNX1 samples do not have the fusion in biomarkers and will be excluded:")
     print(etv6_runx1_rows.index.tolist())
     add_to_silo(etv6_runx1_rows.index, 'excluded')
-exit()
 
 # Set data_silo to "relapse" if any of the following is true:
 # - sample_type contains "Relapse"
