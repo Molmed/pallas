@@ -126,6 +126,43 @@ if multi_subtype_rows.any():
     samplesheet_df.loc[multi_subtype_rows, 'subtype'] = \
         samplesheet_df.loc[multi_subtype_rows, 'attr_diagnosis']
 
+# Check sj_associated_diagnoses to see if there are samples
+# with multiple cancers that should be marked multiclass
+multiclass_keywords = ['Ganglioneuroblastoma',
+                       'Ganglioneuroma',
+                       'Papillary Thyroid Cancer',
+                       'TMDS',
+                       'Ewings',
+                       'NORM',
+                       'THFO',
+                       'Neuroblastoma',
+                       'ALAL',
+                       'MBLWNT',
+                       'THPA',
+                       'TAML',
+                       'SCCNOS'
+                       ]
+multi_subtype_rows = samplesheet_df[
+    samplesheet_df['sj_associated_diagnoses'].str.contains(
+        '|'.join(multiclass_keywords), na=False)]
+if not multi_subtype_rows.empty:  # Check if the DataFrame is not empty
+    add_to_silo(multi_subtype_rows.index, 'multiclass')
+    # And copy the sj_associated_diagnoses value to subtype
+    samplesheet_df.loc[multi_subtype_rows.index, 'subtype'] = \
+        samplesheet_df.loc[multi_subtype_rows.index, 'sj_associated_diagnoses']
+
+# Finally, if there are any samples where 'sj_associated_diagnoses' contains
+# both "BALL" and "AML", then mark them as multiclass
+multi_subtype_rows = samplesheet_df[
+    samplesheet_df['sj_associated_diagnoses'].str.contains('BALL', na=False) &
+    samplesheet_df['sj_associated_diagnoses'].str.contains('AML', na=False)
+]
+if not multi_subtype_rows.empty:
+    add_to_silo(multi_subtype_rows.index, 'multiclass')
+    # And copy the sj_associated_diagnoses value to subtype
+    samplesheet_df.loc[multi_subtype_rows.index, 'subtype'] = \
+        samplesheet_df.loc[multi_subtype_rows.index, 'sj_associated_diagnoses']
+
 # Translate subtype
 tax = Taxonomy()
 samplesheet_df['subtype'] = tax.translate_subtype_column(
