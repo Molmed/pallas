@@ -115,6 +115,31 @@ excluded_rows = samplesheet_df['subtype'].str.contains(
 if excluded_rows.any():
     add_to_silo(samplesheet_df[excluded_rows].index, 'excluded')
 
+# Manually add items that seem to have labeling inconsistencies
+# e.g. different subtypes specificed in different columns
+manual_exclusions = [
+    'SJ030210',  # Both KMT2A and NUP98,
+    'SJHYPER003',       # Identified as Hypodiploid
+    'SJHYPER025',       # Identified as Hypodiploid
+    'SJHYPER022044',    # Identified as Hypodiploid
+    'SJHYPO121',        # Identified as BCR::ABL1
+    'SJHYPO110',        # Identified as BCR::ABL1-like
+    'SJHYPO106',        # Identified as ETV6::RUNX1-like
+    'SJHYPO115',        # Identified as ETV6::RUNX1-like
+    'SJHYPO102',        # Identified as PAX5 P80R
+    'SJHYPO103',       # Identified as PAX5 P80R
+    'SJHYPO112',       # Identified as PAX5 P80R
+    'SJHYPO107',       # Identified as PAX5alt
+    'SJHYPO113',       # Identified as PAX5alt
+    'SJHYPO147',       # Identified as PAX5alt
+    'SJHYPO151',       # Identified as PAX5alt
+    'SJHYPO021982',    # Identified as PAX5alt
+    'SJHYPO021991',    # Identified as PAX5alt
+    'SJHYPO022024',    # Identified as PAX5alt
+    'SJETV003804',    # Identified as TCF3::PBX1
+    ]
+add_to_silo(manual_exclusions, 'excluded')
+
 # Add remaining to labeled_diagnostic silo
 add_to_silo(
     samplesheet_df[samplesheet_df['data_silo'] == ''

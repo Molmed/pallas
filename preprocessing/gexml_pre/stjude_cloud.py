@@ -291,16 +291,20 @@ if excluded_rows.any():
 # Manually add items that seem to have labeling inconsistencies
 # e.g. different subtypes specificed in different columns
 manual_exclusions = [
-    'SJ030210'  # Both KMT2A and NUP98,
-    'SJBALL032645_D1'  # ALL and CML
-    'SJAML061502_D1'  # KMT2A and CEBPA,
-    'SJAML073691_D1'  # KMT2A and CEBPA,
-    'SJBALL032304_D1'  # HeH and PAX5,
-    'SJBALL032020_D1'  # HeH and PAX5,
-    'SJBALL032489_D1'  # HeH and PAX5,
-    'SJBALL032630_D1'  # HeH and PAX5,
-    'SJBALL032755_D1'  # HeH and PAX5,
-    'SJBALL031979_D1'  # HeH and PAX5,
+    'SJBALL032645_D1',  # ALL and CML
+    'SJAML061502_D1',  # KMT2A and CEBPA,
+    'SJAML073691_D1',  # KMT2A and CEBPA,
+    'SJBALL032304_D1',  # HeH and PAX5,
+    'SJBALL032020_D1',  # HeH and PAX5,
+    'SJBALL032489_D1',  # HeH and PAX5,
+    'SJBALL032630_D1',  # HeH and PAX5,
+    'SJBALL032755_D1',  # HeH and PAX5,
+    'SJBALL031979_D1',  # HeH and PAX5,
+    'SJAML030330_D1',  # Identified as B-ALL
+    'SJBALL015199_D1',  # Identified as T-ALL
+    'SJBALL022672_D1',  # Identified as T-ALL
+    'SJAML032072_D1',   # Identified as T-ALL,
+    'SJCBF100_E',       # what is this suffix
     ]
 add_to_silo(manual_exclusions, 'excluded')
 
