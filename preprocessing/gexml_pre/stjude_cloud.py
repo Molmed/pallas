@@ -341,6 +341,29 @@ panall_items = samplesheet_df[
 # Put them in the "replicate" silo
 add_to_silo(panall_items, 'replicate')
 
+# Find all items in samplesheet_df whose sample name ends in a
+# D followed by a digit that isnt 1
+digit_suffix_items = samplesheet_df[
+    samplesheet_df.index.str.match(r'.*D\d$') &  # Ends with a digit
+    ~samplesheet_df.index.str.endswith('D1')  # But not D1
+].index
+
+# Get short names for these items and for D1 items
+short_names_digit_suffix = samplesheet_df.loc[digit_suffix_items, 'panALL_index']
+d1_items = samplesheet_df[samplesheet_df.index.str.endswith('D1')].index
+short_names_d1 = samplesheet_df.loc[d1_items, 'panALL_index']
+
+# Find items with digit suffix that have a corresponding D1 item
+digit_suffix_items_with_d1 = digit_suffix_items[
+    short_names_digit_suffix.isin(short_names_d1)]
+
+# Find the items that do not yet have a silo
+digit_suffix_items_no_silo = digit_suffix_items_with_d1[
+    samplesheet_df.loc[digit_suffix_items_with_d1, 'data_silo'] == '']
+
+# Put these into the "replicate" silo
+add_to_silo(digit_suffix_items_no_silo, 'replicate')
+
 # Add remaining to labeled_diagnostic silo
 add_to_silo(
     samplesheet_df[samplesheet_df['data_silo'] == ''
