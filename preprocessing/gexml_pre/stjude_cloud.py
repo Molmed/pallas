@@ -16,6 +16,23 @@ processed_dir = f'{PROCESSED_DATA_DIR}/{dataset_name}'
 samplesheet_output_file = \
     f'{processed_dir}/samplesheet.csv'
 
+# PAN-ALL DATA FOR DE-DUPLICATION ########
+# Load the data
+panall_data_path = f'{RAW_DATA_DIR}/SJC-panALL'
+panall_raw_data_path = f'{panall_data_path}/BALL-1988S-HTSeq'
+panall_pheno_input_file = f'{panall_data_path}/B-ALL-subtyping.xlsx'
+
+panall_df = pd.read_excel(panall_pheno_input_file,
+                          sheet_name='ST1.Cohort',
+                          header=0,
+                          index_col='patient')
+# Get index of first row where patient is NaN
+nan_idx = panall_df.index.get_indexer_for(
+    panall_df.index[panall_df.index.isna()])[0]
+
+# Drop all rows after the first NaN patient
+panall_df = panall_df.iloc[:nan_idx]
+
 # PROCESS PHENO ########
 print("Processing phenotype data...")
 samplesheet_df = pd.read_csv(pheno_input_file, sep='\t', header=0)
@@ -96,15 +113,6 @@ if not invalid_samples.empty:
     samplesheet_df = samplesheet_df[
         samplesheet_df['sample_type'].isin(valid_sample_types)]
 
-# Set data_silo to "relapse" if any of the following is true:
-# - sample_type contains "Relapse"
-# - sample name ends with "_R"
-relapse_mask = samplesheet_df[
-    'sample_type'].str.contains('Relapse', na=False) | \
-    samplesheet_df.index.str.endswith('_R')
-relapse_items = samplesheet_df[relapse_mask].index
-add_to_silo(relapse_items, 'relapse')
-
 # Rename subtype
 samplesheet_df = samplesheet_df.rename(columns={'sj_diseases': 'subtype'})
 
@@ -118,22 +126,7 @@ if multi_subtype_rows.any():
     samplesheet_df.loc[multi_subtype_rows, 'subtype'] = \
         samplesheet_df.loc[multi_subtype_rows, 'attr_diagnosis']
 
-# Rename library
-samplesheet_df = samplesheet_df.rename(
-    columns={'attr_library_selection_protocol': 'batch'})
-
-# Rename file_path
-samplesheet_df = samplesheet_df.rename(columns={'file_path': 'feature_counts'})
-
-# In each file path, replace "/FEATURE_COUNTS" with raw_data_path
-samplesheet_df['feature_counts'] = samplesheet_df[
-    'feature_counts'].str.replace('/FEATURE_COUNTS', raw_data_path)
-
-# Keep only the columns we need
-samplesheet_df = samplesheet_df[
-    ['subtype', 'batch', 'feature_counts', 'data_silo']]
-
-# Get subtype translation
+# Translate subtype
 tax = Taxonomy()
 samplesheet_df['subtype'] = tax.translate_subtype_column(
     samplesheet_df['subtype'], split_delimiter=',')
@@ -144,6 +137,7 @@ unlabeled_rows = samplesheet_df['subtype'].str.contains(
     'B-other|AML-other|ALLNOS', na=False)
 if unlabeled_rows.any():
     add_to_silo(samplesheet_df[unlabeled_rows].index, 'unlabeled')
+
 
 # Everything prefaced with "UNRECOGNIZED" should be set to unrecognized silo
 unrecognized_rows = samplesheet_df['subtype'].str.contains(
@@ -157,10 +151,73 @@ excluded_rows = samplesheet_df['subtype'].str.contains(
 if excluded_rows.any():
     add_to_silo(samplesheet_df[excluded_rows].index, 'excluded')
 
+# Manually add items that seem to have labeling inconsistencies
+# e.g. different subtypes specificed in different columns
+manual_exclusions = [
+    'SJ030210'  # Both KMT2A and NUP98
+    ]
+add_to_silo(manual_exclusions, 'excluded')
+
+# Set data_silo to "relapse" if any of the following is true:
+# - sample_type contains "Relapse"
+# - sample name ends with "_R"
+relapse_mask = samplesheet_df[
+    'sample_type'].str.contains('Relapse', na=False) | \
+    samplesheet_df.index.str.endswith('_R')
+relapse_items = samplesheet_df[relapse_mask].index
+add_to_silo(relapse_items, 'relapse')
+
+# DE-DUPE PANALL DATA
+# Make a copy of the samplesheet_df index for panALL items,
+# only keeping the string before the first underscore
+samplesheet_df_index_short = samplesheet_df.index.str.split('_').str[0]
+samplesheet_df['panALL_index'] = samplesheet_df_index_short
+
+# Get all items whose panALL_index is in panall_df index
+panall_items = samplesheet_df[
+    samplesheet_df['panALL_index'].isin(panall_df.index)].index
+
+# Put them in the "replicate" silo
+add_to_silo(panall_items, 'replicate')
+
 # Add remaining to labeled_diagnostic silo
 add_to_silo(
     samplesheet_df[samplesheet_df['data_silo'] == ''
                    ].index, 'labeled_diagnostic')
+
+# Rename library
+samplesheet_df = samplesheet_df.rename(
+    columns={'attr_library_selection_protocol': 'batch'})
+
+# Rename file_path
+samplesheet_df = samplesheet_df.rename(columns={'file_path': 'feature_counts'})
+
+# In each file path, replace "/FEATURE_COUNTS" with raw_data_path
+samplesheet_df['feature_counts'] = samplesheet_df[
+    'feature_counts'].str.replace('/FEATURE_COUNTS', raw_data_path)
+
+
+# Copy to new temp df
+temp_df = samplesheet_df.copy()
+# Keep the following cols: sample, sample_type, sj_long_disease_name, attr_diagnosis, attr_subtype_biomarkers, sj_associated_diagnoses, subtype, sj_datasets, sj_disease_hierarchy_code, sj_disease_hierarchy_name, data_silo
+temp_df = temp_df[['sample_type', 'sj_long_disease_name',
+                   'attr_diagnosis', 'attr_subtype_biomarkers',
+                   'sj_associated_diagnoses', 'subtype', 'sj_datasets',
+                   'sj_disease_hierarchy_code', 'sj_disease_hierarchy_name',
+                   'data_silo']]
+# Reorder the columns so sample, sample_type, subtype and data_silo are first
+temp_df = temp_df[['sample_type', 'subtype', 'data_silo',
+                   'sj_long_disease_name', 'attr_diagnosis',
+                   'attr_subtype_biomarkers', 'sj_associated_diagnoses',
+                   'sj_datasets', 'sj_disease_hierarchy_code',
+                   'sj_disease_hierarchy_name']]
+
+# Dump this to a temporary CSV for manual checking
+temp_df.to_csv(f'{processed_dir}/temp_sjc_check.csv')
+
+# Keep only the columns we need
+samplesheet_df = samplesheet_df[
+    ['subtype', 'batch', 'feature_counts', 'data_silo']]
 
 # Set 'dataset' column to dataset name
 samplesheet_df['dataset'] = dataset_name
