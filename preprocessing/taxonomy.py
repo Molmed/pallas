@@ -65,7 +65,7 @@ class Taxonomy():
                 return ','.join([disease, lineage_list[-1]])
             return ','.join(lineage_list)
 
-        def format_unrecognized_and_excluded(prefix, disease=None):
+        def format_unrecognized_and_excluded(name, prefix, disease=None):
             if remove_unrecognized_and_excluded:
                 return None
             str = f'{prefix}{name}'
@@ -80,14 +80,16 @@ class Taxonomy():
         lineage = Taxonomy._find_lineage(parents, name)
         if not lineage:
             return format_unrecognized_and_excluded(
+                name,
                 Taxonomy.UNRECOGNIZED_SUBTYPE_PREFIX,
                 disease)
+        result = [node["name"] for node in lineage]
         do_exclude = [node["exclude"] for node in lineage if "exclude" in node]
         if do_exclude:
             return format_unrecognized_and_excluded(
+                format_lineage_list(result, abbreviate),
                 Taxonomy.EXCLUDED_SUBTYPE_PREFIX,
                 disease)
-        result = [node["name"] for node in lineage]
         if join:
             return format_lineage_list(result, abbreviate)
         return result
