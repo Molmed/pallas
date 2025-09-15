@@ -45,12 +45,6 @@ def add_to_silo(items, silo_name):
     samplesheet_df.loc[mask, 'data_silo'] = silo_name
 
 
-# Compare to the cloud samples and mark all duplicates
-cloud_data = pd.read_csv(cloud_phenotype_file, sep='\t', header=0)
-
-# Update sample_name so that it is the characters before first underscore
-cloud_data['sample_name'] = cloud_data['sample_name'].str.split('_').str[0]
-
 # Put downs cases into the "down_syndrome" silo
 down_syndrome_mask = samplesheet_df['primary subtype'].str.contains(
     'Down', na=False)
@@ -70,11 +64,11 @@ if multi_subtype_rows.any():
         samplesheet_df.at[idx, 'primary subtype'] = f'{primary},{second}'
 
 # If a sample is in both datasets, put it in the "replicate" silo
-samplesheet_df['is_replicate'] = samplesheet_df.index.isin(
-    cloud_data['sample_name'])
-add_to_silo(
-    samplesheet_df[samplesheet_df['is_replicate']].index, 'replicate')
-samplesheet_df = samplesheet_df.drop(columns=['is_replicate'])
+# samplesheet_df['is_replicate'] = samplesheet_df.index.isin(
+#     cloud_data['sample_name'])
+# add_to_silo(
+#     samplesheet_df[samplesheet_df['is_replicate']].index, 'replicate')
+# samplesheet_df = samplesheet_df.drop(columns=['is_replicate'])
 
 # Rename index to sample
 samplesheet_df.index.name = 'sample'
