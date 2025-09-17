@@ -167,43 +167,47 @@ def tune(features_path,
     if not target_path.endswith('.tsv'):
         raise ValueError("Target file must be in .tsv format.")
     y = pd.read_csv(target_path, sep="\t", header=0, index_col=0)
-    y = y["y"]
+    y = y["class"]
+
+    # Print number of samples in each class sorted from most to least common
+    print("Class distribution:")
+    print(y.value_counts().sort_values(ascending=False))
 
     # Align X and y just in case
     X = X.loc[y.index]
 
-    print("Hypertuning DecisionTree...")
+    # print("Hypertuning DecisionTree...")
     # Step 1: Define pipeline
-    pipeline = Pipeline([
-        ("feature_selection", SelectFromModel(
-            DecisionTreeClassifier(
-                random_state=random_state
-            ),
-            threshold="median"
-        )),
-        ("dt", DecisionTreeClassifier(random_state=random_state))
-    ])
+    # pipeline = Pipeline([
+    #     ("feature_selection", SelectFromModel(
+    #         DecisionTreeClassifier(
+    #             random_state=random_state
+    #         ),
+    #         threshold="median"
+    #     )),
+    #     ("dt", DecisionTreeClassifier(random_state=random_state))
+    # ])
 
-    param_grid = {
-        # Keep feature selection relatively strict (helps with thousands of genes)
-        "feature_selection__threshold": ["median", "1.25*median"],
+    # param_grid = {
+    #     # Keep feature selection relatively strict (helps with thousands of genes)
+    #     "feature_selection__threshold": ["median", "1.25*median"],
 
-        # DecisionTree hyperparameters
-        "dt__max_depth": [15, 20],          # limit depth to avoid overfitting
-        "dt__min_samples_split": [10, 20],  # require more samples to split
-        "dt__min_samples_leaf": [5, 10, 20],    # prevent tiny leaves
-        "dt__max_features": [0.2, "sqrt"],    # sqrt is often good for high-d data
-        "dt__class_weight": ["balanced"]       # handle imbalanced rare classes
-    }
+    #     # DecisionTree hyperparameters
+    #     "dt__max_depth": [15, 20],          # limit depth to avoid overfitting
+    #     "dt__min_samples_split": [10, 20],  # require more samples to split
+    #     "dt__min_samples_leaf": [5, 10, 20],    # prevent tiny leaves
+    #     "dt__max_features": [0.2, "sqrt"],    # sqrt is often good for high-d data
+    #     "dt__class_weight": ["balanced"]       # handle imbalanced rare classes
+    # }
 
-    run_grid_search(X=X,
-                    y=y,
-                    pipeline=pipeline,
-                    param_grid=param_grid,
-                    output_dir=output_dir,
-                    prefix="dt",
-                    random_state=random_state,
-                    n_threads=n_threads)
+    # run_grid_search(X=X,
+    #                 y=y,
+    #                 pipeline=pipeline,
+    #                 param_grid=param_grid,
+    #                 output_dir=output_dir,
+    #                 prefix="dt",
+    #                 random_state=random_state,
+    #                 n_threads=n_threads)
 
     print("Hypertuning RandomForest...")
 
@@ -223,7 +227,7 @@ def tune(features_path,
     # Step 2: Define parameter grid for hyperparameter tuning
     param_grid = {
         "feature_selection__threshold": ["0.50*median", "0.25*median"],
-        "rf__n_estimators": [200],
+        "rf__n_estimators": [200, 500],
         "rf__max_depth": [None, 20],
         "rf__max_features": ["sqrt", "log2"],
         "rf__min_samples_leaf": [1, 5],
