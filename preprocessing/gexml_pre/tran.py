@@ -3,6 +3,7 @@ import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PROCESSED_DATA_DIR
+from preprocessing.helpers import add_to_silo
 
 dataset_name = 'GSE181157'
 print(f"Processing {dataset_name}...")
@@ -28,43 +29,45 @@ samplesheet_df = pd.read_csv(pheno_input_file, index_col=0, sep=';')
 # Rename subtype column
 samplesheet_df = samplesheet_df.rename(columns={'Final subtype': 'subtype'})
 
+# Rename index
+samplesheet_df.index.name = 'sample'
+
 # Set data_silo to empty string
 samplesheet_df['data_silo'] = ''
 
-
-def add_to_silo(items, silo_name):
-    # Only set data_silo if it is currently empty
-    mask = samplesheet_df.index.isin(items) & (samplesheet_df['data_silo'] == '')
-    samplesheet_df.loc[mask, 'data_silo'] = silo_name
-
-
-# Find all rows where there is more than one subtype (comma-separated)
-# and put them into the "multiclass" silo
+# Put multiclass items in multiclass silo before translation
 multi_subtype_rows = samplesheet_df['subtype'].str.contains(',', na=False)
 if multi_subtype_rows.any():
-    add_to_silo(samplesheet_df[multi_subtype_rows].index, 'multiclass')
-
-# Rename index
-samplesheet_df.index.name = 'sample'
+    samplesheet_df = add_to_silo(
+        samplesheet_df,
+        samplesheet_df[multi_subtype_rows].index, 'multiclass')
 
 # Get subtype translation
 tax = Taxonomy()
 samplesheet_df['subtype'] = tax.translate_subtype_column(
-    samplesheet_df['subtype'])
+    samplesheet_df['subtype'], split_delimiter=',')
 
-# Add unknowns to unlabeled silo
-unknown_rows = samplesheet_df['subtype'].str.contains('other', na=False)
-if unknown_rows.any():
-    add_to_silo(samplesheet_df[unknown_rows].index, 'unlabeled')
 
+# EXCLUDED SILO
 # Add UNRECOGNIZED to unrecognized silo
 unrecognized_rows = samplesheet_df['subtype'].str.contains(
     'UNRECOGNIZED', na=False)
 if unrecognized_rows.any():
-    add_to_silo(samplesheet_df[unrecognized_rows].index, 'unrecognized')
+    samplesheet_df = add_to_silo(
+        samplesheet_df,
+        samplesheet_df[unrecognized_rows].index, 'excluded')
+
+# UNLABELED SILO
+unknown_rows = samplesheet_df['subtype'].str.contains('other', na=False)
+if unknown_rows.any():
+    samplesheet_df = add_to_silo(
+        samplesheet_df,
+        samplesheet_df[unknown_rows].index, 'unlabeled')
+
 
 # Add remaining to labeled_diagnostic silo
-add_to_silo(
+samplesheet_df = add_to_silo(
+    samplesheet_df,
     samplesheet_df[samplesheet_df['data_silo'] == ''
                    ].index, 'labeled_diagnostic')
 
