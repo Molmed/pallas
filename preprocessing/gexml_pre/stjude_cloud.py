@@ -2,6 +2,7 @@ import pandas as pd
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PROCESSED_DATA_DIR
+from preprocessing.helpers import add_to_silo
 
 dataset_name = 'SJC-DS-1009'
 print(f"Processing {dataset_name}...")
@@ -56,42 +57,6 @@ samplesheet_df.set_index('sample', inplace=True)
 
 # Set data_silo to empty string
 samplesheet_df['data_silo'] = ''
-
-
-# Function to add items to a silo
-def add_to_silo(items, silo_name):
-    # Only set data_silo if it is currently empty
-    mask = samplesheet_df.index.isin(items) & (samplesheet_df['data_silo'] == '')
-    samplesheet_df.loc[mask, 'data_silo'] = silo_name
-
-
-# FILTER OUT SUSPECT SAMPLES
-# If attr_diagnosis says the same is in relapse or remission remove it
-# it is unclear if this was the status when the sample was taken
-ambiguous_samples = samplesheet_df[
-    samplesheet_df['attr_diagnosis'].str.contains('in relapse', na=False) |
-    samplesheet_df['attr_diagnosis'].str.contains('in remission', na=False)
-].index
-if not ambiguous_samples.empty:
-    print("Warning: The following samples have ambiguous status (relapse or remission) and will be removed:")
-    print(ambiguous_samples.tolist())
-    samplesheet_df = samplesheet_df[~samplesheet_df.index.isin(ambiguous_samples)]
-
-# Detect down syndrome samples
-down_syndrome_samples = samplesheet_df[
-    samplesheet_df['attr_diagnosis'].str.contains('DOWN SYNDROME', na=False) |
-    samplesheet_df['attr_diagnosis'].str.contains('_subtype:Down', na=False)
-].index
-
-# Next, get all sample names starting with "SJDOWN"
-down_syndrome_samples_2 = samplesheet_df[
-    samplesheet_df.index.str.startswith('SJDOWN')].index
-
-# Combine both sets of down syndrome samples
-down_syndrome_samples = down_syndrome_samples.union(down_syndrome_samples_2)
-
-# Put all down syndrome samples into the 'down_syndrome' silo
-add_to_silo(down_syndrome_samples, 'down_syndrome')
 
 # Double-check the NOS samples, some of them actually have a subtype!
 # Print items where sj_diseas contains "NOS" but attr_diagnosis
@@ -157,78 +122,142 @@ if not invalid_samples.empty:
 # Rename subtype
 samplesheet_df = samplesheet_df.rename(columns={'sj_diseases': 'subtype'})
 
-# If "secondary" in attr_diagnosis, then it's multiclass
-# Put them into the "multiclass" silo
-multi_subtype_rows = samplesheet_df[
-    'attr_diagnosis'].str.contains('Secondary', na=False)
-if multi_subtype_rows.any():
-    add_to_silo(samplesheet_df[multi_subtype_rows].index, 'multiclass')
-    # And copy the attr_diagnosis value to subtype
-    samplesheet_df.loc[multi_subtype_rows, 'subtype'] = \
-        samplesheet_df.loc[multi_subtype_rows, 'attr_diagnosis']
+# EXCLUDED SILO
+# Everything prefaced with "UNRECOGNIZED" should be set to excluded silo
+unrecognized_rows = samplesheet_df['subtype'].str.contains(
+    'UNRECOGNIZED', na=False)
+if unrecognized_rows.any():
+    samplesheet_df = add_to_silo(samplesheet_df,
+                                 samplesheet_df[unrecognized_rows].index,
+                                 'excluded')
+
+# Everything prefaced with "EXCLUDED" should be set to excluded silo
+excluded_rows = samplesheet_df['subtype'].str.contains(
+    'EXCLUDED', na=False)
+if excluded_rows.any():
+    samplesheet_df = add_to_silo(samplesheet_df,
+                                 samplesheet_df[excluded_rows].index,
+                                 'excluded')
+
+# Manually add items that seem to have labeling inconsistencies
+# e.g. different subtypes specificed in different columns
+manual_exclusions = [
+    'SJBALL032645_D1',  # ALL and CML
+    'SJAML061502_D1',  # KMT2A and CEBPA,
+    'SJAML073691_D1',  # KMT2A and CEBPA,
+    'SJBALL032304_D1',  # HeH and PAX5,
+    'SJBALL032020_D1',  # HeH and PAX5,
+    'SJBALL032489_D1',  # HeH and PAX5,
+    'SJBALL032630_D1',  # HeH and PAX5,
+    'SJBALL032755_D1',  # HeH and PAX5,
+    'SJBALL031979_D1',  # HeH and PAX5,
+    'SJAML030330_D1',  # Identified as B-ALL
+    'SJBALL015199_D1',  # Identified as T-ALL
+    'SJBALL022672_D1',  # Identified as T-ALL
+    'SJAML032072_D1',   # Identified as T-ALL,
+    'SJAML030210_D2',   # KMT2A and NUP98
+    'SJCBF100_E',       # what is this suffix
+    ]
+samplesheet_df = add_to_silo(samplesheet_df,
+                             manual_exclusions,
+                             'excluded')
+
+# If attr_diagnosis says the same is in relapse or remission remove it
+# it is unclear if this was the status when the sample was taken
+ambiguous_samples = samplesheet_df[
+    samplesheet_df['attr_diagnosis'].str.contains('in relapse', na=False) |
+    samplesheet_df['attr_diagnosis'].str.contains('in remission', na=False)
+].index
+if not ambiguous_samples.empty:
+    print("Warning: The following samples have ambiguous status (relapse or remission) and will be excluded:")
+    print(ambiguous_samples.tolist())
+    samplesheet_df = add_to_silo(
+        samplesheet_df, ambiguous_samples, 'excluded')
+
+# Detect down syndrome samples
+down_syndrome_samples = samplesheet_df[
+    samplesheet_df['attr_diagnosis'].str.contains('DOWN SYNDROME', na=False) |
+    samplesheet_df['attr_diagnosis'].str.contains('_subtype:Down', na=False)
+].index
+
+# Next, get all sample names starting with "SJDOWN"
+down_syndrome_samples_2 = samplesheet_df[
+    samplesheet_df.index.str.startswith('SJDOWN')].index
+
+# Combine both sets of down syndrome samples
+down_syndrome_samples = down_syndrome_samples.union(down_syndrome_samples_2)
+
+# Put all down syndrome samples into the 'excluded' silo
+samplesheet_df = add_to_silo(
+    samplesheet_df, down_syndrome_samples, 'excluded')
 
 # Check sj_associated_diagnoses to see if there are samples
-# with multiple cancers that should be marked multiclass
-multiclass_keywords = ['Ganglioneuroblastoma',
-                       'Ganglioneuroma',
-                       'Papillary Thyroid Cancer',
-                       'TMDS',
-                       'Ewings',
-                       'NORM',
-                       'THFO',
-                       'Neuroblastoma',
-                       'ALAL',
-                       'MBLWNT',
-                       'THPA',
-                       'TAML',
-                       'SCCNOS',
-                       'Epithelioid Sarcoma',
-                       'THERAPY-RELATED'
-                       ]
-multi_subtype_rows = samplesheet_df[
+# with multiple cancers that should be excluded
+keywords = ['Ganglioneuroblastoma',
+            'Ganglioneuroma',
+            'Papillary Thyroid Cancer',
+            'TMDS',
+            'Ewings',
+            'NORM',
+            'THFO',
+            'Neuroblastoma',
+            'ALAL',
+            'MBLWNT',
+            'THPA',
+            'TAML',
+            'SCCNOS',
+            'Epithelioid Sarcoma',
+            'THERAPY-RELATED']
+excluded_rows = samplesheet_df[
     samplesheet_df['sj_associated_diagnoses'].str.contains(
-        '|'.join(multiclass_keywords), na=False)]
-if not multi_subtype_rows.empty:  # Check if the DataFrame is not empty
-    add_to_silo(multi_subtype_rows.index, 'multiclass')
+        '|'.join(keywords), na=False)]
+if not excluded_rows.empty:  # Check if the DataFrame is not empty
+    samplesheet_df = add_to_silo(samplesheet_df,
+                                 excluded_rows.index,
+                                 'excluded')
     # And copy the sj_associated_diagnoses value to subtype
-    samplesheet_df.loc[multi_subtype_rows.index, 'subtype'] = \
-        samplesheet_df.loc[multi_subtype_rows.index, 'sj_associated_diagnoses']
+    samplesheet_df.loc[excluded_rows.index, 'subtype'] = \
+        samplesheet_df.loc[excluded_rows.index, 'sj_associated_diagnoses']
 
-# Also some keywords in 'attr_diagnosis' indicate multiclass
-multiclass_keywords_attr = ['THERAPY-RELATED'
-                            ]
-multi_subtype_rows = samplesheet_df[
+# Also some keywords in 'attr_diagnosis' indicate exclusion
+keywords = ['THERAPY-RELATED']
+excluded_rows = samplesheet_df[
     samplesheet_df['attr_diagnosis'].str.contains(
-        '|'.join(multiclass_keywords_attr), na=False)]
-if not multi_subtype_rows.empty:  # Check if the DataFrame is not empty
-    add_to_silo(multi_subtype_rows.index, 'multiclass')
+        '|'.join(keywords), na=False)]
+if not excluded_rows.empty:  # Check if the DataFrame is not empty
+    samplesheet_df = add_to_silo(samplesheet_df,
+                                 excluded_rows.index,
+                                 'excluded')
     # And copy the attr_diagnosis value to subtype
-    samplesheet_df.loc[multi_subtype_rows.index, 'subtype'] = \
-        samplesheet_df.loc[multi_subtype_rows.index, 'attr_diagnosis']
-
-# If attr_diagnosis contains "NUP98r" but the subtype does not,
-# then mark it as multiclass
-multi_subtype_rows = samplesheet_df[
-    samplesheet_df['attr_diagnosis'].str.contains('NUP98r', na=False) &
-    ~samplesheet_df['subtype'].str.contains('NUP98', na=False)
-]
-if not multi_subtype_rows.empty:
-    add_to_silo(multi_subtype_rows.index, 'multiclass')
-    # And copy the attr_diagnosis value to subtype
-    samplesheet_df.loc[multi_subtype_rows.index, 'subtype'] = \
-        samplesheet_df.loc[multi_subtype_rows.index, 'attr_diagnosis']
+    samplesheet_df.loc[excluded_rows.index, 'subtype'] = \
+        samplesheet_df.loc[excluded_rows.index, 'attr_diagnosis']
 
 # Finally, if there are any samples where 'sj_associated_diagnoses' contains
-# both "BALL" and "AML", then mark them as multiclass
+# both "BALL" and "AML", then exclude them
 multi_subtype_rows = samplesheet_df[
     samplesheet_df['sj_associated_diagnoses'].str.contains('BALL', na=False) &
     samplesheet_df['sj_associated_diagnoses'].str.contains('AML', na=False)
 ]
 if not multi_subtype_rows.empty:
-    add_to_silo(multi_subtype_rows.index, 'multiclass')
+    samplesheet_df = add_to_silo(samplesheet_df,
+                                 multi_subtype_rows.index,
+                                 'excluded')
     # And copy the sj_associated_diagnoses value to subtype
     samplesheet_df.loc[multi_subtype_rows.index, 'subtype'] = \
         samplesheet_df.loc[multi_subtype_rows.index, 'sj_associated_diagnoses']
+
+# MULTICLASS SILO
+# If "secondary" in attr_diagnosis, then it's multiclass
+# Put them into the "multiclass" silo
+multi_subtype_rows = samplesheet_df[
+    'attr_diagnosis'].str.contains('Secondary', na=False)
+if multi_subtype_rows.any():
+    samplesheet_df = add_to_silo(samplesheet_df,
+                                 samplesheet_df[multi_subtype_rows].index,
+                                 'multiclass')
+    # And copy the attr_diagnosis value to subtype
+    samplesheet_df.loc[multi_subtype_rows, 'subtype'] = \
+        samplesheet_df.loc[multi_subtype_rows, 'attr_diagnosis']
 
 # Translate subtype
 tax = Taxonomy()
@@ -273,51 +302,9 @@ if not other_samples.empty:
 unlabeled_rows = samplesheet_df['subtype'].str.contains(
     'B-other|AML-other|ALLNOS', na=False)
 if unlabeled_rows.any():
-    add_to_silo(samplesheet_df[unlabeled_rows].index, 'unlabeled')
-
-
-# Everything prefaced with "UNRECOGNIZED" should be set to unrecognized silo
-unrecognized_rows = samplesheet_df['subtype'].str.contains(
-    'UNRECOGNIZED', na=False)
-if unrecognized_rows.any():
-    add_to_silo(samplesheet_df[unrecognized_rows].index, 'unrecognized')
-
-# Everything prefaced with "EXCLUDED" should be set to excluded silo
-excluded_rows = samplesheet_df['subtype'].str.contains(
-    'EXCLUDED', na=False)
-if excluded_rows.any():
-    add_to_silo(samplesheet_df[excluded_rows].index, 'excluded')
-
-# Manually add items that seem to have labeling inconsistencies
-# e.g. different subtypes specificed in different columns
-manual_exclusions = [
-    'SJBALL032645_D1',  # ALL and CML
-    'SJAML061502_D1',  # KMT2A and CEBPA,
-    'SJAML073691_D1',  # KMT2A and CEBPA,
-    'SJBALL032304_D1',  # HeH and PAX5,
-    'SJBALL032020_D1',  # HeH and PAX5,
-    'SJBALL032489_D1',  # HeH and PAX5,
-    'SJBALL032630_D1',  # HeH and PAX5,
-    'SJBALL032755_D1',  # HeH and PAX5,
-    'SJBALL031979_D1',  # HeH and PAX5,
-    'SJAML030330_D1',  # Identified as B-ALL
-    'SJBALL015199_D1',  # Identified as T-ALL
-    'SJBALL022672_D1',  # Identified as T-ALL
-    'SJAML032072_D1',   # Identified as T-ALL,
-    'SJCBF100_E',       # what is this suffix
-    ]
-add_to_silo(manual_exclusions, 'excluded')
-
-# For the ETV6-RUNX1 samples, ensure attr_subtype_biomarkers contains the fusion gene.
-# Find the one whose subtype *ends* in 'ETV6::RUNX1'
-etv6_runx1_rows = samplesheet_df[
-    samplesheet_df['subtype'].str.endswith('ETV6::RUNX1', na=False) &
-    ~samplesheet_df['attr_subtype_biomarkers'].str.contains('ETV6-RUNX1', na=False)
-]
-if not etv6_runx1_rows.empty:
-    print("Warning: The following ETV6-RUNX1 samples do not have the fusion in biomarkers and will be excluded:")
-    print(etv6_runx1_rows.index.tolist())
-    add_to_silo(etv6_runx1_rows.index, 'excluded')
+    samplesheet_df = add_to_silo(samplesheet_df,
+                                 samplesheet_df[unlabeled_rows].index,
+                                 'unlabeled')
 
 # Set data_silo to "relapse" if any of the following is true:
 # - sample_type contains "Relapse"
@@ -326,7 +313,9 @@ relapse_mask = samplesheet_df[
     'sample_type'].str.contains('Relapse', na=False) | \
     samplesheet_df.index.str.endswith('_R')
 relapse_items = samplesheet_df[relapse_mask].index
-add_to_silo(relapse_items, 'relapse')
+samplesheet_df = add_to_silo(samplesheet_df,
+                             relapse_items,
+                             'relapse')
 
 # DE-DUPE PANALL DATA
 # Make a copy of the samplesheet_df index for panALL items,
@@ -339,7 +328,9 @@ panall_items = samplesheet_df[
     samplesheet_df['panALL_index'].isin(panall_df.index)].index
 
 # Put them in the "replicate" silo
-add_to_silo(panall_items, 'replicate')
+samplesheet_df = add_to_silo(samplesheet_df,
+                             panall_items,
+                             'replicate')
 
 # Find all items in samplesheet_df whose sample name ends in a
 # D followed by a digit that isnt 1
@@ -362,10 +353,13 @@ digit_suffix_items_no_silo = digit_suffix_items_with_d1[
     samplesheet_df.loc[digit_suffix_items_with_d1, 'data_silo'] == '']
 
 # Put these into the "replicate" silo
-add_to_silo(digit_suffix_items_no_silo, 'replicate')
+samplesheet_df = add_to_silo(samplesheet_df,
+                             digit_suffix_items_no_silo,
+                             'replicate')
 
 # Add remaining to labeled_diagnostic silo
-add_to_silo(
+samplesheet_df = add_to_silo(
+    samplesheet_df,
     samplesheet_df[samplesheet_df['data_silo'] == ''
                    ].index, 'labeled_diagnostic')
 
