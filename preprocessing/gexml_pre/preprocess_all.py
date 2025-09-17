@@ -107,6 +107,14 @@ y_calib, y_test = train_test_split(
 y_test = pd.concat([y_test, y_low])
 print("Adding classes excluded from calibration into the test set.\n")
 
+# Class distributions in train, cal and test
+print("Class distribution in train:")
+print(y_train.value_counts())
+print("\nClass distribution in calibration:")
+print(y_calib.value_counts())
+print("\nClass distribution in test:")
+print(y_test.value_counts())
+print("\n")
 
 # SAVE SAMPLESHEETS
 def save_samplesheet(df, filename):
