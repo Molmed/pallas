@@ -44,8 +44,8 @@ samplesheet_df['dataset'] = dataset_name
 # Set batch column to empty string
 samplesheet_df['batch'] = ''
 
-# Set data silo to validation
-samplesheet_df['data_silo'] = 'validation'
+# Set data silo to labeled_diagnostic
+samplesheet_df['data_silo'] = 'labeled_diagnostic'
 
 # PROCESS GEX ########
 # Break up the gene expression file
