@@ -36,7 +36,8 @@
               },
               {
                 "name": "DEK::NUP214",
-                "aliases": ["DEK-NUP214", "AMLDEKNUP214", "DEK-NUP214"]
+                "aliases": ["DEK-NUP214", "AMLDEKNUP214", "DEK-NUP214"],
+                "exclude": true
               },
               {
                 "name": "MECOM-r",
