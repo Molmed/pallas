@@ -56,6 +56,8 @@ combined_samplesheet_df['data_silo_detailed'] = combined_samplesheet_df['data_si
     lambda x: x if x in ['labeled_diagnostic', 'unlabeled'] else 'misc'
 )
 print(combined_samplesheet_df['data_silo_detailed'].value_counts())
+combined_samplesheet_df = combined_samplesheet_df.drop(
+    columns=['data_silo_detailed'])
 
 print("\n")
 
