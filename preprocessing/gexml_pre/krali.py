@@ -3,6 +3,7 @@ import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PROCESSED_DATA_DIR
+from preprocessing.helpers import add_to_silo
 
 dataset_name = 'GSE227832'
 print(f"Processing {dataset_name}...")
@@ -72,24 +73,9 @@ samplesheet_df.index.name = 'sample'
 # Only keep records where partition is not NaN
 samplesheet_df = samplesheet_df[samplesheet_df['partition'].notna()]
 
-# For samples that have overlapping GEX and DNAm data,
-# Put them in the validation data silo
-# # The samples with NaN dnam_partition can go in labeled_diagnostic
-# samplesheet_df.loc[
-#     samplesheet_df['dnam_partition'].notna(), 'data_silo'] = 'validation'
-# samplesheet_df.loc[
-#     samplesheet_df['dnam_partition'].isna(), 'data_silo'] = 'labeled_diagnostic'
-
-# For now, put everything in "labeled_diagnostic" by default
-samplesheet_df['data_silo'] = 'labeled_diagnostic'
-
-# Keep only necessary cols
-samplesheet_df = samplesheet_df[['subtype', 'batch', 'data_silo']]
-
 # Append replicates_df to samplesheet_df
 samplesheet_df = pd.concat([samplesheet_df, replicates_df], ignore_index=False)
 
-# Set 'dataset' column to dataset name
 # PROCESS GEX ########
 # Break up the gene expression file
 gex_df = pd.read_csv(raw_data_path, index_col=0, delimiter='\t')
@@ -122,7 +108,6 @@ mask = (samplesheet_df['subtype'].isna()) & (
 )
 samplesheet_df.loc[mask, 'subtype'] = "Control"
 samplesheet_df.loc[mask, 'batch'] = "ScriptSeq"
-samplesheet_df.loc[mask, 'data_silo'] = "labeled_diagnostic"
 
 # Rename KMT2A's to avoid confusion with AML
 samplesheet_df['subtype'] = samplesheet_df['subtype'].str.replace(
@@ -136,23 +121,39 @@ samplesheet_df['subtype'] = tax.translate_subtype_column(
 # Set 'dataset' column to dataset name
 samplesheet_df['dataset'] = dataset_name
 
-# If sample name ends in "_2" or "_3", set data_silo to "relapse"
-relapse_mask = samplesheet_df.index.str.endswith(("_2", "_3"))
-samplesheet_df.loc[relapse_mask, 'data_silo'] = 'relapse'
-
-# If sample name ends in "_r", set data_silo to "replicate"
-replicate_mask = samplesheet_df.index.str.endswith("_r")
-samplesheet_df.loc[replicate_mask, 'data_silo'] = 'replicate'
+# Set data_silo column to empty string
+samplesheet_df['data_silo'] = ''
 
 # Set all items whose subtype ends in "B-other" to data_silo "unlabeled"
 b_other_mask = samplesheet_df['subtype'].str.endswith('B-other')
-samplesheet_df.loc[b_other_mask, 'data_silo'] = 'unlabeled'
+samplesheet_df = add_to_silo(
+    samplesheet_df, samplesheet_df[b_other_mask].index, 'unlabeled')
 
 # Everything prefaced with "EXCLUDED" should be set to excluded silo
 excluded_rows = samplesheet_df['subtype'].str.contains(
     'EXCLUDED', na=False)
 if excluded_rows.any():
-    samplesheet_df.loc[excluded_rows, 'data_silo'] = 'excluded'
+    samplesheet_df = add_to_silo(
+        samplesheet_df, samplesheet_df[excluded_rows].index, 'excluded')
+
+# If sample name ends in "_2" or "_3", set data_silo to "relapse"
+relapse_mask = samplesheet_df.index.str.endswith(("_2", "_3"))
+samplesheet_df = add_to_silo(
+    samplesheet_df, samplesheet_df[relapse_mask].index, 'relapse')
+
+# If sample name ends in "_r", set data_silo to "replicate"
+replicate_mask = samplesheet_df.index.str.endswith("_r")
+samplesheet_df = add_to_silo(
+    samplesheet_df,
+    samplesheet_df[replicate_mask].index,
+    'replicate')
+
+# Put the rest in the labeled_diagnostic silo
+labeled_diagnostic_mask = samplesheet_df['data_silo'] == ''
+samplesheet_df = add_to_silo(
+    samplesheet_df,
+    samplesheet_df[labeled_diagnostic_mask].index,
+    'labeled_diagnostic')
 
 # remove all rows from spreadsheet without feature_counts
 samplesheet_df = samplesheet_df[samplesheet_df['feature_counts'].notna()]
