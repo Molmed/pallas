@@ -1,0 +1,95 @@
+Combining all samplesheets...
+
+Total number of samples: 5405
+
+dataset
+SJC-DS-1009        2625
+SJC-panALL         1988
+GSE227832           340
+EGAS00001001795     195
+GSE181157           173
+GSE228632            65
+GSE161501            19
+Name: count, dtype: int64
+
+
+data_silo
+labeled_diagnostic    3244
+replicate              752
+unlabeled              590
+excluded               539
+multiclass             171
+relapse                109
+Name: count, dtype: int64
+
+
+data_silo_detailed
+labeled_diagnostic    3244
+misc                  1571
+unlabeled              590
+Name: count, dtype: int64
+
+
+Class distribution in labeled_diagnostic:
+subtype
+Disease,B-ALL,aneuploidy,high hyperdiploid          557
+Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1         462
+Disease,B-ALL,BCR::ABL1-group,BCR::ABL1-like        373
+Disease,B-ALL,KMT2A-r                               218
+Disease,B-ALL,PAX5alt                               202
+Disease,T-ALL                                       178
+Disease,B-ALL,DUX4-r                                164
+Disease,B-ALL,BCR::ABL1-group,BCR::ABL1             139
+Disease,B-ALL,TCF3::PBX1                            126
+Disease,B-ALL,aneuploidy,hypodiploid                122
+Disease,AML,KMT2A-r                                 107
+Disease,AML,RUNX1::RUNX1T1                           97
+Disease,B-ALL,ZNF384-r                               80
+Disease,AML,CBFB::MYH11                              63
+Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1-like     62
+Disease,B-ALL,MEF2D-r                                57
+Disease,B-ALL,aneuploidy,iAMP21                      51
+Disease,B-ALL,PAX5 P80R                              38
+Disease,AML,NPM1alt                                  28
+Disease,AML,NUP98-r                                  22
+Disease,B-ALL,NUTM1-r                                18
+Disease,B-ALL,MYC-r                                  17
+Disease,AML,CEBPAalt                                 15
+Disease,Non-leukemic                                 12
+Disease,B-ALL,HLF-r                                   9
+Disease,AML,CBFA2T3::GLIS2                            8
+Disease,AML,DEK::NUP214                               7
+Disease,B-ALL,IKZF1 N159Y                             7
+Disease,AML,APL-PML::RARA                             5
+Name: count, dtype: int64
+
+
+The following classes will be excluded from the calibration set:
+ - Class Disease,B-ALL,PAX5 P80R: 11 samples
+ - Class Disease,B-ALL,HLF-r: 3 samples
+ - Class Disease,AML,CEBPAalt: 5 samples
+ - Class Disease,B-ALL,IKZF1 N159Y: 2 samples
+ - Class Disease,Non-leukemic: 4 samples
+ - Class Disease,AML,NUP98-r: 7 samples
+ - Class Disease,AML,APL-PML::RARA: 2 samples
+ - Class Disease,B-ALL,NUTM1-r: 5 samples
+ - Class Disease,AML,CBFA2T3::GLIS2: 2 samples
+ - Class Disease,B-ALL,MYC-r: 5 samples
+ - Class Disease,AML,NPM1alt: 8 samples
+ - Class Disease,AML,DEK::NUP214: 2 samples
+
+
+Adding classes excluded from calibration into the test set.
+
+Saved samplesheet_labeled_diagnostic.csv with 3244 samples to /home/mariya/Data/pallas/processed/samplesheet_labeled_diagnostic.csv
+Saved samplesheet_unlabeled.csv with 590 samples to /home/mariya/Data/pallas/processed/samplesheet_unlabeled.csv
+Saved samplesheet_misc.csv with 1571 samples to /home/mariya/Data/pallas/processed/samplesheet_misc.csv
+Saved samplesheet_train.csv with 2270 samples to /home/mariya/Data/pallas/processed/samplesheet_train.csv
+Saved samplesheet_calibration.csv with 459 samples to /home/mariya/Data/pallas/processed/samplesheet_calibration.csv
+Saved samplesheet_test.csv with 515 samples to /home/mariya/Data/pallas/processed/samplesheet_test.csv
+
+Final counts in all sets:
+ - TRAIN: 2270 samples
+ - CALIBRATION: 459 samples
+ - TEST: 515 samples
+ - EXCLUDED FROM CALIBRATION: 56 samples
