@@ -50,57 +50,32 @@ class Taxonomy():
 
     def lookup(self,
                name,
-               disease=None,
-               join=False,
-               remove_unrecognized_and_excluded=True,
-               abbreviate=True):
+               remove_unrecognized_and_excluded=True):
         # Trim whitespace from name
         name = name.strip()
-
-        def format_lineage_list(lineage_list, abbreviate=True):
-            if abbreviate:
-                disease = lineage_list[1]
-                if len(lineage_list) < 3:
-                    return disease
-                return ','.join([disease, lineage_list[-1]])
-            return ','.join(lineage_list)
 
         def format_unrecognized_and_excluded(name, prefix, disease=None):
             if remove_unrecognized_and_excluded:
                 return None
-            str = f'{prefix}{name}'
-            if disease:
-                return format_lineage_list([disease, str])
-            return str
+            return f'{prefix}{name}'
 
-        if disease:
-            parents = Taxonomy._find_lineage(self._tree, disease)
-        else:
-            parents = self._tree
-        lineage = Taxonomy._find_lineage(parents, name)
+        lineage = Taxonomy._find_lineage(self._tree, name)
         if not lineage:
             return format_unrecognized_and_excluded(
                 name,
-                Taxonomy.UNRECOGNIZED_SUBTYPE_PREFIX,
-                disease)
-        result = [node["name"] for node in lineage]
+                Taxonomy.UNRECOGNIZED_SUBTYPE_PREFIX)
         do_exclude = [node["exclude"] for node in lineage if "exclude" in node]
         if do_exclude:
             return format_unrecognized_and_excluded(
-                format_lineage_list(result, abbreviate),
-                Taxonomy.EXCLUDED_SUBTYPE_PREFIX,
-                disease)
-        if join:
-            return format_lineage_list(result, abbreviate)
-        return result
+                name,
+                Taxonomy.EXCLUDED_SUBTYPE_PREFIX)
+        return lineage[-1]["display_name"]
 
     def translate_subtype_list(self,
                                subtypes,
-                               disease=None,
-                               join=False,
                                remove_unrecognized_and_excluded=False,
-                               abbreviate=True,
-                               split_delimiter=None):
+                               split_delimiter=None,
+                               join_delimiter=';'):
         translated = {}
         for entry in subtypes:
             split_subtypes = entry.split(split_delimiter) if split_delimiter else [entry]
@@ -108,25 +83,25 @@ class Taxonomy():
                 translated_split_subtypes = []
                 for x in split_subtypes:
                     translated_subtype = self.lookup(
-                        x, disease, join, remove_unrecognized_and_excluded, abbreviate)
+                        x,
+                        remove_unrecognized_and_excluded=remove_unrecognized_and_excluded)
                     translated_split_subtypes.append(translated_subtype)
-                translated[entry] = ','.join(translated_split_subtypes)
+                translated[entry] = join_delimiter.join(translated_split_subtypes)
             else:
                 translated[entry] = self.lookup(
-                    entry, disease, join, remove_unrecognized_and_excluded, abbreviate)
+                    entry,
+                    remove_unrecognized_and_excluded=remove_unrecognized_and_excluded)
         return translated
 
     def translate_subtype_column(self,
                                  column,
-                                 disease=None,
                                  remove_unrecognized_and_excluded=False,
-                                 abbreviate=False,
-                                 split_delimiter=None):
+                                 split_delimiter=None,
+                                 join_delimiter=';'):
         translated = self.translate_subtype_list(
             column,
-            disease,
-            join=True,
             remove_unrecognized_and_excluded=remove_unrecognized_and_excluded,
-            abbreviate=abbreviate,
-            split_delimiter=split_delimiter)
+            split_delimiter=split_delimiter,
+            join_delimiter=join_delimiter
+            )
         return column.replace(translated)

@@ -3,7 +3,9 @@ import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PROCESSED_DATA_DIR
-from preprocessing.helpers import add_to_silo
+from preprocessing.helpers import add_to_silo, \
+    silo_unlabeled, silo_excluded, silo_remaining
+
 
 dataset_name = 'GSE227832'
 print(f"Processing {dataset_name}...")
@@ -124,17 +126,11 @@ samplesheet_df['dataset'] = dataset_name
 # Set data_silo column to empty string
 samplesheet_df['data_silo'] = ''
 
-# Set all items whose subtype ends in "B-other" to data_silo "unlabeled"
-b_other_mask = samplesheet_df['subtype'].str.endswith('B-other')
-samplesheet_df = add_to_silo(
-    samplesheet_df, samplesheet_df[b_other_mask].index, 'unlabeled')
+# Silo unlabeled
+samplesheet_df = silo_unlabeled(samplesheet_df)
 
 # Everything prefaced with "EXCLUDED" should be set to excluded silo
-excluded_rows = samplesheet_df['subtype'].str.contains(
-    'EXCLUDED', na=False)
-if excluded_rows.any():
-    samplesheet_df = add_to_silo(
-        samplesheet_df, samplesheet_df[excluded_rows].index, 'excluded')
+samplesheet_df = silo_excluded(samplesheet_df)
 
 # If sample name ends in "_2" or "_3", set data_silo to "relapse"
 relapse_mask = samplesheet_df.index.str.endswith(("_2", "_3"))
@@ -149,11 +145,7 @@ samplesheet_df = add_to_silo(
     'replicate')
 
 # Put the rest in the labeled_diagnostic silo
-labeled_diagnostic_mask = samplesheet_df['data_silo'] == ''
-samplesheet_df = add_to_silo(
-    samplesheet_df,
-    samplesheet_df[labeled_diagnostic_mask].index,
-    'labeled_diagnostic')
+samplesheet_df = silo_remaining(samplesheet_df)
 
 # remove all rows from spreadsheet without feature_counts
 samplesheet_df = samplesheet_df[samplesheet_df['feature_counts'].notna()]

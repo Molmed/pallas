@@ -3,7 +3,8 @@ import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PROCESSED_DATA_DIR
-from preprocessing.helpers import add_to_silo
+from preprocessing.helpers import add_to_silo, silo_unlabeled, \
+    silo_unrecognized, silo_excluded, silo_remaining
 
 dataset_name = 'SJC-panALL'
 print(f"Processing {dataset_name}...")
@@ -63,6 +64,9 @@ samplesheet_df['subtype'] = tax.translate_subtype_column(
 samplesheet_df['data_silo'] = ''
 
 # EXCLUDED SILO
+samplesheet_df = silo_unrecognized(samplesheet_df)
+samplesheet_df = silo_excluded(samplesheet_df)
+
 # Down cases
 down_syndrome_mask = samplesheet_df['subtype'].str.contains(
     'Down', na=False)
@@ -73,22 +77,6 @@ down_syndrome_mask = samplesheet_df.index.str.startswith('SJDOWN')
 samplesheet_df = add_to_silo(samplesheet_df,
                              samplesheet_df[down_syndrome_mask].index,
                              'excluded')
-
-# Unrecognized subtypes
-unrecognized_rows = samplesheet_df['subtype'].str.contains(
-    'UNRECOGNIZED', na=False)
-if unrecognized_rows.any():
-    samplesheet_df = add_to_silo(samplesheet_df,
-                                 samplesheet_df[unrecognized_rows].index,
-                                 'excluded')
-
-# Excluded subtypes
-excluded_rows = samplesheet_df['subtype'].str.contains(
-    'EXCLUDED', na=False)
-if excluded_rows.any():
-    samplesheet_df = add_to_silo(samplesheet_df,
-                                 samplesheet_df[excluded_rows].index,
-                                 'excluded')
 
 # Manually add items that seem to have labeling inconsistencies
 # e.g. different subtypes specificed in different columns
@@ -127,17 +115,10 @@ if multi_subtype_rows.any():
                                  'multiclass')
 
 # UNLABELED SILO
-unknown_rows = samplesheet_df['subtype'].str.contains('other', na=False)
-if unknown_rows.any():
-    samplesheet_df = add_to_silo(samplesheet_df,
-                                 samplesheet_df[unknown_rows].index,
-                                 'unlabeled')
+samplesheet_df = silo_unlabeled(samplesheet_df)
 
 # Add remaining to labeled_diagnostic silo
-samplesheet_df = add_to_silo(
-    samplesheet_df,
-    samplesheet_df[samplesheet_df['data_silo'] == ''
-                   ].index, 'labeled_diagnostic')
+samplesheet_df = silo_remaining(samplesheet_df)
 
 # Create a map of sample names to paths.
 # For each file in the raw data dir, extract everything

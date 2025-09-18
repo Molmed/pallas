@@ -3,6 +3,7 @@ import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PROCESSED_DATA_DIR
+from preprocessing.helpers import silo_unlabeled, silo_remaining
 
 dataset_name = 'GSE228632'
 print(f"Processing {dataset_name}...")
@@ -49,12 +50,13 @@ samplesheet_df['subtype'] = tax.translate_subtype_column(samplesheet_df['subtype
 samplesheet_df['dataset'] = dataset_name
 
 # Set data silo to empty string
-samplesheet_df['data_silo'] = 'labeled_diagnostic'
+samplesheet_df['data_silo'] = ''
 
-# Set the B-others to 'unlabeled'
-samplesheet_df.loc[
-    samplesheet_df['subtype'].str.contains('B-other'), 'data_silo'
-    ] = 'unlabeled'
+# Silo unlabeled
+samplesheet_df = silo_unlabeled(samplesheet_df)
+
+# Silo remaining as labeled_diagnostic
+samplesheet_df = silo_remaining(samplesheet_df)
 
 # PROCESS GEX ########
 # Break up the gene expression file

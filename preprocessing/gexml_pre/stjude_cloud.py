@@ -2,7 +2,8 @@ import pandas as pd
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PROCESSED_DATA_DIR
-from preprocessing.helpers import add_to_silo
+from preprocessing.helpers import add_to_silo, silo_unlabeled, \
+    silo_unrecognized, silo_excluded, silo_remaining
 
 dataset_name = 'SJC-DS-1009'
 print(f"Processing {dataset_name}...")
@@ -150,21 +151,8 @@ samplesheet_df['subtype'] = tax.translate_subtype_column(
 samplesheet_df['data_silo'] = ''
 
 # EXCLUDED SILO
-# Everything prefaced with "UNRECOGNIZED" should be set to excluded silo
-unrecognized_rows = samplesheet_df['subtype'].str.contains(
-    'UNRECOGNIZED', na=False)
-if unrecognized_rows.any():
-    samplesheet_df = add_to_silo(samplesheet_df,
-                                 samplesheet_df[unrecognized_rows].index,
-                                 'excluded')
-
-# Everything prefaced with "EXCLUDED" should be set to excluded silo
-excluded_rows = samplesheet_df['subtype'].str.contains(
-    'EXCLUDED', na=False)
-if excluded_rows.any():
-    samplesheet_df = add_to_silo(samplesheet_df,
-                                 samplesheet_df[excluded_rows].index,
-                                 'excluded')
+samplesheet_df = silo_unrecognized(samplesheet_df)
+samplesheet_df = silo_excluded(samplesheet_df)
 
 # Manually add items that seem to have labeling inconsistencies
 # e.g. different subtypes specificed in different columns
@@ -286,15 +274,10 @@ if multi_subtype_rows.any():
     samplesheet_df.loc[multi_subtype_rows, 'subtype'] = \
         samplesheet_df.loc[multi_subtype_rows, 'attr_diagnosis']
 
-# Set all items whose subtype contains "B-other" or "AML-other" to data_silo "unlabeled"
-# but use the function to avoid overwriting existing silos
-unlabeled_rows = samplesheet_df['subtype'].str.contains(
-    'B-other|AML-other|ALLNOS', na=False)
-if unlabeled_rows.any():
-    samplesheet_df = add_to_silo(samplesheet_df,
-                                 samplesheet_df[unlabeled_rows].index,
-                                 'unlabeled')
+# UNLABELED SILO
+samplesheet_df = silo_unlabeled(samplesheet_df)
 
+# RELAPSE SILO
 # Set data_silo to "relapse" if any of the following is true:
 # - sample_type contains "Relapse"
 # - sample name ends with "_R"
@@ -347,10 +330,7 @@ samplesheet_df = add_to_silo(samplesheet_df,
                              'replicate')
 
 # Add remaining to labeled_diagnostic silo
-samplesheet_df = add_to_silo(
-    samplesheet_df,
-    samplesheet_df[samplesheet_df['data_silo'] == ''
-                   ].index, 'labeled_diagnostic')
+samplesheet_df = silo_remaining(samplesheet_df)
 
 # Rename library
 samplesheet_df = samplesheet_df.rename(

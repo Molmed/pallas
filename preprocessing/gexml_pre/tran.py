@@ -3,7 +3,8 @@ import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PROCESSED_DATA_DIR
-from preprocessing.helpers import add_to_silo
+from preprocessing.helpers import add_to_silo, silo_unlabeled, \
+    silo_remaining
 
 dataset_name = 'GSE181157'
 print(f"Processing {dataset_name}...")
@@ -47,29 +48,11 @@ tax = Taxonomy()
 samplesheet_df['subtype'] = tax.translate_subtype_column(
     samplesheet_df['subtype'], split_delimiter=',')
 
-
-# EXCLUDED SILO
-# Add UNRECOGNIZED to unrecognized silo
-unrecognized_rows = samplesheet_df['subtype'].str.contains(
-    'UNRECOGNIZED', na=False)
-if unrecognized_rows.any():
-    samplesheet_df = add_to_silo(
-        samplesheet_df,
-        samplesheet_df[unrecognized_rows].index, 'excluded')
-
 # UNLABELED SILO
-unknown_rows = samplesheet_df['subtype'].str.contains('other', na=False)
-if unknown_rows.any():
-    samplesheet_df = add_to_silo(
-        samplesheet_df,
-        samplesheet_df[unknown_rows].index, 'unlabeled')
-
+samplesheet_df = silo_unlabeled(samplesheet_df)
 
 # Add remaining to labeled_diagnostic silo
-samplesheet_df = add_to_silo(
-    samplesheet_df,
-    samplesheet_df[samplesheet_df['data_silo'] == ''
-                   ].index, 'labeled_diagnostic')
+samplesheet_df = silo_remaining(samplesheet_df)
 
 # Set 'dataset' column to dataset name
 samplesheet_df['dataset'] = dataset_name

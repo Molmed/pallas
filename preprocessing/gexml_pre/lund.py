@@ -3,6 +3,7 @@ import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PROCESSED_DATA_DIR
+from preprocessing.helpers import silo_unlabeled, silo_remaining
 
 dataset_name = 'EGAS00001001795'
 print(f"Processing {dataset_name}...")
@@ -38,12 +39,14 @@ samplesheet_df['subtype'] = tax.translate_subtype_column(samplesheet_df['subtype
 # Set 'dataset' column to dataset name
 samplesheet_df['dataset'] = dataset_name
 
-# Set data silo to default
-samplesheet_df['data_silo'] = 'labeled_diagnostic'
+# Set data silo to empty string
+samplesheet_df['data_silo'] = ''
 
 # Set all items whose subtype ends in "B-other" to data_silo "unlabeled"
-b_other_mask = samplesheet_df['subtype'].str.endswith('B-other')
-samplesheet_df.loc[b_other_mask, 'data_silo'] = 'unlabeled'
+samplesheet_df = silo_unlabeled(samplesheet_df)
+
+# Silo remaining as labeled_diagnostic
+samplesheet_df = silo_remaining(samplesheet_df)
 
 # Convert index to string
 samplesheet_df.index = samplesheet_df.index.astype(str)
