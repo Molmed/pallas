@@ -20,3 +20,5 @@ GEX_EXCLUDE_SUBTYPES = [
     'low hyperdiploid',
     'IGH::CEBPD'
 ]
+DNAM_EXCLUDE_SUBTYPES = [
+]
