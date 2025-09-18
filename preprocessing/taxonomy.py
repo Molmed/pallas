@@ -50,8 +50,8 @@ class Taxonomy():
 
     def lookup(self,
                name,
+               exclude_subtypes=[],
                remove_unrecognized_and_excluded=True):
-        # Trim whitespace from name
         name = name.strip()
 
         def format_unrecognized_and_excluded(name, prefix, disease=None):
@@ -64,7 +64,7 @@ class Taxonomy():
             return format_unrecognized_and_excluded(
                 name,
                 Taxonomy.UNRECOGNIZED_SUBTYPE_PREFIX)
-        do_exclude = [node["exclude"] for node in lineage if "exclude" in node]
+        do_exclude = lineage[-1]["name"] in exclude_subtypes
         if do_exclude:
             return format_unrecognized_and_excluded(
                 name,
@@ -73,6 +73,7 @@ class Taxonomy():
 
     def translate_subtype_list(self,
                                subtypes,
+                               exclude_subtypes=[],
                                remove_unrecognized_and_excluded=False,
                                split_delimiter=None,
                                join_delimiter=';'):
@@ -84,22 +85,26 @@ class Taxonomy():
                 for x in split_subtypes:
                     translated_subtype = self.lookup(
                         x,
+                        exclude_subtypes=exclude_subtypes,
                         remove_unrecognized_and_excluded=remove_unrecognized_and_excluded)
                     translated_split_subtypes.append(translated_subtype)
                 translated[entry] = join_delimiter.join(translated_split_subtypes)
             else:
                 translated[entry] = self.lookup(
                     entry,
+                    exclude_subtypes=exclude_subtypes,
                     remove_unrecognized_and_excluded=remove_unrecognized_and_excluded)
         return translated
 
     def translate_subtype_column(self,
                                  column,
+                                 exclude_subtypes=[],
                                  remove_unrecognized_and_excluded=False,
                                  split_delimiter=None,
                                  join_delimiter=';'):
         translated = self.translate_subtype_list(
             column,
+            exclude_subtypes=exclude_subtypes,
             remove_unrecognized_and_excluded=remove_unrecognized_and_excluded,
             split_delimiter=split_delimiter,
             join_delimiter=join_delimiter

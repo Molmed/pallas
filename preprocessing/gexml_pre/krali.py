@@ -2,7 +2,7 @@ import pandas as pd
 import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
-    RAW_DATA_DIR, PROCESSED_DATA_DIR
+    RAW_DATA_DIR, PROCESSED_DATA_DIR, GEX_EXCLUDE_SUBTYPES
 from preprocessing.helpers import add_to_silo, \
     silo_unlabeled, silo_excluded, silo_remaining
 
@@ -118,7 +118,8 @@ samplesheet_df['subtype'] = samplesheet_df['subtype'].str.replace(
 # Get subtype translation
 tax = Taxonomy()
 samplesheet_df['subtype'] = tax.translate_subtype_column(
-    samplesheet_df['subtype'])
+    samplesheet_df['subtype'],
+    exclude_subtypes=GEX_EXCLUDE_SUBTYPES)
 
 # Set 'dataset' column to dataset name
 samplesheet_df['dataset'] = dataset_name

@@ -6,3 +6,17 @@ dotenv.load_dotenv()
 BASE_DATA_DIR = os.getenv('BASE_DATA_DIR')
 RAW_DATA_DIR = os.getenv('RAW_DATA_DIR')
 PROCESSED_DATA_DIR = os.getenv('PROCESSED_DATA_DIR')
+GEX_EXCLUDE_SUBTYPES = [
+    'RUNX1::RUNX1T1-like',
+    'DEK::NUP214',
+    'RBM15::MKL1',
+    'MECOM-r',
+    'KAT6A-r',
+    'PICALM::MLLT10',
+    'RBM15::MKL1',
+    'AMKL',
+    'AMML',
+    'AMOL',
+    'low hyperdiploid',
+    'IGH::CEBPD'
+]
