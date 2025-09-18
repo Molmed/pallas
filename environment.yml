@@ -15,7 +15,7 @@ dependencies:
     - notebook
     - umap-learn
     - scikit-learn
-    - hiclass
     - openpyxl
     - python-dotenv
     - joblib
+    - glasbey
