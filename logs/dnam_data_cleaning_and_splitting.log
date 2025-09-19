@@ -1,0 +1,192 @@
+Processing DNAm...
+Warning: Dropped 1 samples from data_df
+Missing IDs: ['cd34_e1']
+Total number of samples: 2479
+
+dataset
+Krali2023              1125
+GSE190931              1039
+Krali2021               142
+Krali2023_remission      86
+FMCA                     55
+Krali2023_relapse        32
+Name: count, dtype: int64
+
+
+data_silo
+labeled_diagnostic    1774
+unlabeled              450
+relapse                149
+unrecognized            98
+excluded                 8
+Name: count, dtype: int64
+
+
+data_silo_detailed
+labeled_diagnostic    1774
+unlabeled              450
+misc                   255
+Name: count, dtype: int64
+
+
+Class distribution in labeled_diagnostic:
+subtype
+B-ALL, high hyperdiploid    327
+B-ALL, ETV6::RUNX1          284
+AML, KMT2A-r                233
+AML, RUNX1::RUNX1T1         148
+T-ALL                       105
+AML, CBFB::MYH11             99
+Non-leukemic                 86
+B-ALL, PAX5alt               67
+AML, NUP98-r                 66
+B-ALL, KMT2A-r               62
+B-ALL, TCF3::PBX1            37
+B-ALL, DUX4-r                32
+B-ALL, BCR::ABL1             25
+B-ALL, iAMP21                22
+B-ALL, ETV6::RUNX1-like      21
+B-ALL, ZNF384-r              21
+B-ALL, BCR::ABL1-like        20
+AML, CBFA2T3::GLIS2          19
+AML, ETV6-r                  14
+AML, DEK::NUP214             12
+B-ALL, hypodiploid           10
+B-ALL, MEF2D-r                9
+AML, PICALM::MLLT10           9
+B-ALL, PAX5 P80R              8
+AML, NPM1alt                  8
+AML, RBM15::MKL1              7
+AML, CEBPAalt                 6
+AML, MECOM-r                  5
+AML, APL-PML::RARA            4
+B-ALL, NUTM1-r                4
+AML, KAT6A-r                  4
+Name: count, dtype: int64
+
+
+Saved unlabeled with 450 samples to /home/mariya/Data/pallas/processed/dnam/dnam_unlabeled_X.csv and /home/mariya/Data/pallas/processed/dnam/dnam_unlabeled_y.tsv
+Saved labeled_diagnostic with 1774 samples to /home/mariya/Data/pallas/processed/dnam/dnam_labeled_diagnostic_X.csv and /home/mariya/Data/pallas/processed/dnam/dnam_labeled_diagnostic_y.tsv
+Saved relapse with 149 samples to /home/mariya/Data/pallas/processed/dnam/dnam_relapse_X.csv and /home/mariya/Data/pallas/processed/dnam/dnam_relapse_y.tsv
+Saved unrecognized with 98 samples to /home/mariya/Data/pallas/processed/dnam/dnam_unrecognized_X.csv and /home/mariya/Data/pallas/processed/dnam/dnam_unrecognized_y.tsv
+Saved excluded with 8 samples to /home/mariya/Data/pallas/processed/dnam/dnam_excluded_X.csv and /home/mariya/Data/pallas/processed/dnam/dnam_excluded_y.tsv
+The following classes will be excluded from the calibration set:
+ - Class B-ALL, DUX4-r: 10 samples
+ - Class B-ALL, BCR::ABL1-like: 6 samples
+ - Class AML, RBM15::MKL1: 2 samples
+ - Class AML, CBFA2T3::GLIS2: 6 samples
+ - Class B-ALL, BCR::ABL1: 8 samples
+ - Class AML, ETV6-r: 4 samples
+ - Class B-ALL, ETV6::RUNX1-like: 6 samples
+ - Class B-ALL, TCF3::PBX1: 11 samples
+ - Class AML, DEK::NUP214: 4 samples
+ - Class B-ALL, ZNF384-r: 6 samples
+ - Class B-ALL, hypodiploid: 3 samples
+ - Class B-ALL, MEF2D-r: 3 samples
+ - Class B-ALL, iAMP21: 7 samples
+ - Class AML, KAT6A-r: 1 samples
+ - Class AML, MECOM-r: 1 samples
+ - Class AML, PICALM::MLLT10: 3 samples
+ - Class B-ALL, PAX5 P80R: 2 samples
+ - Class AML, NPM1alt: 2 samples
+ - Class B-ALL, NUTM1-r: 1 samples
+ - Class AML, CEBPAalt: 2 samples
+ - Class AML, APL-PML::RARA: 1 samples
+
+
+Adding classes excluded from calibration into the test set.
+
+Saved train with 1241 samples to /home/mariya/Data/pallas/processed/dnam/dnam_train_X.csv and /home/mariya/Data/pallas/processed/dnam/dnam_train_y.tsv
+Saved calibration with 222 samples to /home/mariya/Data/pallas/processed/dnam/dnam_calibration_X.csv and /home/mariya/Data/pallas/processed/dnam/dnam_calibration_y.tsv
+Saved test with 311 samples to /home/mariya/Data/pallas/processed/dnam/dnam_test_X.csv and /home/mariya/Data/pallas/processed/dnam/dnam_test_y.tsv
+Class distribution in train:
+subtype
+B-ALL, high hyperdiploid    229
+B-ALL, ETV6::RUNX1          199
+AML, KMT2A-r                163
+AML, RUNX1::RUNX1T1         104
+T-ALL                        73
+AML, CBFB::MYH11             69
+Non-leukemic                 60
+B-ALL, PAX5alt               47
+AML, NUP98-r                 46
+B-ALL, KMT2A-r               43
+B-ALL, TCF3::PBX1            26
+B-ALL, DUX4-r                22
+B-ALL, BCR::ABL1             17
+B-ALL, ZNF384-r              15
+B-ALL, ETV6::RUNX1-like      15
+B-ALL, iAMP21                15
+B-ALL, BCR::ABL1-like        14
+AML, CBFA2T3::GLIS2          13
+AML, ETV6-r                  10
+AML, DEK::NUP214              8
+B-ALL, hypodiploid            7
+AML, PICALM::MLLT10           6
+B-ALL, MEF2D-r                6
+B-ALL, PAX5 P80R              6
+AML, NPM1alt                  6
+AML, RBM15::MKL1              5
+AML, MECOM-r                  4
+AML, CEBPAalt                 4
+B-ALL, NUTM1-r                3
+AML, KAT6A-r                  3
+AML, APL-PML::RARA            3
+Name: count, dtype: int64
+
+Class distribution in calibration:
+subtype
+B-ALL, high hyperdiploid    49
+B-ALL, ETV6::RUNX1          42
+AML, KMT2A-r                35
+AML, RUNX1::RUNX1T1         22
+T-ALL                       16
+AML, CBFB::MYH11            15
+Non-leukemic                13
+AML, NUP98-r                10
+B-ALL, PAX5alt              10
+B-ALL, KMT2A-r              10
+Name: count, dtype: int64
+
+Class distribution in test:
+subtype
+B-ALL, high hyperdiploid    49
+B-ALL, ETV6::RUNX1          43
+AML, KMT2A-r                35
+AML, RUNX1::RUNX1T1         22
+T-ALL                       16
+AML, CBFB::MYH11            15
+Non-leukemic                13
+B-ALL, TCF3::PBX1           11
+B-ALL, PAX5alt              10
+B-ALL, DUX4-r               10
+AML, NUP98-r                10
+B-ALL, KMT2A-r               9
+B-ALL, BCR::ABL1             8
+B-ALL, iAMP21                7
+B-ALL, BCR::ABL1-like        6
+B-ALL, ZNF384-r              6
+AML, CBFA2T3::GLIS2          6
+B-ALL, ETV6::RUNX1-like      6
+AML, DEK::NUP214             4
+AML, ETV6-r                  4
+AML, PICALM::MLLT10          3
+B-ALL, hypodiploid           3
+B-ALL, MEF2D-r               3
+AML, RBM15::MKL1             2
+B-ALL, PAX5 P80R             2
+AML, CEBPAalt                2
+AML, NPM1alt                 2
+AML, KAT6A-r                 1
+AML, MECOM-r                 1
+B-ALL, NUTM1-r               1
+AML, APL-PML::RARA           1
+Name: count, dtype: int64
+
+
+
+Final counts in all sets:
+ - TRAIN: 1241 samples
+ - CALIBRATION: 222 samples
+ - TEST: 311 samples
+ - EXCLUDED FROM CALIBRATION: 89 samples
