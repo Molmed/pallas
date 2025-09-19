@@ -138,9 +138,9 @@ def get_silo_dataset(silo_name):
 
 
 # Save each silo separately
-# for silo in labels_df['data_silo'].unique():
-#     X_silo, y_silo = get_silo_dataset(silo)
-#     save_dataset(X_silo, y_silo, silo)
+for silo in labels_df['data_silo'].unique():
+    X_silo, y_silo = get_silo_dataset(silo)
+    save_dataset(X_silo, y_silo, silo)
 
 # SPLIT LABELED_DIAGNOSTIC INTO TRAIN/CAL/TEST
 X, y = get_silo_dataset('labeled_diagnostic')
