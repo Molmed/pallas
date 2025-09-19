@@ -7,6 +7,7 @@ from preprocessing.helpers import silo_unlabeled, \
     silo_remaining, silo_unrecognized, silo_excluded, add_to_silo
 from sklearn.model_selection import train_test_split
 import dotenv
+import pickle
 
 dotenv.load_dotenv()
 
@@ -16,21 +17,44 @@ SPLIT_MIN_CALIBRATION_SAMPLES = int(os.getenv("SPLIT_MIN_CALIBRATION_SAMPLES", 1
 
 print("Processing DNAm...")
 
-# INPUT FILES ########
+# INPUT ########
 data_path = f'{RAW_DATA_DIR}/dnam'
 raw_data_path = f'{data_path}/concatenated_df_VARIANCE_FILTERED_0_01.pkl'
-pheno_input_file = f'{data_path}/PALLAS_FINAL_pheno_combined_n=2479.csv'
+pheno_input_file = f'{data_path}/pheno/PALLAS_FINAL_pheno_combined_n=2479.csv'
+epic_pheno_input_file = \
+    f'{data_path}/pheno/NOPHO_EPIC_n=55_subtype_info_FINAL.csv'
 
-# OUTPUT FILES ########
-processed_dir = f'{PROCESSED_DATA_DIR}/dnam'
-data_output_file = \
-    f'{processed_dir}/data.csv'
-labels_output_file = \
-    f'{processed_dir}/labels.tsv'
+# OUTPUT ########
+output_dir = f'{PROCESSED_DATA_DIR}/dnam'
 
-# PROCESS PHENO ########
-print("Processing phenotype data...")
+# Ensure output dir exists
+os.makedirs(output_dir, exist_ok=True)
+
+# PROCESS DATA ########
+# The raw data uses another format of the sample IDs than the pheno file.
+# Update the raw data with public sample ids
+epic_pheno = pd.read_csv(epic_pheno_input_file, index_col=0)
+epic_id_map = epic_pheno['sample_id.x'].to_dict()
+epic_id_map = {v: k for k, v in epic_id_map.items()}
+
+data_df = pd.read_pickle(raw_data_path)
+
+# Update index with public sample ids where available
+data_df.index = data_df.index.to_series().replace(epic_id_map)
+
+# Get the pheno
 labels_df = pd.read_csv(pheno_input_file, index_col=0)
+
+# Check if data_df.index and labels_df.index match
+if not data_df.index.isin(labels_df.index).all():
+    missing_ids = data_df.index[~data_df.index.isin(labels_df.index)]
+    # Drop the missing ids from data_df and print warning
+    data_df = data_df[~data_df.index.isin(missing_ids)]
+    print(f"Warning: Dropped {len(missing_ids)} samples from data_df")
+    print(f"Missing IDs: {missing_ids.tolist()}")
+
+# Sort labels so they match the data
+labels_df = labels_df.loc[data_df.index]
 
 # Set data_silo to empty string
 labels_df['data_silo'] = ''
@@ -59,7 +83,7 @@ if relapse_sample_mask.any():
 
 labels_df = silo_remaining(labels_df)
 
-## PRINT REPORT
+# PRINT REPORT
 # Get total number of samples
 total_samples = labels_df.shape[0]
 print(f"Total number of samples: {total_samples}\n")
@@ -92,10 +116,37 @@ print("Class distribution in labeled_diagnostic:")
 print(labeled_diagnostic_df['subtype'].value_counts())
 print("\n")
 
+# Standardize index names
+data_df.index.name = 'id'
+labels_df.index.name = 'id'
+
+
+# SAVE DATASETS
+def save_dataset(X, y, name):
+    X_output_path = os.path.join(output_dir, f"dnam_{name}_X.csv")
+    y_output_path = os.path.join(output_dir, f"dnam_{name}_y.tsv")
+    X.to_csv(X_output_path, index=True)
+    y.to_csv(y_output_path, sep='\t', index=True)
+    print(f"Saved {name} with {y.shape[0]} samples to {X_output_path} and {y_output_path}")
+
+
+def get_silo_dataset(silo_name):
+    silo_indices = labels_df[labels_df['data_silo'] == silo_name].index
+    X_silo = data_df.loc[silo_indices]
+    y_silo = labels_df.loc[silo_indices, 'subtype']
+    return X_silo, y_silo
+
+
+# Save each silo separately
+# for silo in labels_df['data_silo'].unique():
+#     X_silo, y_silo = get_silo_dataset(silo)
+#     save_dataset(X_silo, y_silo, silo)
 
 # SPLIT LABELED_DIAGNOSTIC INTO TRAIN/CAL/TEST
-y = labeled_diagnostic_df['subtype']
-y_train, y_rest = train_test_split(
+X, y = get_silo_dataset('labeled_diagnostic')
+
+X_train, X_rest, y_train, y_rest = train_test_split(
+        X,
         y,
         train_size=SPLIT_TRAIN_FRAC,
         random_state=RANDOM_SEED,
@@ -108,6 +159,8 @@ low_class_indices = y_rest.isin(
     y_rest.value_counts()[
         y_rest.value_counts() < SPLIT_MIN_CALIBRATION_SAMPLES].index
 )
+X_low = X_rest[low_class_indices]
+X_rest = X_rest[~X_rest.index.isin(X_low.index)]
 y_low = y_rest[low_class_indices]
 y_rest = y_rest[~y_rest.index.isin(y_low.index)]
 
@@ -119,7 +172,8 @@ for class_label in y_low.unique():
 print("\n")
 
 # Split remaining data 50/50
-y_calib, y_test = train_test_split(
+X_calib, X_test, y_calib, y_test = train_test_split(
+    X_rest,
     y_rest,
     test_size=0.5,
     random_state=RANDOM_SEED,
@@ -128,7 +182,13 @@ y_calib, y_test = train_test_split(
 
 # Merge low items into test set
 y_test = pd.concat([y_test, y_low])
+X_test = pd.concat([X_test, X_low])
 print("Adding classes excluded from calibration into the test set.\n")
+
+# Save splits
+save_dataset(X_train, y_train, 'train')
+save_dataset(X_calib, y_calib, 'calibration')
+save_dataset(X_test, y_test, 'test')
 
 # Class distributions in train, cal and test
 print("Class distribution in train:")
@@ -138,46 +198,6 @@ print(y_calib.value_counts())
 print("\nClass distribution in test:")
 print(y_test.value_counts())
 print("\n")
-
-
-# SAVE SAMPLESHEETS
-def save_samplesheet(df, filename):
-    output_path = os.path.join(PROCESSED_DATA_DIR, filename)
-    df.to_csv(output_path)
-    print(f"Saved {filename} with {df.shape[0]} samples to {output_path}")
-
-
-# Save the following samplesheets:
-# - samplesheet_labeled_diagnostic.csv (all with data_silo == labeled_diagnostic)
-# - samplesheet_unlabeled.csv (all with data_silo == unlabeled)
-# - samplesheet_misc.csv (all with data_silo not in labeled_diagnostic or unlabeled)
-# - samplesheet_train.csv (all in y_train)
-# - samplesheet_calibration.csv (all in y_calib)
-# - samplesheet_test.csv (all in y_test)
-save_samplesheet(
-    labels_df[labels_df['data_silo'] == 'labeled_diagnostic'],
-    'dnam_samplesheet_labeled_diagnostic.csv'
-)
-save_samplesheet(
-    labels_df[labels_df['data_silo'] == 'unlabeled'],
-    'dnam_samplesheet_unlabeled.csv'
-)
-save_samplesheet(
-    labels_df[~labels_df['data_silo'].isin(['labeled_diagnostic', 'unlabeled'])],
-    'dnam_samplesheet_misc.csv'
-)
-save_samplesheet(
-    labels_df.loc[y_train.index],
-    'dnam_samplesheet_train.csv'
-)
-save_samplesheet(
-    labels_df.loc[y_calib.index],
-    'dnam_samplesheet_calibration.csv'
-)
-save_samplesheet(
-    labels_df.loc[y_test.index],
-    'dnam_samplesheet_test.csv'
-)
 
 # Print final counts in all sets
 print("\nFinal counts in all sets:")

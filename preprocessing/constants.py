@@ -21,4 +21,6 @@ GEX_EXCLUDE_SUBTYPES = [
     'IGH::CEBPD'
 ]
 DNAM_EXCLUDE_SUBTYPES = [
+    'low hyperdiploid',
+    'FUS::ERG'
 ]
