@@ -7,7 +7,6 @@ from preprocessing.helpers import silo_unlabeled, \
     silo_remaining, silo_unrecognized, silo_excluded, add_to_silo
 from sklearn.model_selection import train_test_split
 import dotenv
-import pickle
 
 dotenv.load_dotenv()
 
@@ -19,7 +18,7 @@ print("Processing DNAm...")
 
 # INPUT ########
 data_path = f'{RAW_DATA_DIR}/dnam'
-raw_data_path = f'{data_path}/concatenated_df_VARIANCE_FILTERED_0_01.pkl'
+raw_data_path = f'{data_path}/concatenated_df_VARIANCE_FILTERED_0_01_NaN_0_1_imputed.pkl'
 pheno_input_file = f'{data_path}/pheno/PALLAS_FINAL_pheno_combined_n=2479.csv'
 epic_pheno_input_file = \
     f'{data_path}/pheno/NOPHO_EPIC_n=55_subtype_info_FINAL.csv'
