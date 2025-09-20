@@ -22,5 +22,10 @@ GEX_EXCLUDE_SUBTYPES = [
 ]
 DNAM_EXCLUDE_SUBTYPES = [
     'low hyperdiploid',
-    'FUS::ERG'
+    'FUS::ERG',
+    'KAT6A-r',
+    'MECOM-r',
+    'NPM1alt',
+    'RBM15::MKL1',
+    'NUTM1-r'
 ]
