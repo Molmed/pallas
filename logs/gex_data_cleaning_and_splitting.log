@@ -161,21 +161,19 @@ AML, APL-PML::RARA            5
 Name: count, dtype: int64
 
 
-The following classes will be excluded from the calibration set:
- - Class AML, CEBPAalt: 5 samples
- - Class AML, NPM1alt: 8 samples
- - Class B-ALL, PAX5 P80R: 11 samples
- - Class B-ALL, NUTM1-r: 5 samples
- - Class AML, NUP98-r: 7 samples
- - Class AML, APL-PML::RARA: 2 samples
- - Class Non-leukemic: 4 samples
- - Class AML, CBFA2T3::GLIS2: 2 samples
- - Class B-ALL, IKZF1 N159Y: 2 samples
- - Class B-ALL, MYC-r: 5 samples
- - Class B-ALL, HLF-r: 3 samples
+The following classes will be excluded from conformal prediction
+tests, and their test samples will be moved back into the training set:
+ - Class AML, NUP98-r: 4 test samples
+ - Class Non-leukemic: 2 test samples
+ - Class B-ALL, MYC-r: 3 test samples
+ - Class AML, NPM1alt: 4 test samples
+ - Class B-ALL, NUTM1-r: 2 test samples
+ - Class AML, CBFA2T3::GLIS2: 1 test samples
+ - Class B-ALL, HLF-r: 2 test samples
+ - Class AML, APL-PML::RARA: 1 test samples
+ - Class AML, CEBPAalt: 2 test samples
+ - Class B-ALL, IKZF1 N159Y: 1 test samples
 
-
-Adding classes excluded from calibration into the test set.
 
 Class distribution in train:
 subtype
@@ -197,30 +195,30 @@ B-ALL, ETV6::RUNX1-like      43
 B-ALL, MEF2D-r               40
 B-ALL, iAMP21                36
 B-ALL, PAX5 P80R             27
-AML, NPM1alt                 20
-AML, NUP98-r                 15
-B-ALL, NUTM1-r               13
-B-ALL, MYC-r                 12
-AML, CEBPAalt                10
-Non-leukemic                  8
-AML, CBFA2T3::GLIS2           6
-B-ALL, HLF-r                  6
-B-ALL, IKZF1 N159Y            5
-AML, APL-PML::RARA            3
+AML, NPM1alt                 24
+AML, NUP98-r                 19
+B-ALL, NUTM1-r               15
+B-ALL, MYC-r                 15
+AML, CEBPAalt                12
+Non-leukemic                 10
+B-ALL, HLF-r                  8
+AML, CBFA2T3::GLIS2           7
+B-ALL, IKZF1 N159Y            6
+AML, APL-PML::RARA            4
 Name: count, dtype: int64
 
 Class distribution in calibration:
 subtype
-B-ALL, high hyperdiploid    83
-B-ALL, ETV6::RUNX1          69
+B-ALL, high hyperdiploid    84
+B-ALL, ETV6::RUNX1          70
 B-ALL, BCR::ABL1-like       56
 B-ALL, KMT2A-r              33
 B-ALL, PAX5alt              31
-T-ALL                       27
-B-ALL, DUX4-r               25
+T-ALL                       26
+B-ALL, DUX4-r               24
 B-ALL, BCR::ABL1            21
 B-ALL, TCF3::PBX1           19
-B-ALL, hypodiploid          18
+B-ALL, hypodiploid          19
 AML, KMT2A-r                16
 AML, RUNX1::RUNX1T1         14
 B-ALL, ZNF384-r             12
@@ -228,50 +226,51 @@ AML, CBFB::MYH11            10
 B-ALL, ETV6::RUNX1-like      9
 B-ALL, iAMP21                8
 B-ALL, MEF2D-r               8
+B-ALL, PAX5 P80R             5
+AML, NPM1alt                 4
+B-ALL, NUTM1-r               3
+AML, CEBPAalt                3
+AML, NUP98-r                 3
+B-ALL, MYC-r                 2
+Non-leukemic                 2
+B-ALL, IKZF1 N159Y           1
+B-ALL, HLF-r                 1
+AML, CBFA2T3::GLIS2          1
+AML, APL-PML::RARA           1
 Name: count, dtype: int64
 
 Class distribution in test:
 subtype
-B-ALL, high hyperdiploid    84
-B-ALL, ETV6::RUNX1          70
+B-ALL, high hyperdiploid    83
+B-ALL, ETV6::RUNX1          69
 B-ALL, BCR::ABL1-like       56
 B-ALL, KMT2A-r              32
 B-ALL, PAX5alt              30
-T-ALL                       26
-B-ALL, DUX4-r               24
+T-ALL                       27
+B-ALL, DUX4-r               25
 B-ALL, BCR::ABL1            21
-B-ALL, hypodiploid          19
 B-ALL, TCF3::PBX1           19
+B-ALL, hypodiploid          18
 AML, KMT2A-r                16
 AML, RUNX1::RUNX1T1         15
 B-ALL, ZNF384-r             12
-B-ALL, PAX5 P80R            11
 B-ALL, ETV6::RUNX1-like     10
-B-ALL, MEF2D-r               9
 AML, CBFB::MYH11             9
-AML, NPM1alt                 8
+B-ALL, MEF2D-r               9
 B-ALL, iAMP21                7
-AML, NUP98-r                 7
-AML, CEBPAalt                5
-B-ALL, NUTM1-r               5
-B-ALL, MYC-r                 5
-Non-leukemic                 4
-B-ALL, HLF-r                 3
-AML, APL-PML::RARA           2
-B-ALL, IKZF1 N159Y           2
-AML, CBFA2T3::GLIS2          2
+B-ALL, PAX5 P80R             6
 Name: count, dtype: int64
 
 
 Saved samplesheet_labeled_diagnostic.csv with 3237 samples to /home/mariya/Data/pallas/processed/samplesheet_labeled_diagnostic.csv
 Saved samplesheet_unlabeled.csv with 590 samples to /home/mariya/Data/pallas/processed/samplesheet_unlabeled.csv
 Saved samplesheet_misc.csv with 1578 samples to /home/mariya/Data/pallas/processed/samplesheet_misc.csv
-Saved samplesheet_train.csv with 2265 samples to /home/mariya/Data/pallas/processed/samplesheet_train.csv
-Saved samplesheet_calibration.csv with 459 samples to /home/mariya/Data/pallas/processed/samplesheet_calibration.csv
-Saved samplesheet_test.csv with 513 samples to /home/mariya/Data/pallas/processed/samplesheet_test.csv
+Saved samplesheet_train.csv with 2287 samples to /home/mariya/Data/pallas/processed/samplesheet_train.csv
+Saved samplesheet_calibration.csv with 486 samples to /home/mariya/Data/pallas/processed/samplesheet_calibration.csv
+Saved samplesheet_test.csv with 464 samples to /home/mariya/Data/pallas/processed/samplesheet_test.csv
 
 Final counts in all sets:
- - TRAIN: 2265 samples
- - CALIBRATION: 459 samples
- - TEST: 513 samples
- - EXCLUDED FROM CALIBRATION: 54 samples
+ - TRAIN: 2287 samples
+ - CALIBRATION: 486 samples
+ - TEST: 464 samples
+ - EXCLUDED FROM CALIBRATION: 22 samples
