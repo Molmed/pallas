@@ -4,14 +4,12 @@
 # In[1]:
 
 
-import numpy as np
 import pandas as pd
 import os
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import SelectPercentile
 from sklearn.model_selection import RandomizedSearchCV, RepeatedStratifiedKFold, cross_val_score
 from sklearn.pipeline import Pipeline
-from sklearn.metrics import classification_report
 import joblib
 
 
@@ -19,8 +17,6 @@ import joblib
 
 X_train_path = os.getenv("X_TRAIN_CSV_PATH")
 y_train_path = os.getenv("Y_TRAIN_TSV_PATH")
-X_test_path = os.getenv("X_TEST_CSV_PATH")
-y_test_path = os.getenv("Y_TEST_TSV_PATH")
 output_dir = os.getenv("OUTPUT_DIR")
 random_seed = int(os.getenv("RANDOM_SEED"))
 n_jobs = int(os.getenv("N_JOBS", -1))
@@ -32,8 +28,6 @@ hyperparams_path = os.getenv("HYPERPARAMS_PATH")
 # Print configuration
 print(f"X_train_path: {X_train_path}")
 print(f"y_train_path: {y_train_path}")
-print(f"X_test_path: {X_test_path}")
-print(f"y_test_path: {y_test_path}")
 print(f"output_dir: {output_dir}")
 print(f"random_seed: {random_seed}")
 print(f"n_jobs: {n_jobs}")
@@ -70,22 +64,6 @@ X_train = X_train.loc[y_train.index]
 X_train
 
 
-# In[6]:
-
-
-X_test = pd.read_csv(X_test_path, index_col=0)
-y_test = pd.read_csv(y_test_path, sep="\t", index_col=0)
-y_test
-
-
-# In[7]:
-
-
-# align the indices
-X_test = X_test.loc[y_test.index]
-X_test
-
-
 # In[8]:
 
 
@@ -98,9 +76,6 @@ min_class_count
 
 
 y_train = y_train.iloc[:, 0].values  # Convert to 1D numpy array
-y_test = y_test.iloc[:, 0].values
-y_test
-
 
 # In[ ]:
 
@@ -174,7 +149,6 @@ N_REPEATS=10
 
 # Use just the selected features
 X_train_selected = X_train[selected_features]
-X_test_selected = X_test[selected_features]
 
 # Read in "best_hyperparameters.pkl"
 with open(hyperparams_path, "rb") as f:
