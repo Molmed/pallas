@@ -12,7 +12,7 @@ dotenv.load_dotenv()
 
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 42))
 SPLIT_TRAIN_FRAC = float(os.getenv("SPLIT_TRAIN_FRAC", 0.7))
-SPLIT_MIN_CALIBRATION_SAMPLES = int(os.getenv("SPLIT_MIN_CALIBRATION_SAMPLES", 15))
+SPLIT_MIN_TEST_SAMPLES = int(os.getenv("SPLIT_MIN_TEST_SAMPLES", 5))
 
 print("Processing DNAm...")
 
@@ -151,24 +151,26 @@ X_train, X_rest, y_train, y_rest = train_test_split(
         random_state=RANDOM_SEED,
         stratify=y
 )
-# In the rest split, remove samples totaling less
-# than the calibration sample minimum.
-# Put them into a separate data split.
-low_class_indices = y_rest.isin(
-    y_rest.value_counts()[
-        y_rest.value_counts() < SPLIT_MIN_CALIBRATION_SAMPLES].index
-)
-X_low = X_rest[low_class_indices]
-X_rest = X_rest[~X_rest.index.isin(X_low.index)]
-y_low = y_rest[low_class_indices]
-y_rest = y_rest[~y_rest.index.isin(y_low.index)]
 
-# Print all classes in this split and the number of samples in each
-print("The following classes will be excluded from the calibration set:")
-for class_label in y_low.unique():
-    class_count = y_low.value_counts().get(class_label, 0)
-    print(f" - Class {class_label}: {class_count} samples")
-print("\n")
+# See if there are any single-class samples in y_rest.
+# If so, move them to a separate single-class set.
+# They will then be merged into the calibration set later.
+single_class_indices = y_rest.isin(
+    y_rest.value_counts()[y_rest.value_counts() == 1].index
+)
+# Print warning
+if single_class_indices.any():
+    print(f"Warning: Found {single_class_indices.sum()} samples in test/calibration "
+          "that belong to classes with only one sample. "
+          "These samples will be excluded from conformal prediction tests.\n")
+    print("These classes are:")
+    print(y_rest[single_class_indices].unique())
+    print("\n")
+
+X_single = X_rest[single_class_indices]
+X_rest = X_rest[~X_rest.index.isin(X_single.index)]
+y_single = y_rest[single_class_indices]
+y_rest = y_rest[~y_rest.index.isin(y_single.index)]
 
 # Split remaining data 50/50
 X_calib, X_test, y_calib, y_test = train_test_split(
@@ -179,10 +181,33 @@ X_calib, X_test, y_calib, y_test = train_test_split(
     stratify=y_rest
 )
 
-# Merge low items into test set
-y_test = pd.concat([y_test, y_low])
-X_test = pd.concat([X_test, X_low])
-print("Adding classes excluded from calibration into the test set.\n")
+# Merge single-class items into calibration set
+X_calib = pd.concat([X_calib, X_single])
+y_calib = pd.concat([y_calib, y_single])
+
+# Now see which classes in test are under SPLIT_MIN_TEST_SAMPLES.
+# For these classes, we will not support conformal prediction.
+# So just move them to the train set.
+low_class_indices = y_test.isin(
+    y_test.value_counts()[
+        y_test.value_counts() < SPLIT_MIN_TEST_SAMPLES].index
+)
+X_low = X_test[low_class_indices]
+X_test = X_test[~X_test.index.isin(X_low.index)]
+y_low = y_test[low_class_indices]
+y_test = y_test[~y_test.index.isin(y_low.index)]
+
+# Print all classes in this split and the number of samples in each
+print("""The following classes will be excluded from conformal prediction
+tests, and their test samples will be moved back into the training set:""")
+for class_label in y_low.unique():
+    class_count = y_low.value_counts().get(class_label, 0)
+    print(f" - Class {class_label}: {class_count} test samples")
+print("\n")
+
+# Merge low items into train set
+y_train = pd.concat([y_train, y_low])
+X_train = pd.concat([X_train, X_low])
 
 # Save splits
 save_dataset(X_train, y_train, 'train')
