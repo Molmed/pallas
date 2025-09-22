@@ -15,6 +15,8 @@ pheno_input_file = f'{data_path}/SupplementaryInfo.xlsx'
 processed_dir = f'{PROCESSED_DATA_DIR}/{dataset_name}'
 samplesheet_output_file = \
     f'{processed_dir}/samplesheet.csv'
+details_file = \
+    f'{processed_dir}/patient_details.csv'
 
 # PROCESS PHENO ########
 print("Processing phenotype data...")
@@ -23,6 +25,17 @@ samplesheet_df = pd.read_excel(pheno_input_file,
                      sheet_name='Supplemental Table 1',
                      header=2,
                      index_col='Sample SJ ID')
+
+details_df = samplesheet_df.copy()
+# Rename index to sample
+details_df.index.name = 'sample'
+details_df = details_df.rename(columns={'Sex': 'sex', 'Age': 'age'})
+details_df['dataset'] = dataset_name
+# Keep just those columns
+details_df = details_df[
+    ['dataset', 'sex', 'age']]
+# Dump to CSV
+details_df.to_csv(details_file)
 
 # Keep only index and subtype cols
 samplesheet_df = samplesheet_df.iloc[:, :1]
