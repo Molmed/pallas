@@ -18,6 +18,8 @@ pheno_input_file = f'{data_path}/B-ALL-subtyping.xlsx'
 processed_dir = f'{PROCESSED_DATA_DIR}/{dataset_name}'
 samplesheet_output_file = \
     f'{processed_dir}/samplesheet.csv'
+details_file = \
+    f'{processed_dir}/patient_details.csv'
 
 # Make processed dir if not exists
 os.makedirs(processed_dir, exist_ok=True)
@@ -28,6 +30,24 @@ samplesheet_df = pd.read_excel(pheno_input_file,
                                sheet_name='ST1.Cohort',
                                header=0,
                                index_col='patient')
+
+details_df = samplesheet_df.copy()
+details_df.index.name = 'sample'
+
+# Drop rows with NaN index
+details_df = details_df[details_df.index.notna()]
+
+# Only keep rows where index starts with 'S' or 'P'
+details_df = details_df[details_df.index.str.startswith(('S', 'P'))]
+
+details_df['dataset'] = dataset_name
+details_df = details_df.rename(columns={'gender': 'sex'})
+
+details_df = details_df[
+    ['dataset', 'sex', 'age']]
+
+details_df.to_csv(details_file)
+
 # Get index of first row where patient is NaN
 nan_idx = samplesheet_df.index.get_indexer_for(
     samplesheet_df.index[samplesheet_df.index.isna()])[0]
