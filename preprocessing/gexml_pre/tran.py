@@ -13,14 +13,31 @@ print(f"Processing {dataset_name}...")
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
 raw_data_path = f'{data_path}/GSE181157_RAW'
 pheno_input_file = f'{data_path}/GSE181157.pheno.csv'
+details_input_file = f'{data_path}/GSE181157_SampleMetadata.xlsx'
 
 # OUTPUT FILES ########
 processed_dir = f'{PROCESSED_DATA_DIR}/{dataset_name}'
 samplesheet_output_file = \
     f'{processed_dir}/samplesheet.csv'
+details_file = \
+    f'{processed_dir}/patient_details.csv'
 
 # Make processed dir if not exists
 os.makedirs(processed_dir, exist_ok=True)
+
+# Read in details file
+details_df = pd.read_excel(details_input_file, index_col=1, header=1)
+details_df.index.name = 'sample'
+details_df['dataset'] = dataset_name
+details_df = details_df.rename(columns={'Age at Dx (years)': 'age', 'Sex': 'sex'})
+
+# For sex, replace M with Male and F with Female
+details_df['sex'] = details_df['sex'].replace({'M': 'Male', 'F': 'Female'})
+
+details_df = details_df[
+    ['dataset', 'sex', 'age']]
+
+details_df.to_csv(details_file)
 
 # PROCESS PHENO ########
 print("Processing phenotype data...")
