@@ -17,6 +17,8 @@ pheno_input_file = f'{data_path}/SAMPLE_INFO.txt'
 processed_dir = f'{PROCESSED_DATA_DIR}/{dataset_name}'
 samplesheet_output_file = \
     f'{processed_dir}/samplesheet.csv'
+details_file = \
+    f'{processed_dir}/patient_details.csv'
 
 # PAN-ALL DATA FOR DE-DUPLICATION ########
 # Load the data
@@ -55,6 +57,18 @@ samplesheet_df = samplesheet_df.rename(columns={'sample_name': 'sample'})
 
 # Set index to sample
 samplesheet_df.set_index('sample', inplace=True)
+
+# Extract the patient details to separate csv
+details_df = samplesheet_df.copy()
+details_df['dataset'] = dataset_name
+details_df = details_df.rename(
+    columns={'attr_sex': 'sex',
+             'attr_age_at_diagnosis': 'age'})
+
+details_df = details_df[
+    ['dataset', 'sex', 'age']]
+
+details_df.to_csv(details_file)
 
 # Set data_silo to empty string
 samplesheet_df['data_silo'] = ''
