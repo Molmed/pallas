@@ -14,14 +14,26 @@ print(f"Processing {dataset_name}...")
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
 raw_data_path = f'{data_path}/GSE227832_RNAseq_read_counts.txt'
 pheno_input_file = f'{data_path}/41698_2023_479_MOESM2_ESM.xlsx'
+details_input_file = f'{data_path}/Patients_clinicallist_FINAL.csv'
 
 # OUTPUT FILES ########
 processed_dir = f'{PROCESSED_DATA_DIR}/{dataset_name}'
 samplesheet_output_file = \
     f'{processed_dir}/samplesheet.csv'
+details_file = \
+    f'{processed_dir}/patient_details.csv'
 
 # Make processed dir if not exists
 os.makedirs(processed_dir, exist_ok=True)
+
+# Read in details file
+details_df = pd.read_csv(details_input_file, index_col=0)
+details_df.index.name = 'sample'
+details_df['dataset'] = dataset_name
+details_df = details_df.rename(columns={'Sex': 'sex', 'Age': 'age'})
+details_df = details_df[
+    ['dataset', 'sex', 'age']]
+details_df.to_csv(details_file)
 
 # PROCESS PHENO ########
 print("Processing phenotype data...")
