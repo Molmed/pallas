@@ -12,14 +12,44 @@ print(f"Processing {dataset_name}...")
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
 raw_data_path = f'{data_path}/GSE228632_RNAseq_read_counts.txt'
 pheno_input_file = f'{data_path}/GSE228632_meta.csv'
+details_input_file = f'{data_path}/Clinical_data_ALLIUM_FIN_cohort.xlsx'
 
 # OUTPUT FILES ########
 processed_dir = f'{PROCESSED_DATA_DIR}/{dataset_name}'
 samplesheet_output_file = \
     f'{processed_dir}/samplesheet.csv'
+details_file = \
+    f'{processed_dir}/patient_details.csv'
 
 # Make processed dir if not exists
 os.makedirs(processed_dir, exist_ok=True)
+
+# Read in details from Clinical_data_ALLIUM_FIN_cohort.xlsx
+details_df = pd.read_excel(details_input_file, index_col=0)
+details_df.index.name = 'sample'
+details_df['dataset'] = dataset_name
+
+
+# The age_range column should be converted to a new column "age" that has the midpoint
+def age_range_to_midpoint(age_range):
+    if pd.isna(age_range):
+        return None
+    if isinstance(age_range, str):
+        parts = age_range.split('-')
+        if len(parts) == 2:
+            try:
+                low = int(parts[0])
+                high = int(parts[1])
+                return (low + high) // 2
+            except ValueError:
+                return None
+    return None
+
+
+details_df['age'] = details_df['age_range'].apply(age_range_to_midpoint)
+details_df = details_df[
+    ['dataset', 'sex', 'age']]
+details_df.to_csv(details_file)
 
 # PROCESS PHENO ########
 print("Processing phenotype data...")
