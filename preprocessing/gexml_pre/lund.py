@@ -12,14 +12,39 @@ print(f"Processing {dataset_name}...")
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
 raw_data_path = f'{data_path}/EGAS00001001795.salmon.merged.gene_counts.tsv'
 pheno_input_file = f'{data_path}/EGAS00001001795.pheno.csv'
+details_input_file = f'{data_path}/41467_2016_BFncomms11790_MOESM1480_ESM.xlsx'
 
 # OUTPUT FILES ########
 processed_dir = f'{PROCESSED_DATA_DIR}/{dataset_name}'
 samplesheet_output_file = \
     f'{processed_dir}/samplesheet.csv'
+details_file = \
+    f'{processed_dir}/patient_details.csv'
 
 # Make processed dir if not exists
 os.makedirs(processed_dir, exist_ok=True)
+
+# Read in details file
+# Headers are in the second row, discard first row
+details_df = pd.read_excel(details_input_file, index_col=0, header=1)
+
+details_df.index.name = 'sample'
+# Preface every sample id with "Case_"
+details_df.index = 'Case_' + details_df.index.astype(str)
+
+details_df['dataset'] = dataset_name
+details_df = details_df.rename(columns={'Sex': 'sex', 'Age': 'age'})
+
+# Drop all rows where both sex and age are NaN
+details_df = details_df.dropna(subset=['sex', 'age'], how='all')
+
+# For sex, replace M with Male and F with Female
+details_df['sex'] = details_df['sex'].replace({'M': 'Male', 'F': 'Female'})
+
+details_df = details_df[
+    ['dataset', 'sex', 'age']]
+
+details_df.to_csv(details_file)
 
 # PROCESS PHENO ########
 print("Processing phenotype data...")
