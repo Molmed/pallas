@@ -6,7 +6,21 @@ import dotenv
 
 dotenv.load_dotenv()
 
-# First, krali 2021
+dataset_name ='enblad2025'
+details_input_file = f'{RAW_DATA_DIR}/dnam/pheno/{dataset_name}/New_DNAm_n_55_with_all_IDs.xlsx'
+details_file = f'{PROCESSED_DATA_DIR}/dnam/pheno/{dataset_name}/patient_details.csv'
+
+# index col is public_id
+details_df = pd.read_excel(details_input_file, index_col='public_id')
+details_df.rename(columns={'Sex': 'sex', 'Age': 'age'}, inplace=True)
+details_df.index.name = 'sample'
+details_df['dataset'] = dataset_name
+details_df['sex'] = details_df['sex'].replace({'male': 'Male', 'female': 'Female'})
+details_df = details_df[
+    ['dataset', 'sex', 'age']]
+details_df.to_csv(details_file)
+
+# Krali 2021
 dataset_name = 'krali2021'
 details_input_file = f'{RAW_DATA_DIR}/dnam/pheno/{dataset_name}/AML_clinical_n=142.csv'
 details_file = f'{PROCESSED_DATA_DIR}/dnam/pheno/{dataset_name}/patient_details.csv'
@@ -82,7 +96,7 @@ details_df = details_df[
     ['dataset', 'sex', 'age']]
 details_df.to_csv(details_file)
 
-print(details_df)
+
 
 # print(f"Processing {dataset_name}...")
 # # Read in details file
