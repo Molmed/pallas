@@ -138,4 +138,10 @@ details_df.index.name = 'sample'
 details_df['dataset'] = dataset_name
 details_df = details_df[
     ['dataset', 'sex', 'age']]
+
+# Only keep samples in details_df that are in the main pheno file
+main_pheno_df = pd.read_csv(main_pheno_file, index_col=0)
+main_pheno_df.index.name = 'sample'
+details_df = details_df[details_df.index.isin(main_pheno_df.index)]
+
 details_df.to_csv(details_file)
