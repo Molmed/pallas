@@ -60,18 +60,6 @@ samplesheet_df.set_index('sample', inplace=True)
 
 # Extract the patient details to separate csv
 details_df = samplesheet_df.copy()
-details_df['dataset'] = dataset_name
-details_df = details_df.rename(
-    columns={'attr_sex': 'sex',
-             'attr_age_at_diagnosis': 'age'})
-
-# Coerce age to numeric, forcing errors to NaN
-details_df['age'] = pd.to_numeric(details_df['age'], errors='coerce')
-
-details_df = details_df[
-    ['dataset', 'sex', 'age']]
-
-details_df.to_csv(details_file)
 
 # Set data_silo to empty string
 samplesheet_df['data_silo'] = ''
@@ -397,3 +385,20 @@ samplesheet_df = samplesheet_df[
 
 # Save the samplesheet
 samplesheet_df.to_csv(samplesheet_output_file)
+
+# Finish processing details
+details_df['dataset'] = dataset_name
+details_df = details_df.rename(
+    columns={'attr_sex': 'sex',
+             'attr_age_at_diagnosis': 'age'})
+
+# Coerce age to numeric, forcing errors to NaN
+details_df['age'] = pd.to_numeric(details_df['age'], errors='coerce')
+
+# Only keep details_df rows that are in samplesheet_df
+details_df = details_df.loc[details_df.index.intersection(samplesheet_df.index)]
+
+details_df = details_df[
+    ['dataset', 'sex', 'age']]
+
+details_df.to_csv(details_file)
