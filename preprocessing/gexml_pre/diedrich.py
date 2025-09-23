@@ -27,15 +27,6 @@ samplesheet_df = pd.read_excel(pheno_input_file,
                      index_col='Sample SJ ID')
 
 details_df = samplesheet_df.copy()
-# Rename index to sample
-details_df.index.name = 'sample'
-details_df = details_df.rename(columns={'Sex': 'sex', 'Age': 'age'})
-details_df['dataset'] = dataset_name
-# Keep just those columns
-details_df = details_df[
-    ['dataset', 'sex', 'age']]
-# Dump to CSV
-details_df.to_csv(details_file)
 
 # Keep only index and subtype cols
 samplesheet_df = samplesheet_df.iloc[:, :1]
@@ -83,3 +74,16 @@ samplesheet_df = samplesheet_df[
 
 # Save the samplesheet
 samplesheet_df.to_csv(samplesheet_output_file)
+
+# Rename index to sample
+details_df.index.name = 'sample'
+# Only keep the ones that are also in samplesheet_df
+details_df = details_df.loc[samplesheet_df.index]
+# Rename columns
+details_df = details_df.rename(columns={'Sex': 'sex', 'Age': 'age'})
+details_df['dataset'] = dataset_name
+# Keep just those columns
+details_df = details_df[
+    ['dataset', 'sex', 'age']]
+# Dump to CSV
+details_df.to_csv(details_file)

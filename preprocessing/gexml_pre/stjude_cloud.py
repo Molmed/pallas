@@ -65,6 +65,9 @@ details_df = details_df.rename(
     columns={'attr_sex': 'sex',
              'attr_age_at_diagnosis': 'age'})
 
+# Coerce age to numeric, forcing errors to NaN
+details_df['age'] = pd.to_numeric(details_df['age'], errors='coerce')
+
 details_df = details_df[
     ['dataset', 'sex', 'age']]
 

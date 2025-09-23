@@ -24,33 +24,6 @@ details_file = \
 # Make processed dir if not exists
 os.makedirs(processed_dir, exist_ok=True)
 
-# Read in details from Clinical_data_ALLIUM_FIN_cohort.xlsx
-details_df = pd.read_excel(details_input_file, index_col=0)
-details_df.index.name = 'sample'
-details_df['dataset'] = dataset_name
-
-
-# The age_range column should be converted to a new column "age" that has the midpoint
-def age_range_to_midpoint(age_range):
-    if pd.isna(age_range):
-        return None
-    if isinstance(age_range, str):
-        parts = age_range.split('-')
-        if len(parts) == 2:
-            try:
-                low = int(parts[0])
-                high = int(parts[1])
-                return (low + high) // 2
-            except ValueError:
-                return None
-    return None
-
-
-details_df['age'] = details_df['age_range'].apply(age_range_to_midpoint)
-details_df = details_df[
-    ['dataset', 'sex', 'age']]
-details_df.to_csv(details_file)
-
 # PROCESS PHENO ########
 print("Processing phenotype data...")
 # Load the data
@@ -111,3 +84,32 @@ samplesheet_df = samplesheet_df[
 
 # Save the samplesheet
 samplesheet_df.to_csv(samplesheet_output_file)
+
+# Read in details from Clinical_data_ALLIUM_FIN_cohort.xlsx
+details_df = pd.read_excel(details_input_file, index_col=0)
+details_df.index.name = 'sample'
+# Only keep the items that are also in samplesheet_df
+details_df = details_df.loc[samplesheet_df.index]
+details_df['dataset'] = dataset_name
+
+
+# The age_range column should be converted to a new column "age" that has the midpoint
+def age_range_to_midpoint(age_range):
+    if pd.isna(age_range):
+        return None
+    if isinstance(age_range, str):
+        parts = age_range.split('-')
+        if len(parts) == 2:
+            try:
+                low = int(parts[0])
+                high = int(parts[1])
+                return (low + high) // 2
+            except ValueError:
+                return None
+    return None
+
+
+details_df['age'] = details_df['age_range'].apply(age_range_to_midpoint)
+details_df = details_df[
+    ['dataset', 'sex', 'age']]
+details_df.to_csv(details_file)

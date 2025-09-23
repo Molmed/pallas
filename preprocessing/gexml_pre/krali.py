@@ -26,15 +26,6 @@ details_file = \
 # Make processed dir if not exists
 os.makedirs(processed_dir, exist_ok=True)
 
-# Read in details file
-details_df = pd.read_csv(details_input_file, index_col=0)
-details_df.index.name = 'sample'
-details_df['dataset'] = dataset_name
-details_df = details_df.rename(columns={'Sex': 'sex', 'Age': 'age'})
-details_df = details_df[
-    ['dataset', 'sex', 'age']]
-details_df.to_csv(details_file)
-
 # PROCESS PHENO ########
 print("Processing phenotype data...")
 # Load the data
@@ -169,3 +160,52 @@ samplesheet_df = samplesheet_df[
 
 # Save the samplesheet
 samplesheet_df.to_csv(samplesheet_output_file)
+
+# Copy df
+krali_df = samplesheet_df.copy()
+krali_samples = krali_df.index.to_list()
+
+# join on details file to see what we have
+details_df = pd.read_csv(details_input_file, index_col=0)
+details_df.index.name = 'sample'
+# Only keep entries that are in krali_samples
+details_df = details_df.loc[details_df.index.isin(krali_samples)]
+details_df['dataset'] = dataset_name
+
+# Get list of samples in krali_samples but not in details_df and print them
+missing_samples = [s for s in krali_samples if s not in details_df.index]
+print(f"Samples in {dataset_name} but not in details file: {missing_samples}")
+
+# Create a new DataFrame for the missing samples
+missing_details = pd.DataFrame(index=missing_samples, columns=['dataset', 'sex', 'age'])
+missing_details.index.name = 'sample'
+missing_details['dataset'] = dataset_name
+
+# Copy details for missing samples
+for sample in missing_samples:
+    # If sample starts with "ALL" and ends with "_2" or "_r", look up the original sample
+    if sample.startswith("ALL") and (sample.endswith("_2") or sample.endswith("_3") or sample.endswith("_r")):
+        # Find the base sample name by removing the suffix
+        if sample.endswith("_r"):
+            base_sample = sample[:-2]  # Remove "_r"
+        else:
+            base_sample = sample[:-2]  # Remove "_2" or "_3"
+
+        # If the base sample exists in details_df, copy its age and sex
+        if base_sample in details_df.index:
+            missing_details.loc[sample, 'sex'] = details_df.loc[base_sample, 'Sex']
+            missing_details.loc[sample, 'age'] = details_df.loc[base_sample, 'Age']
+            print(f"Copied details for {sample} from {base_sample}")
+        else:
+            print(f"Base sample {base_sample} not found for {sample}")
+    # For samples like "Constitutional_*" or "*_B" or "*_T", leave as NaN
+    else:
+        print(f"No details to copy for {sample}")
+
+# Rename columns in details_df to match desired output format
+details_df = details_df.rename(columns={'Sex': 'sex', 'Age': 'age'})
+
+# Combine the original details and the missing details
+all_details = pd.concat([details_df[['dataset', 'sex', 'age']], missing_details])
+# Save the combined details
+all_details.to_csv(details_file)
