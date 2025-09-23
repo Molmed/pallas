@@ -6,6 +6,52 @@ import dotenv
 
 dotenv.load_dotenv()
 
+dataset_name = 'krali2023'
+details_input_file = f'{RAW_DATA_DIR}/dnam/pheno/{dataset_name}/Patients_clinicallist_FINAL.csv'
+details_file = f'{PROCESSED_DATA_DIR}/dnam/pheno/{dataset_name}/patient_details.csv'
+main_pheno_file = f'{RAW_DATA_DIR}/dnam/pheno/PALLAS_FINAL_pheno_combined_n=2479.csv'
+
+# For this dataset, read in main pheno file to get all the sample ids, then see what we can find
+main_pheno_df = pd.read_csv(main_pheno_file, index_col=0)
+
+# Get all samples whose "dataset" column starts with "Krali2023"
+krali_samples = main_pheno_df[main_pheno_df['dataset'].str.startswith('Krali2023')]
+
+# Copy df
+krali_df = krali_samples.copy()
+krali_df['dataset'] = dataset_name
+krali_df.index.name = 'sample'
+
+# join on details file to see what we have
+details_df = pd.read_csv(details_input_file, index_col=0)
+details_df.index.name = 'sample'
+
+# Merge details_df into krali_df based on index
+details_df = krali_df.merge(details_df, left_index=True, right_index=True, how='left', suffixes=('', '_details'))
+
+# Rename columns
+details_df.rename(columns={'Age': 'age', 'Sex': 'sex'}, inplace=True)
+
+# Print all rows where sex is nan and sample starts with "ALL"
+missing_sex = details_df[details_df['sex'].isna() & details_df.index.str.startswith("ALL")]
+
+# In these, create a new col original_sample which strips the final r+digit, e.g. r1, r2
+missing_sex['original_sample'] = missing_sex.index.str.replace(r'r\d+$', '', regex=True)
+
+# Get the age and sex from the original samples
+missing_sex = missing_sex.merge(details_df, left_on='original_sample', right_index=True, how='left', suffixes=('', '_details'))
+
+# Copy them back to details_df
+for idx, row in missing_sex.iterrows():
+    if pd.isna(details_df.at[idx, 'sex']):
+        details_df.at[idx, 'sex'] = row['sex_details']
+    if pd.isna(details_df.at[idx, 'age']):
+        details_df.at[idx, 'age'] = row['age_details']
+
+details_df = details_df[
+    ['dataset', 'sex', 'age']]
+details_df.to_csv(details_file)
+
 dataset_name ='enblad2025'
 details_input_file = f'{RAW_DATA_DIR}/dnam/pheno/{dataset_name}/New_DNAm_n_55_with_all_IDs.xlsx'
 details_file = f'{PROCESSED_DATA_DIR}/dnam/pheno/{dataset_name}/patient_details.csv'
@@ -25,8 +71,6 @@ dataset_name = 'krali2021'
 details_input_file = f'{RAW_DATA_DIR}/dnam/pheno/{dataset_name}/AML_clinical_n=142.csv'
 details_file = f'{PROCESSED_DATA_DIR}/dnam/pheno/{dataset_name}/patient_details.csv'
 
-print(f"Processing {dataset_name}...")
-# Read in details file
 details_df = pd.read_csv(details_input_file, index_col=0)
 details_df.index.name = 'sample'
 details_df['dataset'] = dataset_name
@@ -95,15 +139,3 @@ details_df['dataset'] = dataset_name
 details_df = details_df[
     ['dataset', 'sex', 'age']]
 details_df.to_csv(details_file)
-
-
-
-# print(f"Processing {dataset_name}...")
-# # Read in details file
-# details_df = pd.read_csv(details_input_file, index_col=0)
-# details_df.index.name = 'sample'
-# details_df['dataset'] = dataset_name
-# details_df['sex'] = details_df['sex'].replace({'male': 'Male', 'female': 'Female'})
-# details_df = details_df[
-#     ['dataset', 'sex', 'age']]
-# details_df.to_csv(details_file)
