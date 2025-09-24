@@ -76,11 +76,17 @@ def gex_samplesheet_to_df(modality, silo, split):
         df['data_split'] = split
 
         # Look up age and sex from all_details_df
-        # Do not join, copy instead to avoid duplicating rows
         for idx in df.index:
             if idx in all_details_df.index:
-                df.at[idx, 'age'] = all_details_df.at[idx, 'age']
-                df.at[idx, 'sex'] = all_details_df.at[idx, 'sex']
+                matching_rows = all_details_df[
+                    (all_details_df.index == idx) &
+                    (all_details_df['modality'] == modality)
+                ]
+
+            if not matching_rows.empty:
+                # Use .iloc[0] to get the first (and should be only) matching row
+                df.at[idx, 'age'] = matching_rows.iloc[0]['age']
+                df.at[idx, 'sex'] = matching_rows.iloc[0]['sex']
 
         df = df[['modality',
                  'dataset',
@@ -115,12 +121,18 @@ def dnam_samplesheet_to_df(modality, silo, split):
         df['data_split'] = split
 
         # Look up age and sex from all_details_df
-        # Do not join, copy instead to avoid duplicating rows
         for idx in df.index:
             if idx in all_details_df.index:
-                df.at[idx, 'dataset'] = all_details_df.at[idx, 'dataset']
-                df.at[idx, 'age'] = all_details_df.at[idx, 'age']
-                df.at[idx, 'sex'] = all_details_df.at[idx, 'sex']
+                matching_rows = all_details_df[
+                    (all_details_df.index == idx) &
+                    (all_details_df['modality'] == modality)
+                ]
+
+            if not matching_rows.empty:
+                # Use .iloc[0] to get the first (and should be only) matching row
+                df.at[idx, 'age'] = matching_rows.iloc[0]['age']
+                df.at[idx, 'sex'] = matching_rows.iloc[0]['sex']
+                df.at[idx, 'dataset'] = matching_rows.iloc[0]['dataset']
 
         df = df[['modality',
                  'dataset',
