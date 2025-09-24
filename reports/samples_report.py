@@ -43,44 +43,92 @@ data_silos = [
     'unlabeled'
 ]
 
+misc_data_silos = [
+    'excluded',
+    'relapse',
+    'unrecognized'
+]
+
 data_splits = [
     'train',
     'calibration',
     'test'
 ]
 
-modality_data_paths = {
-    'DNAm': os.path.join(processed_data_dir, 'dnam'),
-    'GEX': processed_data_dir
-}
+modalities = [
+    'GEX',
+    'DNAm'
+]
 
-for modality, data_path in modality_data_paths.items():
-    summary = []
-    for silo in data_silos:
+
+def gex_samplesheet_to_df(modality, silo, split):
+    if split is None:
+        filename = f"samplesheet_{silo}.csv"
+    else:
+        filename = f"samplesheet_{split}.csv"
+    filepath = os.path.join(processed_data_dir, filename)
+    try:
+        df = pd.read_csv(filepath, index_col=0)
+        # Set age and sex to none
+        df['age'] = None
+        df['sex'] = None
+        df['modality'] = modality
+        df['data_split'] = split
+
+        # Look up age and sex from all_details_df
+        # Do not join, copy instead to avoid duplicating rows
+        for idx in df.index:
+            if idx in all_details_df.index:
+                df.at[idx, 'age'] = all_details_df.at[idx, 'age']
+                df.at[idx, 'sex'] = all_details_df.at[idx, 'sex']
+
+        print(df.columns)
+        df = df[['modality',
+                 'dataset',
+                 'data_silo',
+                 'data_split',
+                 'subtype',
+                 'batch',
+                 'age',
+                 'sex']]
+    except FileNotFoundError:
+        return None
+
+
+def dnam_samplesheet_to_df(modality, silo, split):
+    if split is None:
+        filename = f"dnam_{silo}_y.tsv"
+    else:
+        filename = f"dnam_{split}_y.tsv"
+    filepath = os.path.join(processed_data_dir, 'dnam', filename)
+    try:
+        return pd.read_csv(filepath, sep='\t', index_col=0)
+    except FileNotFoundError:
+        return None
+
+
+def get_samplesheet_df(modality, silo, split=None):
+    if modality == 'GEX':
+        return gex_samplesheet_to_df(modality, silo, split)
+    elif modality == 'DNAm':
+        return dnam_samplesheet_to_df(modality, silo, split)
+    else:
+        raise ValueError(f"Unknown modality: {modality}")
+
+
+dfs = []
+for modality in modalities:
+    for silo in data_silos + misc_data_silos:
+        df = None
         if silo == 'labeled_diagnostic':
             for split in data_splits:
-                y_path = os.path.join(data_path, f'{split}_y.tsv')
-                print(y_path)
+                print(f"Modality: {modality}, Silo: {silo}, Split: {split}")
+                df = get_samplesheet_df(modality, silo, split)
         else:
-            y_path = os.path.join(data_path, f'{silo}_y.tsv')
-        print(y_path)
-        # for split in data_splits:
-        #     split_path = os.path.join(data_path, silo, split)
-    # # Check if path exists
-    #         if os.path.exists(split_path):
-    #             # Read in samples file
-    #             samples_file = os.path.join(split_path, 'samples.txt')
-    #             if os.path.exists(samples_file):
-    #                 samples = pd.read_csv(samples_file, header=None, names=['sample'])
-    #                 num_samples = len(samples)
+            print(f"Modality: {modality}, Silo: {silo}")
+            df = get_samplesheet_df(modality, silo)
 
-    #                 # Get patient details for these samples
-    #                 details = all_details_df[all_details_df.index.isin(samples['sample'])]
-    #                 age_summary = f"{details['age'].mean():.1f} ± ({details['age'].std():.1f})"
-    #                summary.append({
-    #                    'modality': modality,
-    #                    'silo': silo,
-    #                    'split': split,
-    #                    'num_samples': num_samples,
-    #                    'age_summary': age_summary
-    #                })
+        if df is not None:
+            dfs.append(df)
+
+print(len(dfs))
