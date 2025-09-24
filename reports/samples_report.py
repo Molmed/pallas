@@ -34,7 +34,7 @@ for details_file in details_files:
 all_details_df = pd.concat(details_dfs)
 
 # Save to CSV
-all_details_df.to_csv(os.path.join(reports_dir, 'all_cohorts_patient_details.csv'))
+# all_details_df.to_csv(os.path.join(reports_dir, 'all_cohorts_patient_details.csv'))
 
 # Go through all silos and then all the splits in the labeled_diagnostic split
 data_silos = [
@@ -180,6 +180,50 @@ for modality in modalities:
 
 # Concatenate all dfs
 all_samples_df = pd.concat(dfs)
+
+# Rename batch to library
+all_samples_df.rename(columns={'batch': 'library'}, inplace=True)
+
+
+# Put all the data_silo=='excluded' samples at the bottom
+def silo_sort_key(silo):
+    # Return high value for 'excluded' to make it sort last
+    if silo == 'excluded':
+        return 999
+    # For other silos, maintain normal order
+    elif silo == 'labeled_diagnostic':
+        return 1
+    elif silo == 'unlabeled':
+        return 2
+    elif silo == 'relapse':
+        return 3
+    elif silo == 'unrecognized':
+        return 4
+    else:
+        return 5  # For any other silos
+
+
+# Create a custom sort key function for data_split
+def split_sort_key(split):
+    if split == 'train':
+        return 1
+    elif split == 'calibration':
+        return 2
+    elif split == 'test':
+        return 3
+    else:
+        return 4  # For any other values (like None)
+
+
+# Create temporary columns for sorting
+all_samples_df['silo_sort'] = all_samples_df['data_silo'].apply(silo_sort_key)
+all_samples_df['split_sort'] = all_samples_df['data_split'].apply(split_sort_key)
+
+# Sort by modality, dataset, silo_sort (puts excluded at bottom), then data_split in custom order
+all_samples_df.sort_values(by=['modality', 'dataset', 'silo_sort', 'split_sort', 'subtype'], inplace=True)
+
+# Drop the temporary columns
+all_samples_df.drop(['silo_sort', 'split_sort'], axis=1, inplace=True)
 
 # Dump to CSV
 all_samples_df.to_csv(os.path.join(reports_dir, 'all_cohorts_samples_report.csv'))
