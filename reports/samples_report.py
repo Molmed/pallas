@@ -82,7 +82,6 @@ def gex_samplesheet_to_df(modality, silo, split):
                 df.at[idx, 'age'] = all_details_df.at[idx, 'age']
                 df.at[idx, 'sex'] = all_details_df.at[idx, 'sex']
 
-        print(df.columns)
         df = df[['modality',
                  'dataset',
                  'data_silo',
@@ -91,6 +90,7 @@ def gex_samplesheet_to_df(modality, silo, split):
                  'batch',
                  'age',
                  'sex']]
+        return df
     except FileNotFoundError:
         return None
 
@@ -102,7 +102,31 @@ def dnam_samplesheet_to_df(modality, silo, split):
         filename = f"dnam_{split}_y.tsv"
     filepath = os.path.join(processed_data_dir, 'dnam', filename)
     try:
-        return pd.read_csv(filepath, sep='\t', index_col=0)
+        df = pd.read_csv(filepath, sep='\t', index_col=0)
+        df['age'] = None
+        df['sex'] = None
+        df['batch'] = None
+        df['modality'] = modality
+        df['data_silo'] = silo
+        df['data_split'] = split
+
+        # Look up age and sex from all_details_df
+        # Do not join, copy instead to avoid duplicating rows
+        for idx in df.index:
+            if idx in all_details_df.index:
+                df.at[idx, 'dataset'] = all_details_df.at[idx, 'dataset']
+                df.at[idx, 'age'] = all_details_df.at[idx, 'age']
+                df.at[idx, 'sex'] = all_details_df.at[idx, 'sex']
+
+        df = df[['modality',
+                 'dataset',
+                 'data_silo',
+                 'data_split',
+                 'subtype',
+                 'batch',
+                 'age',
+                 'sex']]
+        return df
     except FileNotFoundError:
         return None
 
@@ -131,4 +155,8 @@ for modality in modalities:
         if df is not None:
             dfs.append(df)
 
-print(len(dfs))
+# Concatenate all dfs
+all_samples_df = pd.concat(dfs)
+
+# Dump to CSV
+all_samples_df.to_csv(os.path.join(reports_dir, 'all_cohorts_samples_report.csv'))
