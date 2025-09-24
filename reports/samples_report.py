@@ -220,7 +220,7 @@ all_samples_df['silo_sort'] = all_samples_df['data_silo'].apply(silo_sort_key)
 all_samples_df['split_sort'] = all_samples_df['data_split'].apply(split_sort_key)
 
 # Sort by modality, dataset, silo_sort (puts excluded at bottom), then data_split in custom order
-all_samples_df.sort_values(by=['modality', 'dataset', 'silo_sort', 'split_sort', 'subtype'], inplace=True)
+all_samples_df.sort_values(by=['modality', 'silo_sort', 'split_sort', 'subtype', 'dataset'], inplace=True)
 
 # Drop the temporary columns
 all_samples_df.drop(['silo_sort', 'split_sort'], axis=1, inplace=True)
