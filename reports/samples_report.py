@@ -9,6 +9,7 @@ if not os.path.exists(reports_dir):
     os.makedirs(reports_dir)
 
 processed_data_dir = os.getenv('PROCESSED_DATA_DIR')
+sample_report_path = os.getenv('SAMPLE_REPORT_PATH')
 
 # Find all patient_details.csv files in processed_data_dir
 details_files = []
@@ -226,4 +227,4 @@ all_samples_df.sort_values(by=['modality', 'silo_sort', 'split_sort', 'subtype',
 all_samples_df.drop(['silo_sort', 'split_sort'], axis=1, inplace=True)
 
 # Dump to CSV
-all_samples_df.to_csv(os.path.join(reports_dir, 'all_cohorts_samples_report.csv'))
+all_samples_df.to_csv(sample_report_path)
