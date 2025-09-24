@@ -90,8 +90,12 @@ def gex_samplesheet_to_df(modality, silo, split):
                  'batch',
                  'age',
                  'sex']]
+        df = df.reset_index()
+        df = df.set_index(['sample', 'modality'])
+
         return df
     except FileNotFoundError:
+        print(f"File not found: {filepath}")
         return None
 
 
@@ -126,8 +130,13 @@ def dnam_samplesheet_to_df(modality, silo, split):
                  'batch',
                  'age',
                  'sex']]
+        df.index.name = 'sample'
+        df = df.reset_index()
+        df = df.set_index(['sample', 'modality'])
+
         return df
     except FileNotFoundError:
+        print(f"File not found: {filepath}")
         return None
 
 
@@ -142,18 +151,20 @@ def get_samplesheet_df(modality, silo, split=None):
 
 dfs = []
 for modality in modalities:
+    def add_df_to_list(df):
+        if df is not None:
+            print(f"Adding df with modality: {modality}, Silo: {silo}, Split: {split} and shape: {df.shape}")
+            dfs.append(df)
+
     for silo in data_silos + misc_data_silos:
+        split = None
         df = None
         if silo == 'labeled_diagnostic':
             for split in data_splits:
-                print(f"Modality: {modality}, Silo: {silo}, Split: {split}")
-                df = get_samplesheet_df(modality, silo, split)
+                add_df_to_list(get_samplesheet_df(modality, silo, split))
         else:
-            print(f"Modality: {modality}, Silo: {silo}")
-            df = get_samplesheet_df(modality, silo)
+            add_df_to_list(get_samplesheet_df(modality, silo))
 
-        if df is not None:
-            dfs.append(df)
 
 # Concatenate all dfs
 all_samples_df = pd.concat(dfs)
