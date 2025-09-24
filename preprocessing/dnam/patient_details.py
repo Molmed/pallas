@@ -54,10 +54,30 @@ details_df.to_csv(details_file)
 
 dataset_name ='enblad2025'
 details_input_file = f'{RAW_DATA_DIR}/dnam/pheno/{dataset_name}/New_DNAm_n_55_with_all_IDs.xlsx'
+id_mapping_file = f'{RAW_DATA_DIR}/dnam/pheno/{dataset_name}/NOPHO_EPIC_n=55_subtype_info_FINAL.csv'
 details_file = f'{PROCESSED_DATA_DIR}/dnam/pheno/{dataset_name}/patient_details.csv'
 
-# index col is public_id
-details_df = pd.read_excel(details_input_file, index_col='public_id')
+# For some reason the public ids are not correct on the details_input_file,
+# so we need to grab them from the id_mapping_file
+id_mapping_df = pd.read_csv(id_mapping_file, index_col=2)
+
+# Set the name of the first column (not index) to public_id
+id_mapping_df.rename(columns={id_mapping_df.columns[0]: 'public_id'}, inplace=True)
+
+details_df = pd.read_excel(details_input_file, index_col=1)
+
+# In details_df index, strip out everything after the dot
+details_df.index = details_df.index.str.split('.').str[0]
+
+# Drop public_id from details_df
+details_df = details_df.drop(columns=['public_id'], errors='ignore')
+
+# Copy public_id from id_mapping_df to details_df based on index
+details_df = details_df.merge(id_mapping_df[['public_id']], left_index=True, right_index=True, how='left')
+
+# Set public_id to index
+details_df.set_index('public_id', inplace=True)
+
 details_df.rename(columns={'Sex': 'sex', 'Age': 'age'}, inplace=True)
 details_df.index.name = 'sample'
 details_df['dataset'] = dataset_name
