@@ -62,4 +62,6 @@ report_df = report_df.drop(columns=['sort_prefix', 'total_neg'])
 report_df = report_df[report_df['subtype'] != 'Non-leukemic']
 
 # Save as CSV
-report_df.to_csv(os.path.join(reports_dir, 'labeled_diagnostic_subtypes_report.csv'))
+report_df.to_csv(
+    os.path.join(reports_dir, 'labeled_diagnostic_subtypes_report.csv'),
+    index=False)
