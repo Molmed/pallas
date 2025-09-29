@@ -132,7 +132,7 @@ def plot_confusion(y_true, y_pred, class_names, normalize=True):
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     plt.figure(figsize=(8,6))
-    sns.heatmap(cm, annot=True, fmt=".2f" if normalize else "d",
+    sns.heatmap(cm, annot=True, fmt=".1f" if normalize else "d",
                 xticklabels=class_names, yticklabels=class_names, cmap="Blues")
     plt.ylabel("True label"); plt.xlabel("Predicted label");
     plt.title("Confusion Matrix")
@@ -191,7 +191,7 @@ def full_evaluation_report(y_true, y_pred, y_proba, class_names):
     print(per_class)
 
     print("\n=== Plots ===")
-    plot_confusion(y_true, y_pred, class_names)
+    plot_confusion(y_true, y_pred, class_names, normalize=False)
     plot_roc_curves(y_true, y_proba, class_names)
     plot_pr_curves(y_true, y_proba, class_names)
     for i, cls in enumerate(class_names):
