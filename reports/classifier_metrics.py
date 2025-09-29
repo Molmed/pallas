@@ -32,6 +32,9 @@ def compute_macro_auprc(y_true, y_proba, classes):
 
 
 def classifier_level_metrics(y_true, y_pred, y_proba, class_names):
+    class_to_idx = {cls: idx for idx, cls in enumerate(class_names)}
+    y_true_idx = np.array([class_to_idx.get(label, -1) for label in y_true])
+
     metrics = {}
     metrics["accuracy"] = accuracy_score(y_true, y_pred)
     metrics["macro_f1"] = f1_score(y_true, y_pred, average="macro")
@@ -43,7 +46,7 @@ def classifier_level_metrics(y_true, y_pred, y_proba, class_names):
     metrics["brier"] = np.mean([brier_score_loss((y_true==i).astype(int), y_proba[:, i])
                                 for i in range(len(class_names))])
     metrics["macro_auroc"] = roc_auc_score(y_true, y_proba, multi_class="ovr", average="macro")
-    metrics["macro_auprc"] = compute_macro_auprc(y_true, y_proba, classes=np.arange(len(class_names)))
+    metrics["macro_auprc"] = compute_macro_auprc(y_true_idx, y_proba, classes=np.arange(len(class_names)))
     return metrics
 
 # ==========================================================
@@ -67,13 +70,9 @@ def cross_val_metrics(clf, X, y, class_names, n_splits=5, random_state=42):
         y_pred = clf.predict(X_val)
         y_proba = clf.predict_proba(X_val)
 
-        class_to_idx = {cls: idx for idx, cls in enumerate(class_names)}
-        y_true_idx = np.array([class_to_idx.get(label, -1) for label in y_val])
-        y_pred_idx = np.array([class_to_idx.get(label, -1) for label in y_pred])
-
         # Collect for overall cross-val metrics
-        y_true_all.append(y_true_idx)
-        y_pred_all.append(y_pred_idx)
+        y_true_all.append(y_val)
+        y_pred_all.append(y_pred)
         y_proba_all.append(y_proba)
 
         # Per-fold metrics
