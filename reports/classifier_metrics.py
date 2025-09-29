@@ -9,22 +9,27 @@ from sklearn.metrics import (
     cohen_kappa_score
 )
 from sklearn.calibration import calibration_curve
+from sklearn.preprocessing import label_binarize
+from sklearn.model_selection import StratifiedKFold
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.utils import resample
+from collections import defaultdict
 
 # ==========================================================
-# 1. INPUTS: y_true (N,), y_pred (N,), y_proba (N, C)
+# 1. CLASSIFIER-LEVEL METRICS (including safe macro AUPRC)
 # ==========================================================
-# Example placeholders
-# y_true   = np.array([...])  # ground-truth class indices
-# y_pred   = np.array([...])  # predicted class indices (argmax of y_proba)
-# y_proba  = np.array([...])  # predicted probabilities, shape (n_samples, n_classes)
-# class_names = ["Class1", "Class2", ..., "ClassC"]
 
-# ==========================================================
-# 2. CLASSIFIER-LEVEL METRICS
-# ==========================================================
+def compute_macro_auprc(y_true, y_proba, classes):
+    Y_bin = label_binarize(y_true, classes=classes)  # shape (n_samples, n_classes)
+    ap_list = []
+    for i in range(len(classes)):
+        if Y_bin[:, i].sum() == 0:
+            continue  # skip classes with no positives
+        ap = average_precision_score(Y_bin[:, i], y_proba[:, i])
+        ap_list.append(ap)
+    return np.mean(ap_list) if ap_list else 0.0
+
 
 def classifier_level_metrics(y_true, y_pred, y_proba, class_names):
     metrics = {}
@@ -37,15 +42,55 @@ def classifier_level_metrics(y_true, y_pred, y_proba, class_names):
     metrics["log_loss"] = log_loss(y_true, y_proba)
     metrics["brier"] = np.mean([brier_score_loss((y_true==i).astype(int), y_proba[:, i])
                                 for i in range(len(class_names))])
-    # AUROC / AUPRC macro
     metrics["macro_auroc"] = roc_auc_score(y_true, y_proba, multi_class="ovr", average="macro")
-    # Fix for macro_auprc calculation to handle classes with no positive examples
-    metrics["macro_auprc"] = np.mean([
-        average_precision_score((y_true==i).astype(int), y_proba[:, i])
-        for i in range(len(class_names))
-        if np.any(y_true==i)  # Only include classes that have at least one example
-    ])
+    metrics["macro_auprc"] = compute_macro_auprc(y_true, y_proba, classes=np.arange(len(class_names)))
     return metrics
+
+# ==========================================================
+# 2. CROSS-VALIDATION METRICS
+# ==========================================================
+
+def cross_val_metrics(clf, X, y, class_names, n_splits=5, random_state=42):
+    skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=random_state)
+
+    fold_metrics = defaultdict(list)
+
+    y_true_all = []
+    y_pred_all = []
+    y_proba_all = []
+
+    for train_idx, val_idx in skf.split(X, y):
+        X_tr, X_val = X.iloc[train_idx], X.iloc[val_idx]
+        y_tr, y_val = y.iloc[train_idx], y.iloc[val_idx]
+
+        clf.fit(X_tr, y_tr)
+        y_pred = clf.predict(X_val)
+        y_proba = clf.predict_proba(X_val)
+
+        class_to_idx = {cls: idx for idx, cls in enumerate(class_names)}
+        y_true_idx = np.array([class_to_idx.get(label, -1) for label in y_val])
+        y_pred_idx = np.array([class_to_idx.get(label, -1) for label in y_pred])
+
+        # Collect for overall cross-val metrics
+        y_true_all.append(y_true_idx)
+        y_pred_all.append(y_pred_idx)
+        y_proba_all.append(y_proba)
+
+        # Per-fold metrics
+        metrics = classifier_level_metrics(y_val, y_pred, y_proba, class_names)
+        for k, v in metrics.items():
+            fold_metrics[k].append(v)
+
+    # Aggregate metrics across folds
+    fold_metrics_mean_std = {k: (np.mean(v), np.std(v)) for k, v in fold_metrics.items()}
+
+    # Overall metrics using all concatenated predictions (optional)
+    y_true_all = np.concatenate(y_true_all)
+    y_pred_all = np.concatenate(y_pred_all)
+    y_proba_all = np.vstack(y_proba_all)
+    overall_metrics = classifier_level_metrics(y_true_all, y_pred_all, y_proba_all, class_names)
+
+    return fold_metrics_mean_std, overall_metrics, y_true_all, y_pred_all, y_proba_all
 
 # ==========================================================
 # 3. CLASS-LEVEL METRICS
