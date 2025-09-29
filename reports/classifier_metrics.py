@@ -39,8 +39,12 @@ def classifier_level_metrics(y_true, y_pred, y_proba, class_names):
                                 for i in range(len(class_names))])
     # AUROC / AUPRC macro
     metrics["macro_auroc"] = roc_auc_score(y_true, y_proba, multi_class="ovr", average="macro")
-    metrics["macro_auprc"] = np.mean([average_precision_score((y_true==i).astype(int), y_proba[:, i])
-                                      for i in range(len(class_names))])
+    # Fix for macro_auprc calculation to handle classes with no positive examples
+    metrics["macro_auprc"] = np.mean([
+        average_precision_score((y_true==i).astype(int), y_proba[:, i])
+        for i in range(len(class_names))
+        if np.any(y_true==i)  # Only include classes that have at least one example
+    ])
     return metrics
 
 # ==========================================================
