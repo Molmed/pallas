@@ -5,7 +5,8 @@ from sklearn.metrics import (
     confusion_matrix, classification_report,
     roc_auc_score, average_precision_score,
     roc_curve, precision_recall_curve,
-    log_loss, brier_score_loss, matthews_corrcoef
+    log_loss, brier_score_loss, matthews_corrcoef,
+    cohen_kappa_score
 )
 from sklearn.calibration import calibration_curve
 import matplotlib.pyplot as plt
@@ -32,6 +33,7 @@ def classifier_level_metrics(y_true, y_pred, y_proba, class_names):
     metrics["micro_f1"] = f1_score(y_true, y_pred, average="micro")
     metrics["weighted_f1"] = f1_score(y_true, y_pred, average="weighted")
     metrics["mcc"] = matthews_corrcoef(y_true, y_pred)
+    metrics["cohen_kappa"] = cohen_kappa_score(y_true, y_pred)
     metrics["log_loss"] = log_loss(y_true, y_proba)
     metrics["brier"] = np.mean([brier_score_loss((y_true==i).astype(int), y_proba[:, i])
                                 for i in range(len(class_names))])
@@ -80,9 +82,7 @@ def plot_confusion(y_true, y_pred, class_names, normalize=True):
     cm = confusion_matrix(y_true, y_pred)
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-        # font size should be 6
-    sns.set(font_scale=6)
-    plt.figure(figsize=(14,14))
+    plt.figure(figsize=(8,6))
     sns.heatmap(cm, annot=True, fmt=".2f" if normalize else "d",
                 xticklabels=class_names, yticklabels=class_names, cmap="Blues")
     plt.ylabel("True label"); plt.xlabel("Predicted label");
