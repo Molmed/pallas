@@ -31,22 +31,41 @@ def compute_macro_auprc(y_true, y_proba, classes):
     return np.mean(ap_list) if ap_list else 0.0
 
 
-def classifier_level_metrics(y_true, y_pred, y_proba, class_names):
-    class_to_idx = {cls: idx for idx, cls in enumerate(class_names)}
-    y_true_idx = np.array([class_to_idx.get(label, -1) for label in y_true])
-
+def classifier_level_metrics(y_true, y_pred, y_proba, class_names, labels=None):
+    """
+    Compute classifier-level metrics.
+    """
     metrics = {}
+    # Use labels parameter for log_loss
+    metrics["log_loss"] = log_loss(y_true, y_proba, labels=labels if labels else class_names)
     metrics["accuracy"] = accuracy_score(y_true, y_pred)
-    metrics["macro_f1"] = f1_score(y_true, y_pred, average="macro")
-    metrics["micro_f1"] = f1_score(y_true, y_pred, average="micro")
     metrics["weighted_f1"] = f1_score(y_true, y_pred, average="weighted")
     metrics["mcc"] = matthews_corrcoef(y_true, y_pred)
-    metrics["cohen_kappa"] = cohen_kappa_score(y_true, y_pred)
-    metrics["log_loss"] = log_loss(y_true, y_proba)
-    metrics["brier"] = np.mean([brier_score_loss((y_true==i).astype(int), y_proba[:, i])
-                                for i in range(len(class_names))])
-    metrics["macro_auroc"] = roc_auc_score(y_true, y_proba, multi_class="ovr", average="macro")
-    metrics["macro_auprc"] = compute_macro_auprc(y_true_idx, y_proba, classes=np.arange(len(class_names)))
+    metrics["kappa"] = cohen_kappa_score(y_true, y_pred)  # Added back
+
+    # For multi-class ROC AUC, we need to account for classes not in y_true
+    # This is a common approach for calculating macro AUC in imbalanced datasets
+    present_classes = np.unique(y_true)
+    metrics["macro_auroc"] = np.mean([
+        roc_auc_score((y_true == cls).astype(int), y_proba[:, i])
+        for i, cls in enumerate(class_names) if cls in present_classes
+    ])
+
+    # For AUPRC, only calculate for classes present in the data
+    metrics["macro_auprc"] = np.mean([
+        average_precision_score((y_true == cls).astype(int), y_proba[:, i])
+        for i, cls in enumerate(class_names) if cls in present_classes
+    ])
+
+    # Add back the Brier score
+    metrics["brier_score"] = np.mean([
+        brier_score_loss((y_true == cls).astype(int), y_proba[:, i])
+        for i, cls in enumerate(class_names) if cls in present_classes
+    ])
+
+    # Add any other metrics that were missing
+    metrics["macro_f1"] = f1_score(y_true, y_pred, average="macro")
+
     return metrics
 
 # ==========================================================
@@ -102,7 +121,7 @@ def cross_val_metrics(clf, X, y, class_names, n_splits=5, random_state=42):
     per_class_summary = (
         per_class_all.groupby(per_class_all.index)
         .mean(numeric_only=True)  # average metrics per class
-        .drop(columns=["support"], errors="ignore")  # support isn’t meaningful averaged
+        # .drop(columns=["support"], errors="ignore")  # support isn’t meaningful averaged
     )
 
     return (
@@ -123,22 +142,52 @@ def class_level_metrics(y_true, y_pred, y_proba, class_names):
     y_true_enc = le.transform(y_true)
     y_pred_enc = le.transform(y_pred)
 
-    report = classification_report(y_true_enc, y_pred_enc, target_names=class_names, output_dict=True)
+    # Get the unique classes actually present in the data
+    present_class_indices = np.unique(np.concatenate([y_true_enc, y_pred_enc]))
+    present_classes = [class_names[i] for i in present_class_indices]
+
+    # Use only classes present in data for the classification report
+    report = classification_report(y_true_enc, y_pred_enc,
+                                  labels=present_class_indices,
+                                  target_names=present_classes,
+                                  zero_division=0,  # Handle division by zero gracefully
+                                  output_dict=True)
     df = pd.DataFrame(report).T
 
-    auroc_list, auprc_list = [], []
+    # Calculate metrics for ALL classes in class_names
+    auroc_list = []
+    auprc_list = []
+    brier_list = []
     for i, cls in enumerate(class_names):
         y_bin = (y_true_enc == i).astype(int)
+
+        # Skip metrics for classes with no positive examples
         if y_bin.sum() == 0 or y_bin.sum() == len(y_bin):
             auroc_list.append(np.nan)
             auprc_list.append(np.nan)
+            brier_list.append(np.nan)
         else:
             auroc_list.append(roc_auc_score(y_bin, y_proba[:, i]))
             auprc_list.append(average_precision_score(y_bin, y_proba[:, i]))
+            brier_list.append(brier_score_loss(y_bin, y_proba[:, i]))
 
-    df.loc[class_names, "auroc"] = auroc_list
-    df.loc[class_names, "auprc"] = auprc_list
-    return df
+    # Create a complete DataFrame with all classes and initialize with NaN values
+    full_df = pd.DataFrame(index=class_names, columns=df.columns.tolist() + ["auroc", "auprc", "brier"])
+
+    # Copy over values from the classification report for classes that are present
+    for cls in present_classes:
+        if cls in df.index:
+            # Copy columns one by one to avoid issues with column mismatch
+            for col in df.columns:
+                if col in full_df.columns:
+                    full_df.loc[cls, col] = df.loc[cls, col]
+
+    # Add the AUC metrics for all classes
+    full_df["auroc"] = auroc_list
+    full_df["auprc"] = auprc_list
+    full_df["brier"] = brier_list
+
+    return full_df
 
 
 # ==========================================================
