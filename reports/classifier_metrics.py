@@ -115,15 +115,21 @@ def cross_val_metrics(clf, X, y, class_names, n_splits=5, random_state=42):
 # 3. CLASS-LEVEL METRICS
 # ==========================================================
 
+from sklearn.preprocessing import LabelEncoder
+
 def class_level_metrics(y_true, y_pred, y_proba, class_names):
-    report = classification_report(y_true, y_pred, target_names=class_names, output_dict=True)
+    # Encode y_true/y_pred into 0..n-1 integers
+    le = LabelEncoder().fit(class_names)
+    y_true_enc = le.transform(y_true)
+    y_pred_enc = le.transform(y_pred)
+
+    report = classification_report(y_true_enc, y_pred_enc, target_names=class_names, output_dict=True)
     df = pd.DataFrame(report).T
 
     auroc_list, auprc_list = [], []
     for i, cls in enumerate(class_names):
-        y_bin = (y_true == i).astype(int)
+        y_bin = (y_true_enc == i).astype(int)
         if y_bin.sum() == 0 or y_bin.sum() == len(y_bin):
-            # No positives or no negatives → skip metric
             auroc_list.append(np.nan)
             auprc_list.append(np.nan)
         else:
