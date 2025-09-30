@@ -57,12 +57,13 @@ def cross_val_metrics(clf, X, y, class_names, n_splits=5, random_state=42):
     skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=random_state)
 
     fold_metrics = defaultdict(list)
+    per_class_dfs = []  # collect per-class results across folds
 
     y_true_all = []
     y_pred_all = []
     y_proba_all = []
 
-    for train_idx, val_idx in skf.split(X, y):
+    for fold, (train_idx, val_idx) in enumerate(skf.split(X, y), 1):
         X_tr, X_val = X.iloc[train_idx], X.iloc[val_idx]
         y_tr, y_val = y.iloc[train_idx], y.iloc[val_idx]
 
@@ -75,21 +76,40 @@ def cross_val_metrics(clf, X, y, class_names, n_splits=5, random_state=42):
         y_pred_all.append(y_pred)
         y_proba_all.append(y_proba)
 
-        # Per-fold metrics
+        # --- Classifier-level metrics ---
         metrics = classifier_level_metrics(y_val, y_pred, y_proba, class_names)
         for k, v in metrics.items():
             fold_metrics[k].append(v)
 
+        # --- Class-level metrics ---
+        df = class_level_metrics(y_val, y_pred, y_proba, class_names)
+        df["fold"] = fold
+        per_class_dfs.append(df)
+
     # Aggregate metrics across folds
     fold_metrics_mean_std = {k: (np.mean(v), np.std(v)) for k, v in fold_metrics.items()}
 
-    # Overall metrics using all concatenated predictions (optional)
+    # Concatenate all validation predictions
     y_true_all = np.concatenate(y_true_all)
     y_pred_all = np.concatenate(y_pred_all)
     y_proba_all = np.vstack(y_proba_all)
+
+    # Overall classifier-level metrics
     overall_metrics = classifier_level_metrics(y_true_all, y_pred_all, y_proba_all, class_names)
 
-    return fold_metrics_mean_std, overall_metrics, y_true_all, y_pred_all, y_proba_all
+    # Overall class-level metrics
+    per_class_all = pd.concat(per_class_dfs)
+    per_class_summary = (
+        per_class_all.groupby(per_class_all.index)
+        .mean(numeric_only=True)  # average metrics per class
+        .drop(columns=["support"], errors="ignore")  # support isn’t meaningful averaged
+    )
+
+    return (
+        overall_metrics,           # dict of overall classifier-level metrics
+        per_class_summary          # averaged per-class DataFrame
+    )
+
 
 # ==========================================================
 # 3. CLASS-LEVEL METRICS
@@ -98,15 +118,22 @@ def cross_val_metrics(clf, X, y, class_names, n_splits=5, random_state=42):
 def class_level_metrics(y_true, y_pred, y_proba, class_names):
     report = classification_report(y_true, y_pred, target_names=class_names, output_dict=True)
     df = pd.DataFrame(report).T
-    # add per-class AUROC and AUPRC
+
     auroc_list, auprc_list = [], []
     for i, cls in enumerate(class_names):
         y_bin = (y_true == i).astype(int)
-        auroc_list.append(roc_auc_score(y_bin, y_proba[:, i]))
-        auprc_list.append(average_precision_score(y_bin, y_proba[:, i]))
+        if y_bin.sum() == 0 or y_bin.sum() == len(y_bin):
+            # No positives or no negatives → skip metric
+            auroc_list.append(np.nan)
+            auprc_list.append(np.nan)
+        else:
+            auroc_list.append(roc_auc_score(y_bin, y_proba[:, i]))
+            auprc_list.append(average_precision_score(y_bin, y_proba[:, i]))
+
     df.loc[class_names, "auroc"] = auroc_list
     df.loc[class_names, "auprc"] = auprc_list
     return df
+
 
 # ==========================================================
 # 4. BOOTSTRAP CONFIDENCE INTERVALS
