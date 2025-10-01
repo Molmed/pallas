@@ -16,6 +16,27 @@ RANDOM_SEED = int(os.getenv('RANDOM_SEED', 42))
 MODALITIES = ['DNAm', 'GEX']
 DATA_SPLITS = ['train', 'calibration', 'test']
 
+CLASSIFIER_METRICS_ORDER = [
+    'accuracy',
+    'weighted_f1',
+    'macro_f1',
+    'macro_auroc',
+    'macro_auprc',
+    'mcc',
+    'cohen_kappa',
+    'log_loss'
+]
+
+CLASS_METRICS_ORDER = [
+    'support',
+    'auroc',
+    'auprc',
+    'recall',
+    'precision',
+    'f1-score',
+    'brier'
+]
+
 classifier_level_reports = {}
 class_level_reports = {}
 for modality in MODALITIES:
@@ -77,8 +98,12 @@ for modality in MODALITIES:
 df_classifier_reports = pd.concat({(modality, split): pd.Series(metrics)
                                    for modality, splits in classifier_level_reports.items()
                                    for split, metrics in splits.items()}, axis=1)
-df_classifier_reports.columns.names = ['modality', 'data_split']
+df_classifier_reports.columns.names = [
+    'modality',
+    'data_split'
+]
 df_classifier_reports = df_classifier_reports.sort_index()
+df_classifier_reports = df_classifier_reports.reindex(CLASSIFIER_METRICS_ORDER)
 
 # Round all numbers to 3 decimal places
 df_classifier_reports = df_classifier_reports.round(3)
@@ -101,7 +126,7 @@ if 'Non-leukemic' in df_class_reports.index:
 else:
     df_class_reports = df_class_reports.sort_index()
 
-
+df_class_reports = df_class_reports.reindex(columns=CLASS_METRICS_ORDER, level=2)
 df_class_reports.to_csv(os.path.join(reports_dir, 'class_level_reports.csv'))
 
 print(f'Saved classifier-level reports to {os.path.join(reports_dir, "classifier_level_reports.csv")}')

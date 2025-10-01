@@ -41,7 +41,7 @@ def classifier_level_metrics(y_true, y_pred, y_proba, class_names, labels=None):
     metrics["accuracy"] = accuracy_score(y_true, y_pred)
     metrics["weighted_f1"] = f1_score(y_true, y_pred, average="weighted")
     metrics["mcc"] = matthews_corrcoef(y_true, y_pred)
-    metrics["kappa"] = cohen_kappa_score(y_true, y_pred)  # Added back
+    metrics["cohen_kappa"] = cohen_kappa_score(y_true, y_pred)
 
     # For multi-class ROC AUC, we need to account for classes not in y_true
     # This is a common approach for calculating macro AUC in imbalanced datasets
@@ -54,12 +54,6 @@ def classifier_level_metrics(y_true, y_pred, y_proba, class_names, labels=None):
     # For AUPRC, only calculate for classes present in the data
     metrics["macro_auprc"] = np.mean([
         average_precision_score((y_true == cls).astype(int), y_proba[:, i])
-        for i, cls in enumerate(class_names) if cls in present_classes
-    ])
-
-    # Add back the Brier score
-    metrics["brier_score"] = np.mean([
-        brier_score_loss((y_true == cls).astype(int), y_proba[:, i])
         for i, cls in enumerate(class_names) if cls in present_classes
     ])
 
@@ -190,6 +184,20 @@ def class_level_metrics(y_true, y_pred, y_proba, class_names):
     full_df["auroc"] = auroc_list
     full_df["auprc"] = auprc_list
     full_df["brier"] = brier_list
+
+    # coerce all to float
+    full_df = full_df.apply(pd.to_numeric, errors='coerce')
+
+    class_metrics_order = [
+        'support',
+        'auroc',
+        'auprc',
+        'recall',
+        'precision',
+        'f1-score',
+        'brier'
+    ]
+    full_df = full_df.reindex(columns=class_metrics_order)
 
     return full_df
 
