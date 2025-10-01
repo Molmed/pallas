@@ -89,9 +89,7 @@ df_classifier_reports.to_csv(os.path.join(reports_dir, 'classifier_level_reports
 df_class_reports = pd.concat({(modality, split): metrics
                               for modality, splits in class_level_reports.items()
                               for split, metrics in splits.items()}, axis=1)
-# df_class_reports.columns.names = ['modality', 'data_split']
 df_class_reports = df_class_reports.sort_index(axis=1)
-df_class_reports = df_class_reports.apply(pd.to_numeric, errors='ignore')
 df_class_reports = df_class_reports.round(3)
 
 # Sort alphabetically but with Non-leukemic at the bottom
