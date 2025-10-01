@@ -118,10 +118,14 @@ def cross_val_metrics(clf, X, y, class_names, n_splits=5, random_state=42):
 
     # Overall class-level metrics
     per_class_all = pd.concat(per_class_dfs)
+
+    # Convert all to numeric, errors='coerce' to handle any non-numeric entries
+    per_class_all = per_class_all.apply(pd.to_numeric, errors='coerce')
     per_class_summary = (
         per_class_all.groupby(per_class_all.index)
         .mean(numeric_only=True)  # average metrics per class
-        # .drop(columns=["support"], errors="ignore")  # support isn’t meaningful averaged
+        .drop(columns=["fold"], errors="ignore")  # fold isn’t meaningful averaged.
+        # TODO: maybe drop support as well?
     )
 
     return (
