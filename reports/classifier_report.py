@@ -62,6 +62,24 @@ def get_data_split(modality, split):
     return X, y
 
 
+def process_train_split(modality, class_names):
+    X, y = get_data_split(modality, 'train')
+    # Get smallest sample size in order to calculate number of folds
+    min_class_size = y.value_counts().min()
+    n_splits = min(5, min_class_size) if min_class_size >= 2 else 2
+    print(f'Computing cross-validation metrics for {modality} with {n_splits} folds...')
+    classifier_metrics, class_metrics = \
+        cross_val_metrics(classifier,
+                          X,
+                          y,
+                          class_names,
+                          n_splits=n_splits,
+                          random_state=RANDOM_SEED)
+    key = f'train ({n_splits}-fold cv)'
+    classifier_level_reports[modality][key] = classifier_metrics
+    class_level_reports[modality][key] = class_metrics
+
+
 for modality in MODALITIES:
     classifier_level_reports[modality] = {}
     class_level_reports[modality] = {}
@@ -72,21 +90,7 @@ for modality in MODALITIES:
     class_names = classifier.classes_.tolist()
 
     # Process train split
-    X, y = get_data_split(modality, 'train')
-    # Get smallest sample size in order to calculate number of folds
-    min_class_size = y.value_counts().min()
-    n_splits = min(5, min_class_size) if min_class_size >= 2 else 2
-    print(f'Computing cross-validation metrics for {modality} with {n_splits} folds...')
-    classifier_metrics, class_metrics = \
-        cross_val_metrics(classifier,
-                            X,
-                            y,
-                            class_names,
-                            n_splits=n_splits,
-                            random_state=RANDOM_SEED)
-    key = f'train ({n_splits}-fold cv)'
-    classifier_level_reports[modality][key] = classifier_metrics
-    class_level_reports[modality][key] = class_metrics
+    # process_train_split(modality, class_names)
 
     # Get the other two splits and merge them
     X_test, y_test = get_data_split(modality, 'test')
