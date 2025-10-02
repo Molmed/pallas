@@ -220,16 +220,25 @@ def bootstrap_metric(y_true, y_pred, y_proba, metric_fn, n_boot=1000, alpha=0.95
 # 5. VISUALIZATIONS
 # ==========================================================
 
-def plot_confusion(y_true, y_pred, class_names, normalize=True):
+def plot_confusion(y_true,
+                   y_pred,
+                   class_names,
+                   normalize=True,
+                   save_to_svg=None):
     cm = confusion_matrix(y_true, y_pred)
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-    plt.figure(figsize=(8,6))
+    plt.figure(figsize=(8,8))
     sns.heatmap(cm, annot=True, fmt=".1f" if normalize else "d",
                 xticklabels=class_names, yticklabels=class_names, cmap="Blues")
     plt.ylabel("True label"); plt.xlabel("Predicted label");
     plt.title("Confusion Matrix")
-    plt.show()
+    # Add tight layout to prevent clipping of tick-labels
+    plt.tight_layout()
+    if save_to_svg:
+        plt.savefig(save_to_svg, format='svg')
+    else:
+        plt.show()
 
 
 def plot_calibration(y_true, y_proba, class_idx, class_names, n_bins=10):

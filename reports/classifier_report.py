@@ -4,7 +4,8 @@ import joblib
 import dotenv
 import numpy as np
 from .classifier_metrics import cross_val_metrics, \
-    classifier_level_metrics, class_level_metrics
+    classifier_level_metrics, class_level_metrics, \
+    plot_confusion
 
 dotenv.load_dotenv()
 
@@ -14,7 +15,6 @@ if not os.path.exists(reports_dir):
 
 RANDOM_SEED = int(os.getenv('RANDOM_SEED', 42))
 MODALITIES = ['DNAm', 'GEX']
-DATA_SPLITS = ['train', 'calibration', 'test']
 
 CLASSIFIER_METRICS_ORDER = [
     'accuracy',
@@ -103,6 +103,12 @@ for modality in MODALITIES:
 
     class_metrics = class_level_metrics(y, y_pred, y_proba, class_names)
     class_level_reports[modality][split] = class_metrics
+
+    # Plot confusion matrix
+    plot_confusion(y, y_pred, class_names,
+                   normalize=False,
+                   save_to_svg=os.path.join(reports_dir,
+                                            f'confusion_matrix_{modality.lower()}.svg'))
 
 
 # Create dataframe from classifier_level_reports
