@@ -228,9 +228,10 @@ def plot_confusion(y_true,
     cm = confusion_matrix(y_true, y_pred)
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-    plt.figure(figsize=(8,8))
+    plt.figure(figsize=(9,8))
     sns.heatmap(cm, annot=True, fmt=".1f" if normalize else "d",
-                xticklabels=class_names, yticklabels=class_names, cmap="Blues")
+                xticklabels=class_names, yticklabels=class_names, cmap="Blues",
+                annot_kws={"size": 8})
     plt.ylabel("True label"); plt.xlabel("Predicted label");
     plt.title("Confusion Matrix")
     # Add tight layout to prevent clipping of tick-labels
