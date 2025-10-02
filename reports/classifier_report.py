@@ -39,6 +39,29 @@ CLASS_METRICS_ORDER = [
 
 classifier_level_reports = {}
 class_level_reports = {}
+
+
+def get_data_split(modality, split):
+    X_path = os.path.join(os.getenv('DATA_DIR'), modality, f'{modality.lower()}_{split}_X.csv')
+    y_path = os.path.join(os.getenv('DATA_DIR'), modality, f'{modality.lower()}_{split}_y.tsv')
+    print(f'Loading {X_path} and {y_path}...')
+
+    # Read in x and y
+    X = pd.read_csv(X_path, index_col=0)
+    y = pd.read_csv(y_path, sep='\t', index_col=0)
+
+    # Flatten y
+    y = y['class'] if modality == 'GEX' else y['subtype']
+
+    # Align indices of x and y
+    X = X.loc[y.index]
+
+    # Get only selected features
+    X = X[selected_features]
+
+    return X, y
+
+
 for modality in MODALITIES:
     classifier_level_reports[modality] = {}
     class_level_reports[modality] = {}
@@ -48,50 +71,38 @@ for modality in MODALITIES:
     selected_features = joblib.load(selected_features_path)
     class_names = classifier.classes_.tolist()
 
-    for split in DATA_SPLITS:
-        X_path = os.path.join(os.getenv('DATA_DIR'), modality, f'{modality.lower()}_{split}_X.csv')
-        y_path = os.path.join(os.getenv('DATA_DIR'), modality, f'{modality.lower()}_{split}_y.tsv')
-        print(f'Loading {X_path} and {y_path}...')
+    # Process train split
+    X, y = get_data_split(modality, 'train')
+    # Get smallest sample size in order to calculate number of folds
+    min_class_size = y.value_counts().min()
+    n_splits = min(5, min_class_size) if min_class_size >= 2 else 2
+    print(f'Computing cross-validation metrics for {modality} with {n_splits} folds...')
+    classifier_metrics, class_metrics = \
+        cross_val_metrics(classifier,
+                            X,
+                            y,
+                            class_names,
+                            n_splits=n_splits,
+                            random_state=RANDOM_SEED)
+    key = f'train ({n_splits}-fold cv)'
+    classifier_level_reports[modality][key] = classifier_metrics
+    class_level_reports[modality][key] = class_metrics
 
-        # Read in x and y
-        X = pd.read_csv(X_path, index_col=0)
-        y = pd.read_csv(y_path, sep='\t', index_col=0)
+    # Get the other two splits and merge them
+    X_test, y_test = get_data_split(modality, 'test')
+    X_cal, y_cal = get_data_split(modality, 'calibration')
+    X = pd.concat([X_cal, X_test])
+    y = pd.concat([y_cal, y_test])
+    split = 'calibration + test'
 
-        # Flatten y
-        y = y['class'] if modality == 'GEX' else y['subtype']
+    y_pred = classifier.predict(X)
+    y_proba = classifier.predict_proba(X)
 
-        # Align indices of x and y
-        X = X.loc[y.index]
+    metrics = classifier_level_metrics(y, y_pred, y_proba, class_names)
+    classifier_level_reports[modality][split] = metrics
 
-        # Get only selected features
-        X = X[selected_features]
-
-        # If data split is train, use cross-validation to compute metrics
-        if split == 'train':
-            # Get smallest sample size in order to calculate number of folds
-            min_class_size = y.value_counts().min()
-            n_splits = min(5, min_class_size) if min_class_size >= 2 else 2
-            print(f'Computing cross-validation metrics for {modality} with {n_splits} folds...')
-            classifier_metrics, class_metrics = \
-                cross_val_metrics(classifier,
-                                  X,
-                                  y,
-                                  class_names,
-                                  n_splits=n_splits,
-                                  random_state=RANDOM_SEED)
-            key = f'train ({n_splits}-fold cv)'
-            classifier_level_reports[modality][key] = classifier_metrics
-            class_level_reports[modality][key] = class_metrics
-        else:
-            print(f'Computing metrics on {modality} {split} set...')
-            y_pred = classifier.predict(X)
-            y_proba = classifier.predict_proba(X)
-
-            metrics = classifier_level_metrics(y, y_pred, y_proba, class_names)
-            classifier_level_reports[modality][split] = metrics
-
-            class_metrics = class_level_metrics(y, y_pred, y_proba, class_names)
-            class_level_reports[modality][split] = class_metrics
+    class_metrics = class_level_metrics(y, y_pred, y_proba, class_names)
+    class_level_reports[modality][split] = class_metrics
 
 
 # Create dataframe from classifier_level_reports
