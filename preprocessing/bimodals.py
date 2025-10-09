@@ -16,6 +16,10 @@ dnam_filtered_pheno_file = f'{RAW_DATA_DIR}/dnam/pheno/PALLAS_FINAL_pheno_combin
 triche_meta_file = f'{RAW_DATA_DIR}/dnam/pheno/GSE190931/GSE190931_series_matrix.txt'
 gdc_meta_file = f'{RAW_DATA_DIR}/GDC_AML/gdc_sample_sheet.aml.gex.tsv'
 
+# OUTPUT ########
+output_dir = f'{PROCESSED_DATA_DIR}/bimodals'
+bimodal_file = f'{output_dir}/bimodals.csv'
+
 # Read in dnam filtered pheno
 dnam_pheno = pd.read_csv(dnam_filtered_pheno_file, index_col=0)
 dnam_pheno = dnam_pheno[dnam_pheno['dataset'] == 'GSE190931']
@@ -84,3 +88,7 @@ print(gdc_meta)
 bimodal_pheno = pd.merge(triche_df, gdc_meta, on='target_case_id', suffixes=('_triche', '_gdc'))
 bimodal_pheno = bimodal_pheno[bimodal_pheno['timepoint'] == bimodal_pheno['Tumor Descriptor']]
 print(bimodal_pheno)
+
+# Save the bimodal pheno
+os.makedirs(output_dir, exist_ok=True)
+bimodal_pheno.to_csv(bimodal_file)
