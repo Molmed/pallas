@@ -65,15 +65,11 @@ details_df = details_df[
     ['dataset', 'sex', 'age']]
 
 details_df.to_csv(details_file)
-exit()
 
 # PROCESS PHENO ########
 print("Processing phenotype data...")
 # Load the data
-samplesheet_df = pd.read_csv(pheno_input_file, index_col=0, sep=';')
-
-# Rename subtype column
-samplesheet_df = samplesheet_df.rename(columns={'Subtype': 'subtype'})
+samplesheet_df = pd.read_csv(pheno_input_file, sep='\t', index_col='case_id')
 
 # Rename index
 samplesheet_df.index.name = 'sample'
@@ -88,17 +84,11 @@ samplesheet_df['dataset'] = dataset_name
 # Set data silo to empty string
 samplesheet_df['data_silo'] = ''
 
-# Set all items whose subtype ends in "B-other" to data_silo "unlabeled"
-samplesheet_df = silo_unlabeled(samplesheet_df)
-
 # Silo remaining as labeled_diagnostic
 samplesheet_df = silo_remaining(samplesheet_df)
 
 # Convert index to string
 samplesheet_df.index = samplesheet_df.index.astype(str)
-
-# Prepend each sample id with "case_"
-samplesheet_df.index = "Case_" + samplesheet_df.index
 
 # PROCESS GEX ########
 # Break up the gene expression file
