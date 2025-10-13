@@ -18,7 +18,7 @@ gdc_meta_file = f'{RAW_DATA_DIR}/GDC_AML/gdc_sample_sheet.aml.gex.tsv'
 
 # OUTPUT ########
 output_dir = f'{PROCESSED_DATA_DIR}/bimodals'
-bimodal_file = f'{output_dir}/bimodals.csv'
+bimodal_file = f'{output_dir}/gdc_bimodals.csv'
 
 # Read in dnam filtered pheno
 dnam_pheno = pd.read_csv(dnam_filtered_pheno_file, index_col=0)

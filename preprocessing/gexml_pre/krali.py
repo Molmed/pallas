@@ -22,6 +22,7 @@ samplesheet_output_file = \
     f'{processed_dir}/samplesheet.csv'
 details_file = \
     f'{processed_dir}/patient_details.csv'
+bimodal_output_file = f'{PROCESSED_DATA_DIR}/bimodals/krali_bimodals.csv'
 
 # Make processed dir if not exists
 os.makedirs(processed_dir, exist_ok=True)
@@ -153,6 +154,15 @@ samplesheet_df = silo_remaining(samplesheet_df)
 
 # remove all rows from spreadsheet without feature_counts
 samplesheet_df = samplesheet_df[samplesheet_df['feature_counts'].notna()]
+
+# Take items where 'dnam_partition' is not NaN
+# and silo is labeled_diagnostic and update silo to labeled_diagnostic_bimodal
+bimodal_mask = samplesheet_df['dnam_partition'].notna() & (
+    samplesheet_df['data_silo'] == 'labeled_diagnostic')
+samplesheet_df = add_to_silo(
+    samplesheet_df,
+    samplesheet_df[bimodal_mask].index,
+    'labeled_diagnostic_bimodal', force=True)
 
 # Order columns as follows: sample,feature_counts,dataset,batch,subtype
 samplesheet_df = samplesheet_df[
