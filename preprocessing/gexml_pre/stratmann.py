@@ -102,15 +102,45 @@ gex_df = pd.read_excel(raw_data_path, index_col=0, header=8)
 # Drop first 6 cols with metadata
 gex_df = gex_df.iloc[:, 6:]
 
+
+# Some col names need to be changed to match the metadata file
+def get_meta_col(col):
+    if col.startswith('BM') and not col.endswith('-I'):
+        return f"{col}-I"
+    if col == 'AML004-Ref':
+        return 'AML004-PR'
+    if col == 'AML008-Ref':
+        return 'AML008-PR'
+    if col == 'AML016-Ref':
+        return 'AML016-PR'
+    if col == 'AML020-Ref':
+        return 'AML020-PR'
+    if col == 'AML028-Ref':
+        return 'AML028-PR'
+    if col == 'AML017-R2':
+        return 'AML017-R1'
+    if col == 'AML052-R2':
+        return 'AML052-R1'
+    if col == 'AML056-Ref':
+        return 'AML056-R1'
+    if col == 'AML093-D':
+        return 'AML093-PR'
+    return col.replace('.', '-')
+
+
 # For each remaining column:
 # Create a new file with the column name as the file name
 # The contents should contain the Gene and the counts for that column
 # delimited by a tab. No header, no index.
 for col in gex_df.columns:
-    output_file = f'{processed_dir}/{col}.txt'
+    meta_col = get_meta_col(col)
+    output_file = f'{processed_dir}/{meta_col}.txt'
     # Set feature_counts column for this sample in samplesheet_df
-    samplesheet_df.loc[col, 'feature_counts'] = output_file
+    samplesheet_df.loc[meta_col, 'feature_counts'] = output_file
     gex_df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
+
+# Drop all rows with missing feature_counts
+samplesheet_df = samplesheet_df.dropna(subset=['feature_counts'])
 
 # Set batch column to blank string
 samplesheet_df['batch'] = ''
