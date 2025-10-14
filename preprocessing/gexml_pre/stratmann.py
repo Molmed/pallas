@@ -105,8 +105,8 @@ gex_df = gex_df.iloc[:, 6:]
 
 # Some col names need to be changed to match the metadata file
 def get_meta_col(col):
-    if col.startswith('BM') and not col.endswith('-I'):
-        return f"{col}-I"
+    if col.startswith('BM') and not col.endswith('_I'):
+        return f"{col}_I"
     if col == 'AML004-Ref':
         return 'AML004-PR'
     if col == 'AML008-Ref':
