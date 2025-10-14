@@ -3,7 +3,8 @@ import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PROCESSED_DATA_DIR
-from preprocessing.helpers import silo_unlabeled, silo_remaining
+from preprocessing.helpers import silo_unlabeled, \
+    add_to_silo, silo_remaining
 
 dataset_name = 'GDC_AML'
 print(f"Processing {dataset_name}...")
@@ -25,7 +26,13 @@ details_file = \
 os.makedirs(processed_dir, exist_ok=True)
 
 # We only want the subtyped data, use the pre-processed subtypes file as guide
-pheno_df = pd.read_csv(pheno_input_file, sep='\t', index_col='case_id')
+# create multiindex on Sample ID and Replicate
+# Load the data
+pheno_df = pd.read_csv(pheno_input_file, sep='\t', index_col='Unique Sample ID')
+
+# For now, let's only keep Primary non-replicate samples
+pheno_df = pheno_df[(pheno_df['Tumor Descriptor'] == 'Primary') &
+                    (pheno_df['Replicate'] == False)]
 
 # Read in details file
 # Index should be "cases.submitter_id"
@@ -34,8 +41,8 @@ details_df = pd.read_csv(details_input_file,
                          sep='\t',
                          index_col='cases.submitter_id')
 
-# Only keep cases that are in pheno_df
-details_df = details_df[details_df.index.isin(pheno_df.index)]
+# Only keep cases that are in pheno_df 'Case ID' column
+details_df = details_df[details_df.index.isin(pheno_df['Case ID'])]
 
 # Keep the following cols
 # diagnoses.age_at_diagnosis
@@ -43,7 +50,7 @@ details_df = details_df[details_df.index.isin(pheno_df.index)]
 details_df = details_df[['diagnoses.age_at_diagnosis', 'demographic.gender']]
 
 
-details_df.index.name = 'sample'
+details_df.index.name = 'case_id'
 details_df['dataset'] = dataset_name
 details_df = details_df.rename(
     columns={'demographic.gender': 'sex',
@@ -58,25 +65,29 @@ details_df['age'] = (details_df['age'] / 365.25).round(1)
 # For sex, replace M with Male and F with Female
 details_df['sex'] = details_df['sex'].replace({'male': 'Male', 'female': 'Female'})
 
-# Drop duplicate rows
-details_df = details_df.drop_duplicates()
-
 details_df = details_df[
     ['dataset', 'sex', 'age']]
+
+# Drop duplicates
+details_df = details_df[~details_df.index.duplicated(keep='first')]
 
 details_df.to_csv(details_file)
 
 # PROCESS PHENO ########
 print("Processing phenotype data...")
-# Load the data
-samplesheet_df = pd.read_csv(pheno_input_file, sep='\t', index_col='case_id')
+samplesheet_df = pheno_df
+
+# Set Case ID as the index
+samplesheet_df = samplesheet_df.set_index('Case ID', drop=True)
 
 # Rename index
 samplesheet_df.index.name = 'sample'
 
 # Get subtype translation
 tax = Taxonomy()
-samplesheet_df['subtype'] = tax.translate_subtype_column(samplesheet_df['subtype'])
+samplesheet_df['subtype'] = tax.translate_subtype_column(
+    samplesheet_df['subtype'],
+    split_delimiter=',')
 
 # Set 'dataset' column to dataset name
 samplesheet_df['dataset'] = dataset_name
@@ -90,28 +101,44 @@ samplesheet_df = silo_remaining(samplesheet_df)
 # Convert index to string
 samplesheet_df.index = samplesheet_df.index.astype(str)
 
+# Rename 'Project Id' to 'batch'
+samplesheet_df = samplesheet_df.rename(columns={'Project Id': 'batch'})
+
 # PROCESS GEX ########
-# Break up the gene expression file
-gex_df = pd.read_csv(raw_data_path, index_col=0, delimiter='\t')
+# For each row in samplesheet_df, get the file_name
+# Open the filename and extract the gene_name and unstranded columns
+print("Processing gene expression data...")
 
-# Drop second column, it contains gene name in addition to gene id
-gex_df = gex_df.drop(columns=[gex_df.columns[0]])
+for idx, row in samplesheet_df.iterrows():
+    # Open the filename and extract the gene_name and unstranded columns
+    gex_file = f"{raw_data_path}/{row['File Name']}"
 
-# For each remaining column:
-# Create a new file with the column name as the file name
-# The contents should contain the Gene and the counts for that column
-# delimited by a tab. No header, no index.
-for col in gex_df.columns:
-    output_file = f'{processed_dir}/{col}.txt'
-    # Set feature_counts column for this sample in samplesheet_df
-    samplesheet_df.loc[col, 'feature_counts'] = output_file
-    gex_df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
+    try:
+        gex_df = pd.read_csv(gex_file, sep='\t', header=1, index_col=1)
+        # Remove the first four rows which are summary stats
+        gex_df = gex_df.iloc[5:, :]
+
+        # Just keep unstranded column
+        gex_df = gex_df[['unstranded']]
+
+        # Save to a new file
+        output_file = f'{processed_dir}/{idx}.txt'
+
+        row['feature_counts'] = output_file
+        gex_df.to_csv(output_file, sep='\t', header=False, index=True)
+    except Exception as e:
+        print(f"Error reading {gex_file} for {idx}: {e}")
+        continue
 
 # Remove all rows from spreadsheet without feature_counts
 samplesheet_df = samplesheet_df[samplesheet_df['feature_counts'].notna()]
 
-# Set batch column to blank string
-samplesheet_df['batch'] = ''
+# Put multiclass items in multiclass silo
+multi_subtype_rows = samplesheet_df['subtype'].str.contains(';', na=False)
+if multi_subtype_rows.any():
+    samplesheet_df = add_to_silo(
+        samplesheet_df,
+        samplesheet_df[multi_subtype_rows].index, 'multiclass')
 
 # Order columns as follows: sample,feature_counts,dataset,batch,subtype
 samplesheet_df = samplesheet_df[
