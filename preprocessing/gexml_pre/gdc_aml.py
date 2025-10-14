@@ -3,7 +3,7 @@ import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PROCESSED_DATA_DIR
-from preprocessing.helpers import silo_unlabeled, \
+from preprocessing.helpers import \
     add_to_silo, silo_remaining
 
 dataset_name = 'GDC_AML'
@@ -14,6 +14,7 @@ data_path = f'{RAW_DATA_DIR}/{dataset_name}'
 raw_data_path = f'{data_path}/feature_counts'
 pheno_input_file = f'{data_path}/gdc_gex_aml.subtyped.tsv'
 details_input_file = f'{data_path}/gdc_gex_aml.clinical.tsv'
+bimodals_input_file = f'{PROCESSED_DATA_DIR}/bimodals/gdc_bimodals.csv'
 
 # OUTPUT FILES ########
 processed_dir = f'{PROCESSED_DATA_DIR}/{dataset_name}'
@@ -95,6 +96,22 @@ samplesheet_df['dataset'] = dataset_name
 # Set data silo to empty string
 samplesheet_df['data_silo'] = ''
 
+# Put multiclass items in multiclass silo
+multi_subtype_rows = samplesheet_df['subtype'].str.contains(';', na=False)
+if multi_subtype_rows.any():
+    samplesheet_df = add_to_silo(
+        samplesheet_df,
+        samplesheet_df[multi_subtype_rows].index, 'multiclass')
+
+# All that are bimodal should be siloed as 'labeled_diagnostic_bimodal'
+bimodals_df = pd.read_csv(bimodals_input_file, index_col='Case ID')
+bimodal_samples = bimodals_df.index.tolist()
+bimodal_rows = samplesheet_df.index.isin(bimodal_samples)
+if bimodal_rows.any():
+    samplesheet_df = add_to_silo(
+        samplesheet_df,
+        samplesheet_df[bimodal_rows].index, 'labeled_diagnostic_bimodal')
+
 # Silo remaining as labeled_diagnostic
 samplesheet_df = silo_remaining(samplesheet_df)
 
@@ -132,13 +149,6 @@ for idx, row in samplesheet_df.iterrows():
 
 # Remove all rows from spreadsheet without feature_counts
 samplesheet_df = samplesheet_df[samplesheet_df['feature_counts'].notna()]
-
-# Put multiclass items in multiclass silo
-multi_subtype_rows = samplesheet_df['subtype'].str.contains(';', na=False)
-if multi_subtype_rows.any():
-    samplesheet_df = add_to_silo(
-        samplesheet_df,
-        samplesheet_df[multi_subtype_rows].index, 'multiclass')
 
 # Order columns as follows: sample,feature_counts,dataset,batch,subtype
 samplesheet_df = samplesheet_df[
