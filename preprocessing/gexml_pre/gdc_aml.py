@@ -126,23 +126,30 @@ samplesheet_df = samplesheet_df.rename(columns={'Project Id': 'batch'})
 # Open the filename and extract the gene_name and unstranded columns
 print("Processing gene expression data...")
 
+samplesheet_df['feature_counts'] = None
 for idx, row in samplesheet_df.iterrows():
     # Open the filename and extract the gene_name and unstranded columns
     gex_file = f"{raw_data_path}/{row['File Name']}"
+    output_file = f'{processed_dir}/{idx}.txt'
 
     try:
+        # Does output file already exist?
+        if os.path.exists(output_file):
+            samplesheet_df.at[idx, 'feature_counts'] = output_file
+            continue
+
         gex_df = pd.read_csv(gex_file, sep='\t', header=1, index_col=1)
         # Remove the first four rows which are summary stats
         gex_df = gex_df.iloc[5:, :]
-
         # Just keep unstranded column
         gex_df = gex_df[['unstranded']]
 
         # Save to a new file
-        output_file = f'{processed_dir}/{idx}.txt'
-
-        row['feature_counts'] = output_file
         gex_df.to_csv(output_file, sep='\t', header=False, index=True)
+
+        # Save in samplesheet
+        samplesheet_df.at[idx, 'feature_counts'] = output_file
+
     except Exception as e:
         print(f"Error reading {gex_file} for {idx}: {e}")
         continue
