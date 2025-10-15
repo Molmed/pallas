@@ -164,6 +164,12 @@ samplesheet_df = add_to_silo(
     samplesheet_df[bimodal_mask].index,
     'labeled_diagnostic_bimodal', force=True)
 
+# Most of the samples are going into the bimodal silo
+# For all other samples, simply set batch to empty string
+# This avoids issues of having too few samples per batch during batch correction.
+non_bimodal_mask = ~bimodal_mask
+samplesheet_df.loc[non_bimodal_mask, 'batch'] = ''
+
 # Order columns as follows: sample,feature_counts,dataset,batch,subtype
 samplesheet_df = samplesheet_df[
     ['feature_counts', 'dataset', 'batch', 'subtype', 'data_silo']]
