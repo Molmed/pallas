@@ -105,8 +105,10 @@ gex_df = gex_df.iloc[:, 6:]
 
 # Some col names need to be changed to match the metadata file
 def get_meta_col(col):
-    if col.startswith('BM') and not col.endswith('_I'):
+    if col.startswith('BM') and not col.endswith('I'):
         return f"{col}_I"
+    if col.startswith('BM') and col.endswith('-II'):
+        return col.replace('-', '_')
     if col == 'AML004-Ref':
         return 'AML004-PR'
     if col == 'AML008-Ref':
@@ -123,7 +125,7 @@ def get_meta_col(col):
         return 'AML052-R1'
     if col == 'AML056-Ref':
         return 'AML056-R1'
-    if col == 'AML093-D':
+    if col == 'AML093-D-P' or col == 'AML093.D.P':
         return 'AML093-PR'
     return col.replace('.', '-')
 
@@ -141,6 +143,9 @@ for col in gex_df.columns:
 
 # Drop all rows with missing feature_counts
 samplesheet_df = samplesheet_df.dropna(subset=['feature_counts'])
+
+# Drop all rows with missing subtype
+samplesheet_df = samplesheet_df.dropna(subset=['subtype'])
 
 # Set batch column to blank string
 samplesheet_df['batch'] = ''
