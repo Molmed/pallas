@@ -121,7 +121,8 @@ manual_exclusions = [
     'SJHYPO021982',    # Identified as PAX5alt
     'SJHYPO021991',    # Identified as PAX5alt
     'SJHYPO022024',    # Identified as PAX5alt
-    'SJETV003804',    # Identified as TCF3::PBX1
+    'SJETV003804',    # Identified as TCF3::PBX1,
+    'SJBALL020113',   # Both HeH and CEBPB-IGH
     ]
 samplesheet_df = add_to_silo(samplesheet_df,
                              manual_exclusions,

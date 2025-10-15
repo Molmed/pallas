@@ -8,10 +8,6 @@ RAW_DATA_DIR = os.getenv('RAW_DATA_DIR')
 PROCESSED_DATA_DIR = os.getenv('PROCESSED_DATA_DIR')
 GEX_EXCLUDE_SUBTYPES = [
     'RUNX1::RUNX1T1-like',
-    'PICALM::MLLT10',
-    'AMKL',
-    'AMML',
-    'AMOL',
     'low hyperdiploid',
     'IGH::CEBPD'
 ]

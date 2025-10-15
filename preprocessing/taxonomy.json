@@ -36,8 +36,8 @@
                 "display_name": "AML, CBFB::MYH11"
               },
               {
-                "name": "KMT2A-r",
-                "aliases": ["AMLKMT2A", "AMLKMT2APTD", "other 11q23/MLL", "t(9;11)", "t(10;11)","t(11;19)", "KMT2A-MLLT3", "KMT2A-MLLT10", "KMT2A-MLLT4", "KMT2A-ELL", "KMT2A-MLLT1", "KMT2A-SEPT6", "KMT2A-MLLT11", "KMT2A-MYO1F", "KMT2A-LASP1", "KMT2A-SEPT9", "KMT2A-ABI1", "KMT2A-USP2", "KMT2A-ARHGEF37", "KMT2A-MYOCD", "KMT2A-MLLT6", "KMT2A-DCP1A", "KMT2A-FNBP1", "KMT2A-AFF3", "KMT2A-CCNJL", "KMT2A-C9orf72", "KMT2A-SEPT2", "KMT2A-RARA", "KMT2A-PALM2.AKAP2", "KMT2A-AFF1", "KMT2A-PICALM", "KMT2A-EPS15", "KMT2A-LYN", "KMT2A-X"],
+                "name": "KMT2A-r AML",
+                "aliases": ["AMLKMT2A", "AMKLKMT2A", "AMLKMT2APTD", "other 11q23/MLL", "t(9;11)", "t(10;11)","t(11;19)", "KMT2A-MLLT3", "KMT2A-MLLT10", "KMT2A-MLLT4", "KMT2A-ELL", "KMT2A-MLLT1", "KMT2A-SEPT6", "KMT2A-MLLT11", "KMT2A-MYO1F", "KMT2A-LASP1", "KMT2A-SEPT9", "KMT2A-ABI1", "KMT2A-USP2", "KMT2A-ARHGEF37", "KMT2A-MYOCD", "KMT2A-MLLT6", "KMT2A-DCP1A", "KMT2A-FNBP1", "KMT2A-AFF3", "KMT2A-CCNJL", "KMT2A-C9orf72", "KMT2A-SEPT2", "KMT2A-RARA", "KMT2A-PALM2.AKAP2", "KMT2A-AFF1", "KMT2A-PICALM", "KMT2A-EPS15", "KMT2A-LYN", "KMT2A-X", "AMMLKMT2A", "AMOLKMT2A"],
                 "display_name": "AML, KMT2A-r"
               },
               {
@@ -52,7 +52,7 @@
               },
               {
                 "name": "NPM1alt",
-                "aliases": ["AMLNPM1", "NPM1-MLF1", "NPM1-CCDC28A", "NPM1-RARA"],
+                "aliases": ["AMLNPM1", "NPM1-MLF1", "NPM1-CCDC28A", "NPM1-RARA", "AMMLNPM1"],
                 "display_name": "AML, NPM1alt"
               },
               {
@@ -77,12 +77,12 @@
               },
               {
                 "name": "CBFA2T3::GLIS2",
-                "aliases": ["AMLCBFA2T3GLIS2", "CBFA2T3-GLIS2"],
+                "aliases": ["AMLCBFA2T3GLIS2", "CBFA2T3-GLIS2", "AMKLCBFA2T3GLIS2"],
                 "display_name": "AML, CBFA2T3::GLIS2"
               },
               {
                 "name": "ETV6-r",
-                "aliases": ["ETV6-MNX1", "ETV6(deletion)", "ETV6-FOXO1", "ETV6-LMBR1", "ETV6-NIPBL", "EP300-ETV6", "ETV6-MN1"],
+                "aliases": ["ETV6-MNX1", "ETV6(deletion)", "ETV6-FOXO1", "ETV6-LMBR1", "ETV6-NIPBL", "EP300-ETV6", "ETV6-MN1", "PAX5-ETV6"],
                 "display_name": "AML, ETV6-r"
               },
               {
@@ -98,21 +98,6 @@
               {
                 "name": "BCR::ABL1 AML",
                 "display_name": "AML, BCR::ABL1"
-              },
-              {
-                "name": "AMKL",
-                "aliases": ["AMKLCBFA2T3GLIS2","AMKLHOX","AMKLKMT2A"],
-                "display_name": "AML, AMKL"
-              },
-              {
-                "name": "AMML",
-                "aliases": ["AMMLKMT2A","AMMLNPM1"],
-                "display_name": "AML, AMML"
-              },
-              {
-                "name": "AMOL",
-                "aliases": ["AMOLKMT2A"],
-                "display_name": "AML, AMOL"
               }
             ]
         },

@@ -133,7 +133,7 @@ samplesheet_df = samplesheet_df.rename(columns={'sj_diseases': 'subtype'})
 # but whose attr_subtype_biomarkers is not empty
 other_samples = samplesheet_df[
     (samplesheet_df['subtype'].str.contains(
-        'B-other|AML-other|ALLNOS', na=False)) &
+        'B-other|AML-other|ALLNOS|AMLNOS|AMLETS', na=False)) &
     (~samplesheet_df['attr_subtype_biomarkers'].isna()) &
     (samplesheet_df['attr_subtype_biomarkers'] != '') &
     (samplesheet_df['attr_subtype_biomarkers'] != 'Not Available')
@@ -178,7 +178,15 @@ manual_exclusions = [
     'SJBALL022672_D1',  # Identified as T-ALL
     'SJAML032072_D1',   # Identified as T-ALL,
     'SJAML030210_D2',   # KMT2A and NUP98
-    'SJCBF100_E',       # what is this suffix
+    'SJCBF100_E',       # what is this suffix,
+    'SJBALL020113_D1',   # Both HeH and CEBPB-IGH,
+    'SJBALL021790_D1',   # Both HeH and CEBPB-IGH,
+    'SJBALL032135_D1'    # ETV6-RUNX1 and PAX5,
+    'SJTALL031944_D1'   # T-ALL and MLLT10-PICALM,
+    'SJTALL030880_D1'   # T-ALL and MLLT10-PICALM,
+    'SJTALL030907_D1'   # T-ALL and MLLT10-PICALM,
+    'SJTALL031798_D1'   # T-ALL and MLLT10-PICALM,
+    'SJTALL031662_D1'   # T-ALL and MLLT10-PICALM,
     ]
 samplesheet_df = add_to_silo(samplesheet_df,
                              manual_exclusions,
