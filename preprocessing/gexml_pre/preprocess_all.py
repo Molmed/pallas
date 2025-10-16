@@ -25,9 +25,9 @@ modules = [
     "preprocessing.gexml_pre.gdc_all"
 ]
 
-# for mod in modules:
-#     print(f"Running {mod}...")
-#     runpy.run_module(mod, run_name="__main__")
+for mod in modules:
+    print(f"Running {mod}...")
+    runpy.run_module(mod, run_name="__main__")
 
 # Find all samplesheet.csv files and combine them
 print("Combining all samplesheets...\n")
