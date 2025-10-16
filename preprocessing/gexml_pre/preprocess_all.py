@@ -82,6 +82,10 @@ if len(rows_to_move) > 0:
     y_bimodal = labeled_diagnostic_bimodal_df['subtype']
     y_bimodal_counts = y_bimodal.value_counts()
     print(f"Moved {len(rows_to_move)} samples from labeled_diagnostic_bimodal to labeled_diagnostic\n")
+    # Print ids of all items that are being moved
+    print(f"Samples moved: {rows_to_move.tolist()}\n")
+    # Set batch for these items to empty string
+    combined_samplesheet_df.loc[rows_to_move, 'batch'] = ''
 
 # Put labeled_diagnostic into separate dataframe
 labeled_diagnostic_df = combined_samplesheet_df[

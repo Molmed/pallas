@@ -39,6 +39,8 @@ Name: count, dtype: int64
 
 Moved 16 samples from labeled_diagnostic_bimodal to labeled_diagnostic
 
+Samples moved: ['ALL_1100', 'ALL_1135', 'ALL_1136', 'ALL_410', 'ALL_644', 'ALL_888', 'ALL_Validation_20', 'TARGET-20-PARCCH', 'TARGET-20-PARFIW', 'TARGET-20-PARYVW', 'TARGET-20-PASIEJ', 'TARGET-20-PASRLS', 'TARGET-20-PASTTW', 'TARGET-20-PASVYA', 'TARGET-21-PATISD', 'TARGET-21-PATKBK']
+
 Class distribution in labeled_diagnostic:
 subtype
 B-ALL, high hyperdiploid    511
