@@ -21,7 +21,8 @@ modules = [
     "preprocessing.gexml_pre.lund",
     "preprocessing.gexml_pre.lund_hypodiploidy",
     "preprocessing.gexml_pre.stratmann",
-    "preprocessing.gexml_pre.gdc_aml"
+    "preprocessing.gexml_pre.gdc_aml",
+    "preprocessing.gexml_pre.gdc_all"
 ]
 
 for mod in modules:

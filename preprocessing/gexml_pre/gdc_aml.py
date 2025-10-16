@@ -91,11 +91,12 @@ samplesheet_df['subtype'] = tax.translate_subtype_column(
     split_delimiter=',',
     exclude_subtypes=GEX_EXCLUDE_SUBTYPES)
 
-# Set 'dataset' column to dataset name
-samplesheet_df['dataset'] = dataset_name
+# Rename 'Project Id' to 'dataset'
+samplesheet_df = samplesheet_df.rename(columns={'Project Id': 'dataset'})
 
 # Set data silo to empty string
 samplesheet_df['data_silo'] = ''
+samplesheet_df['batch'] = ''
 
 # Put multiclass items in multiclass silo
 multi_subtype_rows = samplesheet_df['subtype'].str.contains(';', na=False)
@@ -122,9 +123,6 @@ samplesheet_df = silo_remaining(samplesheet_df)
 
 # Convert index to string
 samplesheet_df.index = samplesheet_df.index.astype(str)
-
-# Rename 'Project Id' to 'batch'
-samplesheet_df = samplesheet_df.rename(columns={'Project Id': 'batch'})
 
 # PROCESS GEX ########
 # For each row in samplesheet_df, get the file_name
