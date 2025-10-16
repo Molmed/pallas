@@ -2,9 +2,9 @@ import pandas as pd
 import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
-    RAW_DATA_DIR, PROCESSED_DATA_DIR
+    RAW_DATA_DIR, PROCESSED_DATA_DIR, GEX_EXCLUDE_SUBTYPES
 from preprocessing.helpers import \
-    add_to_silo, silo_remaining
+    add_to_silo, silo_remaining, silo_excluded, silo_unrecognized
 
 dataset_name = 'GDC_AML'
 print(f"Processing {dataset_name}...")
@@ -88,7 +88,8 @@ samplesheet_df.index.name = 'sample'
 tax = Taxonomy()
 samplesheet_df['subtype'] = tax.translate_subtype_column(
     samplesheet_df['subtype'],
-    split_delimiter=',')
+    split_delimiter=',',
+    exclude_subtypes=GEX_EXCLUDE_SUBTYPES)
 
 # Set 'dataset' column to dataset name
 samplesheet_df['dataset'] = dataset_name
@@ -102,6 +103,10 @@ if multi_subtype_rows.any():
     samplesheet_df = add_to_silo(
         samplesheet_df,
         samplesheet_df[multi_subtype_rows].index, 'multiclass')
+
+# Silo excluded and unrecognized
+samplesheet_df = silo_unrecognized(samplesheet_df)
+samplesheet_df = silo_excluded(samplesheet_df)
 
 # All that are bimodal should be siloed as 'labeled_diagnostic_bimodal'
 bimodals_df = pd.read_csv(bimodals_input_file, index_col='Case ID')

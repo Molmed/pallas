@@ -2,7 +2,7 @@ import pandas as pd
 import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
-    RAW_DATA_DIR, PROCESSED_DATA_DIR
+    RAW_DATA_DIR, PROCESSED_DATA_DIR, GEX_EXCLUDE_SUBTYPES
 from preprocessing.helpers import add_to_silo, \
     silo_unlabeled, silo_remaining, \
     silo_unrecognized, silo_excluded
@@ -73,7 +73,8 @@ if multi_subtype_rows.any():
 # Get subtype translation
 tax = Taxonomy()
 samplesheet_df['subtype'] = tax.translate_subtype_column(
-    samplesheet_df['subtype'], split_delimiter=',')
+    samplesheet_df['subtype'], split_delimiter=',',
+    exclude_subtypes=GEX_EXCLUDE_SUBTYPES)
 
 # Silo unlabeled
 samplesheet_df = silo_unlabeled(samplesheet_df)

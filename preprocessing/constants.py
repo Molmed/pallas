@@ -9,7 +9,9 @@ PROCESSED_DATA_DIR = os.getenv('PROCESSED_DATA_DIR')
 GEX_EXCLUDE_SUBTYPES = [
     'RUNX1::RUNX1T1-like',
     'low hyperdiploid',
-    'IGH::CEBPD'
+    'IGH::CEBPD',
+    'PICALM::MLLT10',
+    'BCR::ABL1 AML'
 ]
 DNAM_EXCLUDE_SUBTYPES = [
     'low hyperdiploid',
