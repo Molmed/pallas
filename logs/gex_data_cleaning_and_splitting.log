@@ -189,9 +189,9 @@ Name: count, dtype: int64
 
 
 data_silo
-labeled_diagnostic            3881
+labeled_diagnostic            3746
+labeled_diagnostic_bimodal     827
 replicate                      750
-labeled_diagnostic_bimodal     692
 unlabeled                      590
 unrecognized                   354
 multiclass                     200
@@ -201,8 +201,8 @@ Name: count, dtype: int64
 
 
 data_silo_detailed
-labeled_diagnostic    3881
-misc                  2339
+labeled_diagnostic    3746
+misc                  2474
 unlabeled              590
 Name: count, dtype: int64
 
@@ -212,37 +212,37 @@ subtype
 B-ALL, high hyperdiploid    511
 B-ALL, ETV6::RUNX1          443
 B-ALL, BCR::ABL1-like       366
-AML, KMT2A-r                324
-AML, RUNX1::RUNX1T1         239
+AML, KMT2A-r                299
+AML, RUNX1::RUNX1T1         225
 B-ALL, KMT2A-r              220
 B-ALL, PAX5alt              173
-AML, CBFB::MYH11            167
 T-ALL                       160
-AML, NPM1alt                145
+AML, CBFB::MYH11            156
 B-ALL, DUX4-r               145
 B-ALL, BCR::ABL1            134
 B-ALL, TCF3::PBX1           131
 B-ALL, hypodiploid          122
-AML, NUP98-r                 96
-AML, CEBPAalt                71
+AML, NPM1alt                108
+AML, NUP98-r                 77
+AML, CEBPAalt                66
 B-ALL, ZNF384-r              63
 B-ALL, ETV6::RUNX1-like      52
 B-ALL, MEF2D-r               49
 B-ALL, iAMP21                36
-AML, CBFA2T3::GLIS2          36
 B-ALL, PAX5 P80R             34
-AML, DEK::NUP214             32
+AML, CBFA2T3::GLIS2          31
+AML, DEK::NUP214             30
 Non-leukemic                 22
-AML, APL-PML::RARA           20
 B-ALL, MYC-r                 17
 B-ALL, NUTM1-r               15
 AML, KAT6A-r                 12
-AML, ETV6-r                  11
+AML, ETV6-r                  10
 B-ALL, HLF-r                  9
 AML, FUS::ERG                 7
+AML, APL-PML::RARA            7
 B-ALL, IKZF1 N159Y            7
-AML, MECOM-r                  6
-AML, RBM15::MKL1              6
+AML, MECOM-r                  5
+AML, RBM15::MKL1              4
 Name: count, dtype: int64
 
 
@@ -251,37 +251,37 @@ subtype
 B-ALL, high hyperdiploid    409
 B-ALL, ETV6::RUNX1          354
 B-ALL, BCR::ABL1-like       293
-AML, KMT2A-r                259
-AML, RUNX1::RUNX1T1         191
+AML, KMT2A-r                239
+AML, RUNX1::RUNX1T1         180
 B-ALL, KMT2A-r              176
 B-ALL, PAX5alt              138
-AML, CBFB::MYH11            133
 T-ALL                       128
-AML, NPM1alt                116
+AML, CBFB::MYH11            125
 B-ALL, DUX4-r               116
 B-ALL, BCR::ABL1            107
 B-ALL, TCF3::PBX1           105
 B-ALL, hypodiploid           97
-AML, NUP98-r                 77
-AML, CEBPAalt                57
+AML, NPM1alt                 86
+AML, NUP98-r                 61
+AML, CEBPAalt                53
 B-ALL, ZNF384-r              50
 B-ALL, ETV6::RUNX1-like      41
 B-ALL, MEF2D-r               39
-AML, CBFA2T3::GLIS2          29
 B-ALL, iAMP21                29
 B-ALL, PAX5 P80R             27
-AML, DEK::NUP214             25
+AML, CBFA2T3::GLIS2          25
+AML, DEK::NUP214             24
 Non-leukemic                 18
-AML, APL-PML::RARA           16
 B-ALL, MYC-r                 14
 B-ALL, NUTM1-r               12
 AML, KAT6A-r                 10
-AML, ETV6-r                   9
+AML, ETV6-r                   8
 B-ALL, HLF-r                  7
+AML, APL-PML::RARA            6
 AML, FUS::ERG                 6
 B-ALL, IKZF1 N159Y            6
-AML, RBM15::MKL1              5
-AML, MECOM-r                  5
+AML, MECOM-r                  4
+AML, RBM15::MKL1              3
 Name: count, dtype: int64
 
 Class distribution in calibration:
@@ -289,72 +289,79 @@ subtype
 B-ALL, high hyperdiploid    102
 B-ALL, ETV6::RUNX1           89
 B-ALL, BCR::ABL1-like        73
-AML, KMT2A-r                 65
-AML, RUNX1::RUNX1T1          48
+AML, KMT2A-r                 60
+AML, RUNX1::RUNX1T1          45
 B-ALL, KMT2A-r               44
 B-ALL, PAX5alt               35
-AML, CBFB::MYH11             34
 T-ALL                        32
+AML, CBFB::MYH11             31
 B-ALL, DUX4-r                29
-AML, NPM1alt                 29
 B-ALL, BCR::ABL1             27
 B-ALL, TCF3::PBX1            26
 B-ALL, hypodiploid           25
-AML, NUP98-r                 19
-AML, CEBPAalt                14
+AML, NPM1alt                 22
+AML, NUP98-r                 16
+AML, CEBPAalt                13
 B-ALL, ZNF384-r              13
 B-ALL, ETV6::RUNX1-like      11
 B-ALL, MEF2D-r               10
-AML, DEK::NUP214              7
 B-ALL, PAX5 P80R              7
 B-ALL, iAMP21                 7
-AML, CBFA2T3::GLIS2           7
+AML, CBFA2T3::GLIS2           6
+AML, DEK::NUP214              6
 Non-leukemic                  4
-AML, APL-PML::RARA            4
 B-ALL, MYC-r                  3
 B-ALL, NUTM1-r                3
-AML, ETV6-r                   2
-AML, KAT6A-r                  2
 B-ALL, HLF-r                  2
-AML, MECOM-r                  1
-B-ALL, IKZF1 N159Y            1
-AML, FUS::ERG                 1
+AML, KAT6A-r                  2
+AML, ETV6-r                   2
 AML, RBM15::MKL1              1
+AML, FUS::ERG                 1
+B-ALL, IKZF1 N159Y            1
+AML, MECOM-r                  1
+AML, APL-PML::RARA            1
 Name: count, dtype: int64
 
 Class distribution in bimodal:
 subtype
-AML, KMT2A-r                196
-AML, RUNX1::RUNX1T1         121
-AML, NPM1alt                 82
+AML, KMT2A-r                221
+AML, RUNX1::RUNX1T1         135
+AML, NPM1alt                119
+AML, CEBPAalt                47
 B-ALL, high hyperdiploid     45
-AML, CEBPAalt                42
 B-ALL, ETV6::RUNX1           31
 B-ALL, PAX5alt               29
+AML, NUP98-r                 19
 B-ALL, DUX4-r                19
 T-ALL                        18
 B-ALL, ZNF384-r              17
 B-ALL, iAMP21                15
+AML, DEK::NUP214             14
 B-ALL, KMT2A-r               13
-AML, DEK::NUP214             12
+AML, APL-PML::RARA           13
+AML, CBFB::MYH11             11
 B-ALL, TCF3::PBX1            10
-B-ALL, ETV6::RUNX1-like      10
 B-ALL, BCR::ABL1             10
+B-ALL, ETV6::RUNX1-like      10
 B-ALL, MEF2D-r                8
 B-ALL, BCR::ABL1-like         7
+AML, CBFA2T3::GLIS2           5
 B-ALL, PAX5 P80R              4
 B-ALL, NUTM1-r                3
+AML, RBM15::MKL1              2
+AML, ETV6-r                   1
+AML, MECOM-r                  1
 Name: count, dtype: int64
 
 
-Saved samplesheet_labeled_diagnostic.csv with 3881 samples to /home/mariya/Data/pallas/processed/samplesheet_labeled_diagnostic.csv
+Saved samplesheet_labeled_diagnostic.csv with 3746 samples to /home/mariya/Data/pallas/processed/samplesheet_labeled_diagnostic.csv
 Saved samplesheet_unlabeled.csv with 590 samples to /home/mariya/Data/pallas/processed/samplesheet_unlabeled.csv
-Saved samplesheet_misc.csv with 2339 samples to /home/mariya/Data/pallas/processed/samplesheet_misc.csv
-Saved samplesheet_train.csv with 3104 samples to /home/mariya/Data/pallas/processed/samplesheet_train.csv
-Saved samplesheet_calibration.csv with 777 samples to /home/mariya/Data/pallas/processed/samplesheet_calibration.csv
-Saved samplesheet_bimodal.csv with 692 samples to /home/mariya/Data/pallas/processed/samplesheet_bimodal.csv
+Saved samplesheet_misc.csv with 2474 samples to /home/mariya/Data/pallas/processed/samplesheet_misc.csv
+Saved samplesheet_train.csv with 2996 samples to /home/mariya/Data/pallas/processed/samplesheet_train.csv
+Saved samplesheet_calibration.csv with 750 samples to /home/mariya/Data/pallas/processed/samplesheet_calibration.csv
+Saved samplesheet_bimodal.csv with 827 samples to /home/mariya/Data/pallas/processed/samplesheet_bimodal.csv
 
 Final counts in all sets:
- - TRAIN: 3104 samples
- - CALIBRATION: 777 samples
- - BIMODAL: 692 samples
+ - TRAIN: 2996 samples
+ - CALIBRATION: 750 samples
+ - BIMODAL: 827 samples

@@ -15,6 +15,7 @@ raw_data_path = f'{data_path}/feature_counts'
 pheno_input_file = f'{data_path}/gdc_gex_aml.subtyped.tsv'
 details_input_file = f'{data_path}/gdc_gex_aml.clinical.tsv'
 bimodals_input_file = f'{PROCESSED_DATA_DIR}/bimodals/gdc_bimodals.csv'
+additional_dnams_file = f'{RAW_DATA_DIR}/dnam/pheno/GDC_AML_excl_triche/gdc.aml.dnam.subtyped.tsv'
 
 # OUTPUT FILES ########
 processed_dir = f'{PROCESSED_DATA_DIR}/{dataset_name}'
@@ -112,6 +113,17 @@ samplesheet_df = silo_excluded(samplesheet_df)
 # All that are bimodal should be siloed as 'labeled_diagnostic_bimodal'
 bimodals_df = pd.read_csv(bimodals_input_file, index_col='Case ID')
 bimodal_samples = bimodals_df.index.tolist()
+bimodal_rows = samplesheet_df.index.isin(bimodal_samples)
+if bimodal_rows.any():
+    samplesheet_df = add_to_silo(
+        samplesheet_df,
+        samplesheet_df[bimodal_rows].index, 'labeled_diagnostic_bimodal')
+
+# Also get additional dnam cases with the same case names
+additional_dnam_df = pd.read_csv(additional_dnams_file,
+                                 sep='\t',
+                                 index_col='cases.submitter_id')
+bimodal_samples = additional_dnam_df.index.tolist()
 bimodal_rows = samplesheet_df.index.isin(bimodal_samples)
 if bimodal_rows.any():
     samplesheet_df = add_to_silo(
