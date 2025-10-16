@@ -1,173 +1,3 @@
-Running preprocessing.gexml_pre.diedrich...
-Processing GSE161501...
-Processing phenotype data...
-Running preprocessing.gexml_pre.heinaniemi...
-Processing GSE228632...
-Processing phenotype data...
-Running preprocessing.gexml_pre.krali...
-Processing GSE227832...
-Processing phenotype data...
-Samples in GSE227832 but not in details file: ['ALL_1026_r', 'ALL_210_r', 'ALL_257_r', 'ALL_317_2', 'ALL_317_3', 'ALL_358_r', 'ALL_368_r', 'ALL_380_r', 'ALL_464_r', 'ALL_468_2', 'ALL_555_2', 'ALL_680_2', 'ALL_680_r', 'Constitutional_458rep3', 'Constitutional_559rep2', '817_B', '817_T', '845_B', '845_T', '858_B', '858_T', '867_B', '867_T', '899_B', '899_T']
-Copied details for ALL_1026_r from ALL_1026
-Copied details for ALL_210_r from ALL_210
-Copied details for ALL_257_r from ALL_257
-Copied details for ALL_317_2 from ALL_317
-Copied details for ALL_317_3 from ALL_317
-Copied details for ALL_358_r from ALL_358
-Copied details for ALL_368_r from ALL_368
-Copied details for ALL_380_r from ALL_380
-Copied details for ALL_464_r from ALL_464
-Copied details for ALL_468_2 from ALL_468
-Copied details for ALL_555_2 from ALL_555
-Copied details for ALL_680_2 from ALL_680
-Copied details for ALL_680_r from ALL_680
-No details to copy for Constitutional_458rep3
-No details to copy for Constitutional_559rep2
-No details to copy for 817_B
-No details to copy for 817_T
-No details to copy for 845_B
-No details to copy for 845_T
-No details to copy for 858_B
-No details to copy for 858_T
-No details to copy for 867_B
-No details to copy for 867_T
-No details to copy for 899_B
-No details to copy for 899_T
-Running preprocessing.gexml_pre.stjude_cloud...
-Processing SJC-DS-1009...
-Processing phenotype data...
-Warning: The following sample names are duplicated and secondary occurrences will be removed:
-['SJBALL021900_D1', 'SJBALL237_D', 'SJCBF041_D', 'SJETV093_D', 'SJETV092_D', 'SJMLL014_D', 'SJMLL019_D', 'SJPHALL005_D', 'SJPHALL003_D', 'SJBALL021305_D1', 'SJERG020299_D1', 'SJBALL021530_D1', 'SJBALL021109_D1', 'SJBALL021080_D1', 'SJAML030025_D1', 'SJAML030004_D1', 'SJAML030286_R1', 'SJMLL001_D', 'SJMLL002_D']
-Warning: The following NOS samples actually have a subtype:
-['SJBALL021047_D1', 'SJALL015948_D1', 'SJBALL043631_D1', 'SJBALL013392_D1', 'SJBALL022671_D1', 'SJBALL016237_D1', 'SJBALL020607_D1', 'SJTALL022664_D1', 'SJALL015987_D1', 'SJALL015942_D1', 'SJALL015970_D1', 'SJBALL020592_D1', 'SJBALL013357_D1', 'SJBALL016307_D1', 'SJBALL020943_D1', 'SJBALL016296_D1', 'SJBALL022606_D1', 'SJBALL020972_D1', 'SJBALL020776_D1']
-Info: Sample SJBALL030983_R1 has known subtype BALLHYPO in sj_associated_diagnoses.
-Info: Sample SJAML031051_R1 has known subtype AMLKMT2A in sj_associated_diagnoses.
-Info: Sample SJBALL031052_R1 has known subtype BALLHYPO in sj_associated_diagnoses.
-Info: Sample SJBALL030894_D2 has known subtype BALLPAX5 in sj_associated_diagnoses.
-Info: Sample SJAML016582_D1 has known subtype AMLNUP98 in sj_associated_diagnoses.
-Info: Sample SJAML016570_D1 has known subtype AMLNUP98 in sj_associated_diagnoses.
-Info: Sample SJAML016560_D1 has known subtype AMLKMT2A in sj_associated_diagnoses.
-Info: Sample SJAML016551_D1 has known subtype AMLKMT2A in sj_associated_diagnoses.
-Info: Sample SJAML016537_D1 has known subtype AMLKMT2A in sj_associated_diagnoses.
-Info: Sample SJAML001444_D1 has known subtype AMLKMT2A in sj_associated_diagnoses.
-Info: Sample SJAML001427_D2 has known subtype AMLNPM1 in sj_associated_diagnoses.
-Info: Sample SJAML061501_R1 has known subtype AMLPICALMMLLT10 in sj_associated_diagnoses.
-Info: Sample SJAML060291_R1 has known subtype AMLNPM1 in sj_associated_diagnoses.
-Info: Sample SJAML045737_R1 has known subtype AMLBCL11B in sj_associated_diagnoses.
-Info: Sample SJAML040281_R1 has known subtype AMLMECOM in sj_associated_diagnoses.
-Info: Sample SJAML040277_R1 has known subtype AMLDEKNUP214 in sj_associated_diagnoses.
-Info: Sample SJAML031043_R1 has known subtype AMLUBTF in sj_associated_diagnoses.
-Info: Sample SJAML010730_R4 has known subtype AMLUBTF in sj_associated_diagnoses.
-Info: Sample SJAML031254_D1 has known subtype AMLNUP98 in sj_associated_diagnoses.
-Info: Sample SJBALL030413_D2 has known subtype BALLHYPER in sj_associated_diagnoses.
-Warning: The following samples have invalid sample_type and will be removed:
-['SJBALL020016_C1', 'SJBALL020579_X1', 'SJHYPO010000_C4', 'SJHYPO010000_C34', 'SJHYPO010000_C47', 'SJHYPO010000_C1', 'SJHYPO010000_C48', 'SJHYPO010000_C11', 'SJHYPO010000_C46', 'SJHYPO010000_C10', 'SJHYPO010000_C6', 'SJHYPO010000_C49', 'SJHYPO010000_C5', 'SJHYPO010000_C7', 'SJHYPO010000_C8', 'SJHYPO010000_C9']
-Warning: The following 'other' samples have biomarkers that might help refine the subtype:
-['SJAML030560_D1', 'SJAML030459_D1', 'SJAML030773_D1', 'SJAML030714_D1', 'SJAML030988_D1', 'SJAML031312_D1', 'SJTALL030880_D1', 'SJTALL030907_D1', 'SJTALL031201_D1', 'SJAML030006_D1', 'SJAML030004_D1', 'SJTALL030263_D1', 'SJTALL002_D', 'SJTALL031798_D1', 'SJTALL032007_D1', 'SJTALL031662_D1', 'SJTALL031594_D1', 'SJTALL031991_D1', 'SJTALL031832_D1', 'SJTALL031632_D1', 'SJHM031652_D1', 'SJAML031719_D1', 'SJBALL031906_D1', 'SJBALL031749_D1', 'SJBALL031942_D1', 'SJAML031781_D1', 'SJBALL031268_D2', 'SJAML031924_D1', 'SJBALL031488_D1', 'SJTALL032088_D1', 'SJBALL032078_D1', 'SJAML032172_D1', 'SJAML032178_D1', 'SJAML032325_D1', 'SJAML032347_D1', 'SJTALL032368_D1', 'SJAML032070_D1', 'SJTALL032380_D1', 'SJTALL032246_D1', 'SJTALL032041_D1', 'SJHM032516_D1', 'SJTALL032568_D1', 'SJAML030286_R1', 'SJAML067625_R1', 'SJAML061536_R1', 'SJAML061511_R1', 'SJAML060294_R1', 'SJBALL032691_D1', 'SJAML032297_D1', 'SJAML032056_D1', 'SJAML030586_D1', 'SJBALL032005_D1', 'SJAML032934_D1', 'SJAML032715_D1', 'SJAML031769_D1', 'SJTALL032972_D1', 'SJTALL032835_D1', 'SJTALL031634_D1', 'SJTALL031901_D2', 'SJTALL031944_D1', 'SJTALL032610_D2', 'SJTALL032798_D1', 'SJTALL033025_D1', 'SJBALL031556_D1', 'SJBALL032509_D1', 'SJTALL033105_D1', 'SJTALL033207_D1', 'SJTALL033273_D1', 'SJAML033350_D1', 'SJAML033580_D1', 'SJTALL033523_D1', 'SJBALL030463_R1', 'SJTALL033645_D1', 'SJBALL033703_D1', 'SJTALL033715_D1', 'SJBALL034424_D1', 'SJTALL034354_D1', 'SJAML060298_D1', 'SJAML074169_D1']
-Sample SJAML030560_D1 has biomarkers: MECOM
-Sample SJAML030459_D1 has biomarkers: PICALM-MLLT10
-Sample SJAML030773_D1 has biomarkers: TEC-MLLT10
-Sample SJAML030714_D1 has biomarkers: CEBPA S21fs;CEBPA LOH
-Sample SJAML030988_D1 has biomarkers: PICALM-MLLT10
-Sample SJAML031312_D1 has biomarkers: CEBPA K313>KK;CEBPA P115_A118fs
-Sample SJTALL030880_D1 has biomarkers: PICALM-MLLT10
-Sample SJTALL030907_D1 has biomarkers: PICALM-MLLT10
-Sample SJTALL031201_D1 has biomarkers: TCF7-SPI1
-Sample SJAML030006_D1 has biomarkers: DEK-NUP214
-Sample SJAML030004_D1 has biomarkers: KAT6A-CREBBP
-Sample SJTALL030263_D1 has biomarkers: SPI1-TCF7
-Sample SJTALL002_D has biomarkers: ETV6-INO80D
-Sample SJTALL031798_D1 has biomarkers: PICALM-MLLT10
-Sample SJTALL032007_D1 has biomarkers: STIL-TAL1
-Sample SJTALL031662_D1 has biomarkers: PICALM-MLLT10
-Sample SJTALL031594_D1 has biomarkers: TCRA-LMO2
-Sample SJTALL031991_D1 has biomarkers: TCRA-LMO2
-Sample SJTALL031832_D1 has biomarkers: TRB-TLX1
-Sample SJTALL031632_D1 has biomarkers: TCRA-LMO2
-Sample SJHM031652_D1 has biomarkers: BCR-ABL1
-Sample SJAML031719_D1 has biomarkers: TBL1XR1-RARB
-Sample SJBALL031906_D1 has biomarkers: P2RY8-CRLF2
-Sample SJBALL031749_D1 has biomarkers: P2RY8-CRLF2
-Sample SJBALL031942_D1 has biomarkers: IGH-CRLF2
-Sample SJAML031781_D1 has biomarkers: MECOM
-Sample SJBALL031268_D2 has biomarkers: KMT2A-MLLT3
-Sample SJAML031924_D1 has biomarkers: DEK-NUP214
-Sample SJBALL031488_D1 has biomarkers: C11orf74-CRLF2
-Sample SJTALL032088_D1 has biomarkers: FLT3 ITD
-Sample SJBALL032078_D1 has biomarkers: MLLT3 truncation
-Sample SJAML032172_D1 has biomarkers: FLT3
-Sample SJAML032178_D1 has biomarkers: RUNX1 Y285fs
-Sample SJAML032325_D1 has biomarkers: GATA2 N365>TH;NPM1 W288fs
-Sample SJAML032347_D1 has biomarkers: FLT3 ITD
-Sample SJTALL032368_D1 has biomarkers: BCL11B D122fs
-Sample SJAML032070_D1 has biomarkers: FLT3 ITD
-Sample SJTALL032380_D1 has biomarkers: FBXW7 R479Q
-Sample SJTALL032246_D1 has biomarkers: BCL11B Y221fs
-Sample SJTALL032041_D1 has biomarkers: FLT3 ITD
-Sample SJHM032516_D1 has biomarkers: NOTCH Duplication
-Sample SJTALL032568_D1 has biomarkers: RBPMS-FGFR1;RUNX1 R205_E6splice;RUNX1 T196I
-Sample SJAML030286_R1 has biomarkers: FLT3 ITD
-Sample SJAML067625_R1 has biomarkers: CEBPA ITD
-Sample SJAML061536_R1 has biomarkers: CBFA2T3-GLIS3
-Sample SJAML061511_R1 has biomarkers: CBFA2T3-GLIS2
-Sample SJAML060294_R1 has biomarkers: CBFA2T3-GLIS2
-Sample SJBALL032691_D1 has biomarkers: PAX5 LOSS
-Sample SJAML032297_D1 has biomarkers: FUS-FLI1
-Sample SJAML032056_D1 has biomarkers: RUNX1 P301fs;FLT3 D835Y
-Sample SJAML030586_D1 has biomarkers: FLT3 ITD
-Sample SJBALL032005_D1 has biomarkers: PAX5-ETV6
-Sample SJAML032934_D1 has biomarkers: KMT2A ITD;FLT3 ITD
-Sample SJAML032715_D1 has biomarkers: FNDC3B-RARB
-Sample SJAML031769_D1 has biomarkers: FLT3 I836del
-Sample SJTALL032972_D1 has biomarkers: FLT3 N676K;WT1 R413*
-Sample SJTALL032835_D1 has biomarkers: FLT3 D835Y;CREBBP Y1705*;WT1 R368fs;WT1 V268fs;CNOT3 Y209*
-Sample SJTALL031634_D1 has biomarkers: NOTCH1 Q2391*;NOTCH1 A19P
-Sample SJTALL031901_D2 has biomarkers: TRB-NOTCH1
-Sample SJTALL031944_D1 has biomarkers: MLLT10-PICALM
-Sample SJTALL032610_D2 has biomarkers: TP53 R282W;FBXW7 G423V;RPL22 V4_E1splice;NOTCH1 R1598P;FBXW7 R465C;MYB gain;CDKN2A loss;LIN28A gain
-Sample SJTALL032798_D1 has biomarkers: NOTCH1 proximity effect;CDKN2A loss;CDKN2B loss;IKZF2 loss
-Sample SJTALL033025_D1 has biomarkers: TRIM25-JAK2
-Sample SJBALL031556_D1 has biomarkers: ETV6-ETV5
-Sample SJBALL032509_D1 has biomarkers: KDM6A LOSS
-Sample SJTALL033105_D1 has biomarkers: TRB-NOTCH1
-Sample SJTALL033207_D1 has biomarkers: ETV6 Deletion;CDK6 cnv gain;NOTCH1 frameshift
-Sample SJTALL033273_D1 has biomarkers: SET-NUP214
-Sample SJAML033350_D1 has biomarkers: FLT3 DUP
-Sample SJAML033580_D1 has biomarkers: FUS-ERG
-Sample SJTALL033523_D1 has biomarkers: FBXW7 R465C
-Sample SJBALL030463_R1 has biomarkers: KDM6A
-Sample SJTALL033645_D1 has biomarkers: NOTCH1 DUP
-Sample SJBALL033703_D1 has biomarkers: IGH-CEBPA
-Sample SJTALL033715_D1 has biomarkers: USP7 V302_E8splice;NOTCH1 L1585P;FBXW7 R479Q
-Sample SJBALL034424_D1 has biomarkers: ETV6 truncation;IKZF1 truncation
-Sample SJTALL034354_D1 has biomarkers: TCRB@-NOTCH1
-Sample SJAML060298_D1 has biomarkers: FUS-ERG
-Sample SJAML074169_D1 has biomarkers: FUS-FEV
-Warning: The following samples have ambiguous status (relapse or remission) and will be excluded:
-['SJBALL033857_D1', 'SJTALL033892_D1', 'SJBALL034002_D1', 'SJBALL034140_D1', 'SJBALL034128_D1', 'SJBALL034158_D1', 'SJBALL034271_D1', 'SJAML034342_D1', 'SJBALL034403_D1', 'SJBALL034329_D1', 'SJBALL034418_D1']
-Running preprocessing.gexml_pre.stjude_panALL...
-Processing SJC-panALL...
-Processing phenotype data...
-Running preprocessing.gexml_pre.tran...
-Processing GSE181157...
-Processing phenotype data...
-Running preprocessing.gexml_pre.lund...
-Processing EGAS00001001795...
-Processing phenotype data...
-Running preprocessing.gexml_pre.lund_hypodiploidy...
-Processing lund_hypodiploidy...
-Running preprocessing.gexml_pre.stratmann...
-Processing stratmann2022...
-Processing phenotype data...
-Processing gene expression data...
-Running preprocessing.gexml_pre.gdc_aml...
-Processing GDC_AML...
-Processing phenotype data...
-Processing gene expression data...
-Running preprocessing.gexml_pre.gdc_all...
-Processing GDC_ALL...
-Processing phenotype data...
-Processing gene expression data...
 Combining all samplesheets...
 
 Total number of samples: 6810
@@ -207,6 +37,8 @@ unlabeled              590
 Name: count, dtype: int64
 
 
+Moved 16 samples from labeled_diagnostic_bimodal to labeled_diagnostic
+
 Class distribution in labeled_diagnostic:
 subtype
 B-ALL, high hyperdiploid    511
@@ -228,21 +60,21 @@ AML, CEBPAalt                66
 B-ALL, ZNF384-r              63
 B-ALL, ETV6::RUNX1-like      52
 B-ALL, MEF2D-r               49
+B-ALL, PAX5 P80R             38
 B-ALL, iAMP21                36
-B-ALL, PAX5 P80R             34
-AML, CBFA2T3::GLIS2          31
+AML, CBFA2T3::GLIS2          36
 AML, DEK::NUP214             30
 Non-leukemic                 22
+B-ALL, NUTM1-r               18
 B-ALL, MYC-r                 17
-B-ALL, NUTM1-r               15
 AML, KAT6A-r                 12
-AML, ETV6-r                  10
+AML, ETV6-r                  11
 B-ALL, HLF-r                  9
 AML, FUS::ERG                 7
 AML, APL-PML::RARA            7
 B-ALL, IKZF1 N159Y            7
-AML, MECOM-r                  5
-AML, RBM15::MKL1              4
+AML, MECOM-r                  6
+AML, RBM15::MKL1              6
 Name: count, dtype: int64
 
 
@@ -267,21 +99,21 @@ AML, CEBPAalt                53
 B-ALL, ZNF384-r              50
 B-ALL, ETV6::RUNX1-like      41
 B-ALL, MEF2D-r               39
+B-ALL, PAX5 P80R             30
+AML, CBFA2T3::GLIS2          29
 B-ALL, iAMP21                29
-B-ALL, PAX5 P80R             27
-AML, CBFA2T3::GLIS2          25
 AML, DEK::NUP214             24
 Non-leukemic                 18
+B-ALL, NUTM1-r               14
 B-ALL, MYC-r                 14
-B-ALL, NUTM1-r               12
 AML, KAT6A-r                 10
-AML, ETV6-r                   8
+AML, ETV6-r                   9
 B-ALL, HLF-r                  7
-AML, APL-PML::RARA            6
 AML, FUS::ERG                 6
+AML, APL-PML::RARA            6
 B-ALL, IKZF1 N159Y            6
-AML, MECOM-r                  4
-AML, RBM15::MKL1              3
+AML, MECOM-r                  5
+AML, RBM15::MKL1              5
 Name: count, dtype: int64
 
 Class distribution in calibration:
@@ -305,21 +137,21 @@ AML, CEBPAalt                13
 B-ALL, ZNF384-r              13
 B-ALL, ETV6::RUNX1-like      11
 B-ALL, MEF2D-r               10
-B-ALL, PAX5 P80R              7
+B-ALL, PAX5 P80R              8
+AML, CBFA2T3::GLIS2           7
 B-ALL, iAMP21                 7
-AML, CBFA2T3::GLIS2           6
 AML, DEK::NUP214              6
+B-ALL, NUTM1-r                4
 Non-leukemic                  4
 B-ALL, MYC-r                  3
-B-ALL, NUTM1-r                3
 B-ALL, HLF-r                  2
-AML, KAT6A-r                  2
 AML, ETV6-r                   2
+AML, KAT6A-r                  2
 AML, RBM15::MKL1              1
-AML, FUS::ERG                 1
-B-ALL, IKZF1 N159Y            1
 AML, MECOM-r                  1
+B-ALL, IKZF1 N159Y            1
 AML, APL-PML::RARA            1
+AML, FUS::ERG                 1
 Name: count, dtype: int64
 
 Class distribution in bimodal:
@@ -337,31 +169,25 @@ T-ALL                        18
 B-ALL, ZNF384-r              17
 B-ALL, iAMP21                15
 AML, DEK::NUP214             14
-B-ALL, KMT2A-r               13
 AML, APL-PML::RARA           13
+B-ALL, KMT2A-r               13
 AML, CBFB::MYH11             11
-B-ALL, TCF3::PBX1            10
 B-ALL, BCR::ABL1             10
+B-ALL, TCF3::PBX1            10
 B-ALL, ETV6::RUNX1-like      10
 B-ALL, MEF2D-r                8
 B-ALL, BCR::ABL1-like         7
-AML, CBFA2T3::GLIS2           5
-B-ALL, PAX5 P80R              4
-B-ALL, NUTM1-r                3
-AML, RBM15::MKL1              2
-AML, ETV6-r                   1
-AML, MECOM-r                  1
 Name: count, dtype: int64
 
 
-Saved samplesheet_labeled_diagnostic.csv with 3746 samples to /home/mariya/Data/pallas/processed/samplesheet_labeled_diagnostic.csv
+Saved samplesheet_labeled_diagnostic.csv with 3762 samples to /home/mariya/Data/pallas/processed/samplesheet_labeled_diagnostic.csv
 Saved samplesheet_unlabeled.csv with 590 samples to /home/mariya/Data/pallas/processed/samplesheet_unlabeled.csv
-Saved samplesheet_misc.csv with 2474 samples to /home/mariya/Data/pallas/processed/samplesheet_misc.csv
-Saved samplesheet_train.csv with 2996 samples to /home/mariya/Data/pallas/processed/samplesheet_train.csv
-Saved samplesheet_calibration.csv with 750 samples to /home/mariya/Data/pallas/processed/samplesheet_calibration.csv
-Saved samplesheet_bimodal.csv with 827 samples to /home/mariya/Data/pallas/processed/samplesheet_bimodal.csv
+Saved samplesheet_misc.csv with 2458 samples to /home/mariya/Data/pallas/processed/samplesheet_misc.csv
+Saved samplesheet_train.csv with 3009 samples to /home/mariya/Data/pallas/processed/samplesheet_train.csv
+Saved samplesheet_calibration.csv with 753 samples to /home/mariya/Data/pallas/processed/samplesheet_calibration.csv
+Saved samplesheet_bimodal.csv with 811 samples to /home/mariya/Data/pallas/processed/samplesheet_bimodal.csv
 
 Final counts in all sets:
- - TRAIN: 2996 samples
- - CALIBRATION: 750 samples
- - BIMODAL: 827 samples
+ - TRAIN: 3009 samples
+ - CALIBRATION: 753 samples
+ - BIMODAL: 811 samples

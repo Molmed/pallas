@@ -9,7 +9,7 @@ from preprocessing.constants import PROCESSED_DATA_DIR
 dotenv.load_dotenv()
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 42))
 SPLIT_TRAIN_FRAC = float(os.getenv("SPLIT_TRAIN_FRAC", 0.7))
-SPLIT_MIN_CAL_SAMPLES = int(os.getenv("SPLIT_MIN_CAL_SAMPLES", 5))
+SPLIT_MIN_BIMODAL_SAMPLES = int(os.getenv("SPLIT_MIN_BIMODAL_SAMPLES", 6))
 
 modules = [
     "preprocessing.gexml_pre.diedrich",
@@ -25,9 +25,9 @@ modules = [
     "preprocessing.gexml_pre.gdc_all"
 ]
 
-for mod in modules:
-    print(f"Running {mod}...")
-    runpy.run_module(mod, run_name="__main__")
+# for mod in modules:
+#     print(f"Running {mod}...")
+#     runpy.run_module(mod, run_name="__main__")
 
 # Find all samplesheet.csv files and combine them
 print("Combining all samplesheets...\n")
@@ -70,6 +70,18 @@ labeled_diagnostic_bimodal_df = combined_samplesheet_df[
     combined_samplesheet_df['data_silo'] == 'labeled_diagnostic_bimodal']
 y_bimodal = labeled_diagnostic_bimodal_df['subtype']
 y_bimodal_counts = y_bimodal.value_counts()
+
+# Put all classes with less than SPLIT_MIN_BIMODAL_SAMPLES samples into "labeled_diagnostic"
+classes_to_keep = y_bimodal_counts[y_bimodal_counts >= SPLIT_MIN_BIMODAL_SAMPLES].index.tolist()
+rows_to_move = labeled_diagnostic_bimodal_df[~labeled_diagnostic_bimodal_df['subtype'].isin(classes_to_keep)].index
+if len(rows_to_move) > 0:
+    combined_samplesheet_df.loc[rows_to_move, 'data_silo'] = 'labeled_diagnostic'
+    # remove them from labeled_diagnostic_bimodal_df
+    labeled_diagnostic_bimodal_df = combined_samplesheet_df[
+        combined_samplesheet_df['data_silo'] == 'labeled_diagnostic_bimodal']
+    y_bimodal = labeled_diagnostic_bimodal_df['subtype']
+    y_bimodal_counts = y_bimodal.value_counts()
+    print(f"Moved {len(rows_to_move)} samples from labeled_diagnostic_bimodal to labeled_diagnostic\n")
 
 # Put labeled_diagnostic into separate dataframe
 labeled_diagnostic_df = combined_samplesheet_df[
