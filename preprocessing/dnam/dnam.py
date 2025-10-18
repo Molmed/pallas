@@ -21,7 +21,8 @@ data_path = f'{RAW_DATA_DIR}/dnam'
 raw_data_path = f'{data_path}/concatenated_df_VARIANCE_FILTERED_0_01_NaN_0_1_imputed.pkl'
 pheno_input_file = f'{data_path}/pheno/PALLAS_FINAL_pheno_combined_n=2479.csv'
 epic_pheno_input_file = \
-    f'{data_path}/pheno/NOPHO_EPIC_n=55_subtype_info_FINAL.csv'
+    f'{data_path}/pheno/enblad2025/NOPHO_EPIC_n=55_subtype_info_FINAL.csv'
+cpglist_path = f'{PROCESSED_DATA_DIR}/dnam/pallas_training_cpg_sites.txt'
 
 # OUTPUT ########
 output_dir = f'{PROCESSED_DATA_DIR}/dnam'
@@ -40,6 +41,9 @@ data_df = pd.read_pickle(raw_data_path)
 
 # Update index with public sample ids where available
 data_df.index = data_df.index.to_series().replace(epic_id_map)
+
+# Save columns to cpglist_path
+data_df.columns.to_series().to_csv(cpglist_path, index=False, header=False)
 
 # Get the pheno
 labels_df = pd.read_csv(pheno_input_file, index_col=0)
