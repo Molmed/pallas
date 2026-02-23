@@ -20,7 +20,7 @@ details_input_file = f'{RAW_DATA_DIR}/stratmann2022/AML_RNAseq_Metadata_Holmfeld
 # OUTPUT FILES ########
 processed_dir = f'{PROCESSED_DATA_DIR}/dnam/{dataset_name}'
 samplesheet_output_file = \
-    f'{processed_dir}/samplesheet.csv'
+    f'{PROCESSED_DATA_DIR}/../samplesheet_holmfeldt.tsv'
 details_file = \
     f'{processed_dir}/patient_details.csv'
 
@@ -59,7 +59,7 @@ samplesheet_df['sample'] = samplesheet_df.index.map(lambda x: x.split('_')[1].sp
 samplesheet_df = samplesheet_df.set_index('sample')
 
 # Rename index to Sample ID
-samplesheet_df.index.name = 'Sample ID'
+samplesheet_df.index.name = 'Sample_Name'
 
 # Rename "Sentrix Barcode" to "Sentrix_ID" and "Sample Section" to "Sentrix_Position"
 samplesheet_df = samplesheet_df.rename(columns={
@@ -138,7 +138,7 @@ samplesheet_df = samplesheet_df.rename(columns={'subtype': 'Class'})
 samplesheet_df = samplesheet_df.drop(columns=['patient'])
 
 # Save the samplesheet
-samplesheet_df.to_csv(samplesheet_output_file)
+samplesheet_df.to_csv(samplesheet_output_file, sep='\t')
 exit()
 
 # PROCESS PHENO ########
