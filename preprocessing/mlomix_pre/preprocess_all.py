@@ -15,7 +15,8 @@ SPLIT_TEST_FRAC = 0.15
 MIN_TEST_SAMPLES_PER_CLASS = 5
 
 modules = [
-    "preprocessing.mlomix_pre.SJC-DS-1009"
+    "preprocessing.mlomix_pre.SJC-DS-1009",
+    "preprocessing.mlomix_pre.SJC-panALL"
 ]
 
 for mod in modules:

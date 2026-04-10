@@ -6,9 +6,11 @@ dotenv.load_dotenv()
 BASE_DATA_DIR = os.getenv('BASE_DATA_DIR')
 RAW_DATA_DIR = os.getenv('RAW_DATA_DIR')
 PREPROCESSED_DATA_DIR = os.getenv('PREPROCESSED_DATA_DIR')
+MLOMIX_SAMPLESHEETS_DIR = os.getenv('MLOMIX_SAMPLESHEETS_DIR')
+
 GEX_EXCLUDE_SUBTYPES = [
-    'RUNX1::RUNX1T1-like',
     'low hyperdiploid',
+    'RUNX1::RUNX1T1-like',
     'IGH::CEBPD',
     'PICALM::MLLT10',
     'BCR::ABL1 AML'
