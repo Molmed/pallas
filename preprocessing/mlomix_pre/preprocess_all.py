@@ -156,6 +156,34 @@ print(y_large_calib.value_counts())
 print("\nClass distribution in test_large_model:")
 print(y_large_test.value_counts())
 
+# Move classes with too few samples in test back to calibration
+test_class_counts = y_large_test.value_counts()
+underrepresented_classes = test_class_counts[
+    test_class_counts < MIN_TEST_SAMPLES_PER_CLASS
+].index.tolist()
+
+if len(underrepresented_classes) > 0:
+    min_test_str = str(MIN_TEST_SAMPLES_PER_CLASS)
+    print(
+        f"\nMoving {len(underrepresented_classes)} underrepresented "
+        f"class(es) from test to calibration "
+        f"(MIN_TEST_SAMPLES_PER_CLASS={min_test_str}):"
+    )
+    print(f"  {underrepresented_classes}")
+
+    # Find indices of underrepresented classes in test
+    move_to_calib_mask = y_large_test.isin(underrepresented_classes)
+    indices_to_move = y_large_test[move_to_calib_mask].index
+
+    # Move from test to calibration
+    y_large_calib = y_large_calib._append(y_large_test[move_to_calib_mask])
+    y_large_test = y_large_test[~move_to_calib_mask]
+
+    print("\nUpdated class distribution in calibration_large_model:")
+    print(y_large_calib.value_counts())
+    print("\nUpdated class distribution in test_large_model:")
+    print(y_large_test.value_counts())
+
 if n_bimodal > 0:
     # SPLIT BIMODAL INTO TRAIN/TEST
     y_bimodal = bimodal_df['class']
