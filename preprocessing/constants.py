@@ -5,7 +5,7 @@ import os
 dotenv.load_dotenv()
 BASE_DATA_DIR = os.getenv('BASE_DATA_DIR')
 RAW_DATA_DIR = os.getenv('RAW_DATA_DIR')
-PROCESSED_DATA_DIR = os.getenv('PROCESSED_DATA_DIR')
+PREPROCESSED_DATA_DIR = os.getenv('PREPROCESSED_DATA_DIR')
 GEX_EXCLUDE_SUBTYPES = [
     'RUNX1::RUNX1T1-like',
     'low hyperdiploid',
