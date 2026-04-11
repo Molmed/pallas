@@ -112,7 +112,7 @@ def process_dnam_file(filename, suffix, samplesheet_col):
             continue
         samplesheet_df.loc[col, samplesheet_col] = output_file
         print(f"Saving {col} to {output_file}...")
-        beta_df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
+        df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
 
 
 # # Read in and merge all beta matrix files
