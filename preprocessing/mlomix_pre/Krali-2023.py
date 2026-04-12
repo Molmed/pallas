@@ -103,15 +103,19 @@ def process_dnam_file(filename, suffix, samplesheet_col):
             new_col = col.split('.')[0]
             df = df.rename(columns={col: new_col})
             col = new_col
-        print(f"Processing column {col} in {filename}...")
         output_file = f'{dnam_dir}/{col}.{suffix}.txt'
         # Set 'dnam_beta_matrix_file' column for this sample in samplesheet_df
         # First check that the sample is in samplesheet_df
         if col not in samplesheet_df.index:
-            print(f"Warning: Sample {col} in {filename} not found in samplesheet_df index")
-            continue
+            # If sample name starts with "Constitutional" or "cd", add it to the samplesheet_df with class "Control"
+            if col.startswith("Constitutional") or col.startswith("cd"):
+                print(f"Adding {col} to samplesheet_df with class 'Control'...")
+                samplesheet_df.loc[col, :] = pd.NA
+                samplesheet_df.at[col, 'class'] = 'Control'
+            else:
+                print(f"Warning: Sample {col} in {filename} not found in samplesheet_df index")
+                continue
         samplesheet_df.loc[col, samplesheet_col] = output_file
-        print(f"Saving {col} to {output_file}...")
         df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
 
 
@@ -137,6 +141,7 @@ for col in gex_df.columns:
     # Set feature_counts column for this sample in samplesheet_df
     samplesheet_df.loc[col, 'gex_feature_counts_file'] = output_file
     gex_df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
+
 
 # For items where subtype is null and sample ends in "_2", "_3", or "_r",
 # Look for the sample name without that suffix and copy the subtype from there
@@ -166,6 +171,9 @@ tax = Taxonomy()
 samplesheet_df['class'] = tax.translate_subtype_column(
     samplesheet_df['class'],
     exclude_subtypes=GEX_EXCLUDE_SUBTYPES)
+
+# Set batch to null if there is no gene expression data, since batch is only relevant for gene expression
+samplesheet_df.loc[samplesheet_df['gex_feature_counts_file'].isna(), 'batch'] = None
 
 # Set 'dataset' column to dataset name
 samplesheet_df['dataset'] = dataset_name
