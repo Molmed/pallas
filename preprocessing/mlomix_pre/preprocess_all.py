@@ -16,7 +16,8 @@ MIN_TEST_SAMPLES_PER_CLASS = 5
 
 modules = [
     "preprocessing.mlomix_pre.SJC-DS-1009",
-    "preprocessing.mlomix_pre.SJC-panALL"
+    "preprocessing.mlomix_pre.SJC-panALL",
+    "preprocessing.mlomix_pre.Krali-2023",
 ]
 
 for mod in modules:
