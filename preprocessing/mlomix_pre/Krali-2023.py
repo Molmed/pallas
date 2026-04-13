@@ -267,10 +267,14 @@ all_details = pd.concat([details_df[['dataset', 'sex', 'age']], missing_details]
 # Save the combined details
 all_details.to_csv(details_file)
 
-# Print report: num samples with GEX data only, num with DNA data only, and num with both
+# Print report: num total GEX, num total DNAm, num samples with GEX data only, num with DNA data only, and num with both
+num_gex_total = samplesheet_df['gex_feature_counts_file'].notna().sum()
+num_dnam_total = samplesheet_df['dnam_beta_matrix_file'].notna().sum()
 num_gex_only = ((samplesheet_df['gex_feature_counts_file'].notna()) & (samplesheet_df['dnam_beta_matrix_file'].isna())).sum()
 num_dnam_only = ((samplesheet_df['gex_feature_counts_file'].isna()) & (samplesheet_df['dnam_beta_matrix_file'].notna())).sum()
 num_both = ((samplesheet_df['gex_feature_counts_file'].notna()) & (samplesheet_df['dnam_beta_matrix_file'].notna())).sum()
+print(f"Total samples with GEX data: {num_gex_total}")
+print(f"Total samples with DNAm data: {num_dnam_total}")
 print(f"Number of samples with GEX data only: {num_gex_only}")
 print(f"Number of samples with DNAm data only: {num_dnam_only}")
 print(f"Number of samples with both GEX and DNAm data: {num_both}")
