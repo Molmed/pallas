@@ -18,6 +18,8 @@ modules = [
     "preprocessing.mlomix_pre.SJC-DS-1009",
     "preprocessing.mlomix_pre.SJC-panALL",
     "preprocessing.mlomix_pre.Krali-2023",
+    "preprocessing.mlomix_pre.Lilljebjorn-2016",
+    "preprocessing.mlomix_pre.Paulsson-2023",
 ]
 
 for mod in modules:
