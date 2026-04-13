@@ -165,28 +165,6 @@ for col in gex_df.columns:
     samplesheet_df.loc[meta_col, 'gex_feature_counts_file'] = output_file
     gex_df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
 
-# Num rows before
-num_rows_before = samplesheet_df.shape[0]
-print(f"Number of samples before dropping missing feature counts: {num_rows_before}")
-
-# Drop all rows with missing feature_counts
-# samplesheet_df = samplesheet_df.dropna(subset=['gex_feature_counts_file'])
-
-# Num rows after
-num_rows_after = samplesheet_df.shape[0]
-print(f"Number of samples after dropping missing feature counts: {num_rows_after}")
-
-# Report rows before and after dropping missing subtype
-num_rows_before = samplesheet_df.shape[0]
-print(f"Number of samples before dropping missing class: {num_rows_before}")
-
-# Drop all rows with missing subtype
-# samplesheet_df = samplesheet_df.dropna(subset=['class'])
-
-# Num rows after
-num_rows_after = samplesheet_df.shape[0]
-print(f"Number of samples after dropping missing class: {num_rows_after}")
-
 # Set batch column to blank string
 samplesheet_df['batch'] = ''
 
