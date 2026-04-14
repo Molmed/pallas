@@ -3,7 +3,8 @@ import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR
-from preprocessing.helpers import format_mlomix_columns
+from preprocessing.helpers import format_mlomix_columns, \
+    summarize_patient_details
 
 dataset_name = 'Diedrich-2021'
 print(f"Processing {dataset_name}...")
@@ -89,5 +90,6 @@ details_df['dataset'] = dataset_name
 # Keep just those columns
 details_df = details_df[
     ['dataset', 'sex', 'age']]
+summarize_patient_details(details_df)
 # Dump to CSV
 details_df.to_csv(details_file)
