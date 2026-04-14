@@ -4,7 +4,8 @@ from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR, GEX_EXCLUDE_SUBTYPES
 from preprocessing.helpers import add_to_silo, silo_unlabeled, \
-    silo_unrecognized, silo_excluded, silo_remaining, format_mlomix_columns
+    silo_unrecognized, silo_excluded, silo_remaining, \
+        format_mlomix_columns, summarize_patient_details
 
 dataset_name = 'SJC-DS-1009'
 print(f"Processing {dataset_name}...")
@@ -406,7 +407,56 @@ details_df['age'] = pd.to_numeric(details_df['age'], errors='coerce')
 # Only keep details_df rows that are in samplesheet_df
 details_df = details_df.loc[details_df.index.intersection(samplesheet_df.index)]
 
+# Replace sex "Not Available" with NaN
+details_df['sex'] = details_df['sex'].replace('Not Available', pd.NA)
+
+# Create new col "unique_patient_id" which is the index but removing everything after underscore
+details_df['unique_patient_id'] = details_df.index.str.split('_').str[0]
+
+
+def deduplicate_using_sample_suffix(suffix):
+    samples = details_df[details_df.index.str.endswith(suffix)]
+    print(f"Deduplicating {suffix} samples:")
+    for idx, row in samples.iterrows():
+        unique_patient_id = row['unique_patient_id']
+        # Check if there is another sample with the same unique_patient_id that does not end with this suffix
+        other_samples = details_df[
+            (details_df['unique_patient_id'] == unique_patient_id) &
+            ~details_df.index.str.endswith(suffix)]
+        if not other_samples.empty:
+            print(f"Warning: Dropping sample {idx} from details_df because there is another sample with the same unique_patient_id {unique_patient_id} that does not end with {suffix}.")
+            details_df.drop(idx, inplace=True)
+
+
+# The largest diagnostic value we have is D8 and largest relapse is R4
+diagnostic_sampling_number = 8
+for i in range(diagnostic_sampling_number, 1, -1):
+    suffix = f'_D{i}'
+    deduplicate_using_sample_suffix(suffix)
+
+relapse_sampling_number = 4
+for i in range(relapse_sampling_number, 0, -1):
+    suffix = f'_R{i}'
+    deduplicate_using_sample_suffix(suffix)
+
+# Find all items ending in any letter except "D" and dedupe them
+other_suffix_items = details_df[
+    details_df.index.str.match(r'.*[A-CE-Z]$')]
+
+# Get all unique suffixes from these items
+other_suffixes = other_suffix_items.index.str.extract(r'.*(_[A-CE-Z])$')[0].unique()
+for suffix in other_suffixes:
+    deduplicate_using_sample_suffix(suffix)
+
+# Check for duplicate unique_patient_id, report if any left
+duplicate_patients = details_df[details_df.duplicated(subset='unique_patient_id', keep=False)]
+if not duplicate_patients.empty:
+    print("Warning: The following unique_patient_id values are duplicated in details_df after deduplication:")
+    print(duplicate_patients['unique_patient_id'].unique())
+
 details_df = details_df[
     ['dataset', 'sex', 'age']]
+
+summarize_patient_details(details_df)
 
 details_df.to_csv(details_file)
