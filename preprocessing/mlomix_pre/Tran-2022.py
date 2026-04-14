@@ -4,7 +4,8 @@ from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR
 from preprocessing.helpers import add_to_silo, silo_unlabeled, \
-    silo_remaining, format_mlomix_columns
+    silo_remaining, format_mlomix_columns, \
+    summarize_patient_details
 
 dataset_name = 'Tran-2022'
 print(f"Processing {dataset_name}...")
@@ -37,6 +38,7 @@ details_df['sex'] = details_df['sex'].replace({'M': 'Male', 'F': 'Female'})
 details_df = details_df[
     ['dataset', 'sex', 'age']]
 
+summarize_patient_details(details_df)
 details_df.to_csv(details_file)
 
 # PROCESS PHENO ########
