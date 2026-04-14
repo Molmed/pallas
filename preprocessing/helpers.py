@@ -50,10 +50,10 @@ def silo_remaining(samplesheet_df, silo_name='labeled_diagnostic'):
 
 def format_mlomix_columns(df):
     # The cols are as follows:
-    # sample,dataset,batch,class,gex_feature_counts_file,dnam_beta_matrix_file,dnam_pvals_file,sentrix_id,sentrix_position,idats_dir
+    # data_silo,dataset,batch,class,gex_feature_counts_file,dnam_beta_matrix_file,dnam_pvals_file,sentrix_id,sentrix_position,idats_dir
     # For the df, add empty columns for any that are missing and then put them in the right order
     expected_cols = [
-        'dataset', 'batch', 'class', 'gex_feature_counts_file',
+        'data_silo', 'dataset', 'batch', 'class', 'gex_feature_counts_file',
         'dnam_beta_matrix_file', 'dnam_pvals_file', 'sentrix_id',
         'sentrix_position', 'idats_dir'
     ]
@@ -63,3 +63,25 @@ def format_mlomix_columns(df):
         if col not in df.columns:
             df[col] = ''
     return df[expected_cols]
+
+
+def summarize_patient_details(df):
+    print("Patient details summary:")
+    # Num unique patients
+    num_patients = df.index.nunique()
+    print(f"Number of unique patients: {num_patients}")
+    # We want mean age in this format: 19.4 ± (19.0)
+    mean_age = df['age'].mean()
+    std_age = df['age'].std()
+    print(f"Mean age at dx: {mean_age:.1f} ± ({std_age:.1f})")
+    # We want Male/Female in this format: 1042/850
+    male_count = df['sex'].value_counts().get('Male', 0)
+    female_count = df['sex'].value_counts().get('Female', 0)
+    print(f"Male/Female: {male_count}/{female_count}")
+    # Report the number of patients missing age, sex or both
+    missing_age = df['age'].isna().sum()
+    missing_sex = df['sex'].isna().sum()
+    missing_both = df[df['age'].isna() & df['sex'].isna()].shape[0]
+    print(f"Missing age: {missing_age}")
+    print(f"Missing sex: {missing_sex}")
+    print(f"Missing both: {missing_both}")

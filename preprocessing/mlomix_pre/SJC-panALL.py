@@ -4,7 +4,8 @@ from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR, GEX_EXCLUDE_SUBTYPES
 from preprocessing.helpers import add_to_silo, silo_unlabeled, \
-    silo_unrecognized, silo_excluded, silo_remaining, format_mlomix_columns
+    silo_unrecognized, silo_excluded, silo_remaining, \
+        format_mlomix_columns, summarize_patient_details
 
 dataset_name = 'SJC-panALL'
 print(f"Processing {dataset_name}...")
@@ -37,14 +38,20 @@ details_df.index.name = 'sample'
 # Drop rows with NaN index
 details_df = details_df[details_df.index.notna()]
 
-# Only keep rows where index starts with 'S' or 'P'
-details_df = details_df[details_df.index.str.startswith(('S', 'P'))]
+# Only keep rows where index starts with 'S' or 'P' and report what is being dropped
+valid_mask = details_df.index.str.startswith(('S', 'P'))
+if not valid_mask.all():
+    print("Warning: Dropping rows with invalid sample names:")
+    print(details_df[~valid_mask])
+details_df = details_df[valid_mask]
 
 details_df['dataset'] = dataset_name
 details_df = details_df.rename(columns={'gender': 'sex'})
 
 details_df = details_df[
     ['dataset', 'sex', 'age']]
+
+summarize_patient_details(details_df)
 
 details_df.to_csv(details_file)
 
