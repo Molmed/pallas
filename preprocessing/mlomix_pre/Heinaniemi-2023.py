@@ -4,7 +4,8 @@ from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR
 from preprocessing.helpers import silo_unlabeled, \
-    silo_remaining, format_mlomix_columns
+    silo_remaining, format_mlomix_columns, \
+    summarize_patient_details
 
 dataset_name = 'Heinaniemi-2023'
 print(f"Processing {dataset_name}...")
@@ -112,4 +113,5 @@ def age_range_to_midpoint(age_range):
 details_df['age'] = details_df['age_range'].apply(age_range_to_midpoint)
 details_df = details_df[
     ['dataset', 'sex', 'age']]
+summarize_patient_details(details_df)
 details_df.to_csv(details_file)
