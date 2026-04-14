@@ -4,7 +4,8 @@ from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR, GEX_EXCLUDE_SUBTYPES
 from preprocessing.helpers import add_to_silo, \
-    silo_unlabeled, silo_excluded, silo_remaining, format_mlomix_columns
+    silo_unlabeled, silo_excluded, silo_remaining, \
+        format_mlomix_columns, summarize_patient_details
 
 
 dataset_name = 'Krali-2023'
@@ -119,7 +120,7 @@ def process_dnam_file(filename, suffix, samplesheet_col):
         df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
 
 
-# # Read in and merge all beta matrix files
+# Read in and merge all beta matrix files
 for beta_matrix_file in dnam_beta_matrix_files:
     process_dnam_file(beta_matrix_file, 'betas', 'dnam_beta_matrix_file')
 
@@ -238,32 +239,31 @@ missing_details = pd.DataFrame(index=missing_samples, columns=['dataset', 'sex',
 missing_details.index.name = 'sample'
 missing_details['dataset'] = dataset_name
 
-# Copy details for missing samples
-for sample in missing_samples:
-    # If sample starts with "ALL" and ends with "_2" or "_r", look up the original sample
-    if sample.startswith("ALL") and (sample.endswith("_2") or sample.endswith("_3") or sample.endswith("_r")):
-        # Find the base sample name by removing the suffix
-        if sample.endswith("_r"):
-            base_sample = sample[:-2]  # Remove "_r"
-        else:
-            base_sample = sample[:-2]  # Remove "_2" or "_3"
-
-        # If the base sample exists in details_df, copy its age and sex
-        if base_sample in details_df.index:
-            missing_details.loc[sample, 'sex'] = details_df.loc[base_sample, 'Sex']
-            missing_details.loc[sample, 'age'] = details_df.loc[base_sample, 'Age']
-            print(f"Copied details for {sample} from {base_sample}")
-        else:
-            print(f"Base sample {base_sample} not found for {sample}")
-    # For samples like "Constitutional_*" or "*_B" or "*_T", leave as NaN
-    else:
-        print(f"No details to copy for {sample}")
-
 # Rename columns in details_df to match desired output format
 details_df = details_df.rename(columns={'Sex': 'sex', 'Age': 'age'})
 
 # Combine the original details and the missing details
 all_details = pd.concat([details_df[['dataset', 'sex', 'age']], missing_details])
+
+# Drop all rows missing either age or sex and report them
+missing_age_or_sex = all_details[all_details['age'].isna() | all_details['sex'].isna()]
+if not missing_age_or_sex.empty:
+    print("Samples missing age or sex details:")
+    print(missing_age_or_sex.index.to_list())
+all_details = all_details.dropna(subset=['age', 'sex'])
+
+# Drop all rows with "_r", "_2", or "_3" in the index, since those are replicates or relapses and we don't want to include them in the details file
+all_details = all_details[~all_details.index.str.endswith(("_r", "_2", "_3"))]
+
+# Drop all rows ending with "_B" or "_T" in the index, since those are controls and we don't want to include them in the details file
+all_details = all_details[~all_details.index.str.endswith(("_B", "_T"))]
+
+# Drop all rows starting with "Constitutional" in the index, since those are controls and we don't want to include them in the details file
+all_details = all_details[~all_details.index.str.startswith("Constitutional")]
+
+# Report details
+summarize_patient_details(all_details)
+
 # Save the combined details
 all_details.to_csv(details_file)
 
