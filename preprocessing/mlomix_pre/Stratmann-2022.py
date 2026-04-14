@@ -2,7 +2,8 @@ import pandas as pd
 import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
-    RAW_DATA_DIR, PREPROCESSED_DATA_DIR, GEX_EXCLUDE_SUBTYPES
+    RAW_DATA_DIR, PREPROCESSED_DATA_DIR, GEX_EXCLUDE_SUBTYPES, \
+        DNAM_EXCLUDE_SUBTYPES
 from preprocessing.helpers import add_to_silo, format_mlomix_columns, \
     silo_unlabeled, silo_remaining, \
     silo_unrecognized, silo_excluded, \
@@ -121,9 +122,11 @@ if multi_subtype_rows.any():
 
 # Get subtype translation
 tax = Taxonomy()
+# Merge excluded subtypes from GEX and DNAM
+all_excluded_subtypes = set(GEX_EXCLUDE_SUBTYPES) | set(DNAM_EXCLUDE_SUBTYPES)
 samplesheet_df['class'] = tax.translate_subtype_column(
     samplesheet_df['class'], split_delimiter=',',
-    exclude_subtypes=GEX_EXCLUDE_SUBTYPES)
+    exclude_subtypes=all_excluded_subtypes)
 
 # Silo unlabeled
 samplesheet_df = silo_unlabeled(samplesheet_df)

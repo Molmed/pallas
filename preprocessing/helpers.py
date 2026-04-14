@@ -1,3 +1,5 @@
+import pandas as pd
+
 # Function to add items to a silo
 def add_to_silo(samplesheet_df, items, silo_name, force=False):
     if force:
@@ -100,3 +102,33 @@ def deduplicate_patient_details_using_sample_suffix(suffix, details_df):
             print(f"Warning: Dropping sample {idx} from details_df because there is another sample with the same unique_patient_id {unique_patient_id} that does not end with {suffix}.")
             details_df.drop(idx, inplace=True)
     return details_df
+
+
+def process_dnam_file(samplesheet_df,
+                      dnam_dir,
+                      filename,
+                      suffix,
+                      samplesheet_col):
+    print(f"Processing {filename} for {samplesheet_col}...")
+    df = pd.read_csv(filename, index_col=0, delimiter='\t')
+    for col in df.columns:
+        # If there is a dot in the col name, remove it and everything after it
+        if '.' in col:
+            new_col = col.split('.')[0]
+            df = df.rename(columns={col: new_col})
+            col = new_col
+        output_file = f'{dnam_dir}/{col}.{suffix}.txt'
+        # Set 'dnam_beta_matrix_file' column for this sample in samplesheet_df
+        # First check that the sample is in samplesheet_df
+        if col not in samplesheet_df.index:
+            # If sample name starts with "Constitutional" or "cd", add it to the samplesheet_df with class "Control"
+            if col.startswith("Constitutional") or col.startswith("cd"):
+                print(f"Adding {col} to samplesheet_df with class 'Control'...")
+                samplesheet_df.loc[col, :] = pd.NA
+                samplesheet_df.at[col, 'class'] = 'Control'
+            else:
+                print(f"Warning: Sample {col} in {filename} not found in samplesheet_df index")
+                continue
+        samplesheet_df.loc[col, samplesheet_col] = output_file
+        df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
+    return samplesheet_df

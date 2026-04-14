@@ -2,10 +2,12 @@ import pandas as pd
 import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
-    RAW_DATA_DIR, PREPROCESSED_DATA_DIR, GEX_EXCLUDE_SUBTYPES
+    RAW_DATA_DIR, PREPROCESSED_DATA_DIR, \
+        GEX_EXCLUDE_SUBTYPES, DNAM_EXCLUDE_SUBTYPES
 from preprocessing.helpers import add_to_silo, \
     silo_unlabeled, silo_excluded, silo_remaining, \
-        format_mlomix_columns, summarize_patient_details
+        format_mlomix_columns, summarize_patient_details, \
+            process_dnam_file
 
 
 dataset_name = 'Krali-2023'
@@ -95,37 +97,12 @@ samplesheet_df['dnam_pvals_file'] = None
 samplesheet_df['gex_feature_counts_file'] = None
 
 
-def process_dnam_file(filename, suffix, samplesheet_col):
-    print(f"Processing {filename} for {samplesheet_col}...")
-    df = pd.read_csv(filename, index_col=0, delimiter='\t')
-    for col in df.columns:
-        # If there is a dot in the col name, remove it and everything after it
-        if '.' in col:
-            new_col = col.split('.')[0]
-            df = df.rename(columns={col: new_col})
-            col = new_col
-        output_file = f'{dnam_dir}/{col}.{suffix}.txt'
-        # Set 'dnam_beta_matrix_file' column for this sample in samplesheet_df
-        # First check that the sample is in samplesheet_df
-        if col not in samplesheet_df.index:
-            # If sample name starts with "Constitutional" or "cd", add it to the samplesheet_df with class "Control"
-            if col.startswith("Constitutional") or col.startswith("cd"):
-                print(f"Adding {col} to samplesheet_df with class 'Control'...")
-                samplesheet_df.loc[col, :] = pd.NA
-                samplesheet_df.at[col, 'class'] = 'Control'
-            else:
-                print(f"Warning: Sample {col} in {filename} not found in samplesheet_df index")
-                continue
-        samplesheet_df.loc[col, samplesheet_col] = output_file
-        df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
-
-
 # Read in and merge all beta matrix files
 for beta_matrix_file in dnam_beta_matrix_files:
-    process_dnam_file(beta_matrix_file, 'betas', 'dnam_beta_matrix_file')
+    samplesheet_df = process_dnam_file(samplesheet_df, dnam_dir, beta_matrix_file, 'betas', 'dnam_beta_matrix_file')
 
 for pvals_file in dnam_pvals_files:
-    process_dnam_file(pvals_file, 'pvals', 'dnam_pvals_file')
+    samplesheet_df = process_dnam_file(samplesheet_df, dnam_dir, pvals_file, 'pvals', 'dnam_pvals_file')
 
 # PROCESS GEX ########
 # Break up the gene expression file
@@ -169,9 +146,12 @@ samplesheet_df['class'] = samplesheet_df['class'].str.replace(
 
 # Get subtype translation
 tax = Taxonomy()
+# Merge excluded subtypes from GEX and DNAM
+all_excluded_subtypes = set(GEX_EXCLUDE_SUBTYPES) | set(DNAM_EXCLUDE_SUBTYPES)
+
 samplesheet_df['class'] = tax.translate_subtype_column(
     samplesheet_df['class'],
-    exclude_subtypes=GEX_EXCLUDE_SUBTYPES)
+    exclude_subtypes=all_excluded_subtypes)
 
 # Set batch to null if there is no gene expression data, since batch is only relevant for gene expression
 samplesheet_df.loc[samplesheet_df['gex_feature_counts_file'].isna(), 'batch'] = None
