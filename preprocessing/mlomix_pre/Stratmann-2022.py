@@ -6,7 +6,8 @@ from preprocessing.constants import \
 from preprocessing.helpers import add_to_silo, format_mlomix_columns, \
     silo_unlabeled, silo_remaining, \
     silo_unrecognized, silo_excluded, \
-    format_mlomix_columns
+    format_mlomix_columns, summarize_patient_details, \
+    deduplicate_patient_details_using_sample_suffix
 
 dataset_name = 'Stratmann-2022'
 print(f"Processing {dataset_name}...")
@@ -44,8 +45,31 @@ details_df = details_df[~details_df.index.str.startswith('BM')]
 # For sex, replace M with Male and F with Female
 details_df['sex'] = details_df['sex'].replace({'M': 'Male', 'F': 'Female'})
 
+# Create new col "unique_patient_id" which is the index but removing everything after dash
+details_df['unique_patient_id'] = details_df.index.str.split('-').str[0]
+
+suffixes_to_dedupe = [
+    'R3',
+    'R2',
+    'R2-P',
+    'R1',
+    'R1-P',
+    'PR'
+]
+
+for suffix in suffixes_to_dedupe:
+    details_df = deduplicate_patient_details_using_sample_suffix(suffix, details_df)
+
+# Report on all remaining duplicated unique patient ids
+duplicate_patients = details_df[details_df.duplicated(subset='unique_patient_id', keep=False)]
+if not duplicate_patients.empty:
+    print("Warning: There are still duplicate unique patient ids after deduplication:")
+    print(duplicate_patients)
+
 details_df = details_df[
     ['dataset', 'sex', 'age']]
+
+summarize_patient_details(details_df)
 
 details_df.to_csv(details_file)
 

@@ -85,3 +85,18 @@ def summarize_patient_details(df):
     print(f"Missing age: {missing_age}")
     print(f"Missing sex: {missing_sex}")
     print(f"Missing both: {missing_both}")
+
+
+def deduplicate_patient_details_using_sample_suffix(suffix, details_df):
+    samples = details_df[details_df.index.str.endswith(suffix)]
+    print(f"Deduplicating {suffix} samples:")
+    for idx, row in samples.iterrows():
+        unique_patient_id = row['unique_patient_id']
+        # Check if there is another sample with the same unique_patient_id that does not end with this suffix
+        other_samples = details_df[
+            (details_df['unique_patient_id'] == unique_patient_id) &
+            ~details_df.index.str.endswith(suffix)]
+        if not other_samples.empty:
+            print(f"Warning: Dropping sample {idx} from details_df because there is another sample with the same unique_patient_id {unique_patient_id} that does not end with {suffix}.")
+            details_df.drop(idx, inplace=True)
+    return details_df
