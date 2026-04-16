@@ -30,24 +30,23 @@ preprocessed_dir = f'{PREPROCESSED_DATA_DIR}/{dataset_name}'
 gex_output_dir = f'{preprocessed_dir}/gex'
 dnam_output_dir = f'{preprocessed_dir}/dnam'
 
-samplesheet_df, details_df = process_gdc_gex(
-    dataset_name,
-    clinical_file,
-    gex_samples_file,
-    gex_dir,
-    gex_output_dir)
+# samplesheet_df, details_df = process_gdc_gex(
+#     dataset_name,
+#     clinical_file,
+#     gex_samples_file,
+#     gex_dir,
+#     gex_output_dir)
 
-# Save files to output dir
-samplesheet_output_file = f'{preprocessed_dir}/samplesheet.csv'
-details_output_file = f'{preprocessed_dir}/patient_details.csv'
-samplesheet_df.to_csv(samplesheet_output_file, index=True)
-details_df.to_csv(details_output_file, index=True)
+# # Save files to output dir
+# samplesheet_output_file = f'{preprocessed_dir}/samplesheet.csv'
+# details_output_file = f'{preprocessed_dir}/patient_details.csv'
+# samplesheet_df.to_csv(samplesheet_output_file, index=True)
+# details_df.to_csv(details_output_file, index=True)
 
-
-exit()
 
 def process_geo_pheno_file(file_path):
-    samples = pd.DataFrame(columns=['id', 'target_sample_id', 'class'])
+    samples = pd.DataFrame(columns=['id', 'target_case_id', 'class', 'geo_dataset'])
+    geo_dataset = None
     with open(file_path, "r") as file:
         for line in file:
             # Tokenize line by tab and remove quotes from each token
@@ -56,6 +55,11 @@ def process_geo_pheno_file(file_path):
 
             if key == 'ID_REF':
                 samples['id'] = tokens
+            elif key == '!Series_geo_accession':
+                accession = tokens[0]
+                # If not empty, set geo_dataset to the accession
+                if accession:
+                    geo_dataset = accession
             elif key == '!Sample_title':
                 samples['title'] = tokens
             elif key == '!Sample_supplementary_file':
@@ -77,10 +81,26 @@ def process_geo_pheno_file(file_path):
             elif key == '!Sample_source_name_ch1':
                 samples['source'] = tokens
 
+    # Set geo_dataset column to the value of geo_dataset variable
+    samples['geo_dataset'] = geo_dataset
+
     # Perform secondary processing.
     # First process "title" column
-    # For each row, if title starts with "gDNA from normal human bone marrow"
-    # samples['is_normal'] = samples['title'].str.startswith("gDNA from normal human bone marrow")
+    # For each row, check if title starts with "gDNA from normal human bone marrow"
+    # If so, set class to "Control"
+    samples['class'] = samples['title'].apply(
+        lambda x: 'Control' if x.startswith('gDNA from normal human bone marrow') else '')
+
+    # If title starts with "gDNA from subject", set the last
+    # word of the title as the target_case_id
+    samples['target_case_id'] = samples['title'].apply(
+        lambda x: x.split()[-1] if x.startswith('gDNA from subject') else None)
+
+    # If "secondary_name" is set, set its value before the first underscore as the target_case_id
+    if 'secondary_name' in samples.columns:
+        samples['target_case_id'] = samples.apply(
+            lambda row: row['secondary_name'].split('_')[0] if pd.notna(row['secondary_name']) else row['target_case_id'],
+            axis=1)
 
     return samples
 
