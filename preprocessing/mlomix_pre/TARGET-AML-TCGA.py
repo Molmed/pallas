@@ -35,21 +35,23 @@ gex_output_dir = f'{preprocessed_dir}/gex'
 dnam_output_dir = f'{preprocessed_dir}/dnam'
 clinical_file = f'{data_path}/TCGA-LAML.clinical.tsv'
 
-gex_samplesheet_df, gex_details_df = process_gdc_gex(dataset_name,
-                                             clinical_file,
-                                             gex_samples_file,
-                                             gex_dir,
-                                             gex_output_dir)
-dnam_samplesheet_df, dnam_details_df = process_gdc_dnam(dataset_name,
-                                                        clinical_file,
-                                             dnam_samples_file,
-                                             dnam_subtypes_file,
-                                             dnam_dir,
-                                             dnam_output_dir)
+gex_samplesheet_df, gex_details_df = process_gdc_gex(
+    dataset_name,
+    clinical_file,
+    gex_samples_file,
+    gex_dir,
+    gex_output_dir)
+
+dnam_samplesheet_df, dnam_details_df = process_gdc_dnam(
+    dataset_name,
+    clinical_file,
+    dnam_samples_file,
+    dnam_subtypes_file,
+    dnam_dir,
+    dnam_output_dir)
 
 # Concatenate the details dataframes and save
 details_df = pd.concat([gex_details_df, dnam_details_df], axis=0)
-# Remove duplicates
 details_df = details_df[~details_df.index.duplicated(keep='first')]
 summarize_patient_details(details_df)
 details_output_file = f'{preprocessed_dir}/patient_details.csv'
