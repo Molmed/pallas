@@ -55,13 +55,10 @@ def silo_remaining(samplesheet_df, silo_name='labeled_diagnostic'):
 
 
 def format_mlomix_columns(df):
-    # The cols are as follows:
-    # data_silo,dataset,batch,class,gex_feature_counts_file,dnam_beta_matrix_file,dnam_pvals_file,sentrix_id,sentrix_position,idats_dir
-    # For the df, add empty columns for any that are missing and then put them in the right order
     expected_cols = [
         'data_silo', 'dataset', 'batch', 'class', 'gex_feature_counts_file',
         'dnam_beta_matrix_file', 'dnam_pvals_file', 'sentrix_id',
-        'sentrix_position', 'idats_dir'
+        'sentrix_position', 'idats_basename'
     ]
     # Ensure that index is named 'sample'
     df.index.name = 'sample'
