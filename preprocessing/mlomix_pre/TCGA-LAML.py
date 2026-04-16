@@ -3,7 +3,8 @@ from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR
 from preprocessing.helpers import summarize_patient_details, \
     process_gdc_gex, process_gdc_dnam, \
-    summarize_modalities
+    summarize_modalities, concatenate_detail_dfs, \
+    concatenate_samplesheets
 
 
 # INPUT FILES ########
@@ -38,12 +39,8 @@ dnam_samplesheet_df, dnam_details_df = process_gdc_dnam(
     dnam_dir,
     dnam_output_dir)
 
-# Concatenate the details dataframes and save
-details_df = pd.concat([gex_details_df, dnam_details_df], axis=0)
-details_df = details_df[~details_df.index.duplicated(keep='first')]
-summarize_patient_details(details_df)
-details_output_file = f'{preprocessed_dir}/patient_details.csv'
-details_df.to_csv(details_output_file, index=True)
+concatenate_detail_dfs(
+    gex_details_df, dnam_details_df, f'{preprocessed_dir}/patient_details.csv')
 
 # Indices are of the format TCGA-AB-2803-03A
 # Create new column "target_case_id" which removes the last segment, so TCGA-AB-2803
@@ -54,9 +51,5 @@ dnam_samplesheet_df['target_case_id'] = dnam_samplesheet_df.index.str.rsplit('-'
 gex_samplesheet_df = gex_samplesheet_df.set_index('target_case_id')
 dnam_samplesheet_df = dnam_samplesheet_df.set_index('target_case_id')
 
-g = gex_samplesheet_df.replace('', pd.NA)
-d = dnam_samplesheet_df.replace('', pd.NA)
-samplesheet_df = g.combine_first(d)
-samplesheet_output_file = f'{preprocessed_dir}/samplesheet.csv'
-samplesheet_df.to_csv(samplesheet_output_file, index=True)
-summarize_modalities(samplesheet_df)
+concatenate_samplesheets(
+    gex_samplesheet_df, dnam_samplesheet_df, f'{preprocessed_dir}/samplesheet.csv')

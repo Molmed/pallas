@@ -403,3 +403,20 @@ def process_gdc_dnam(dataset_name,
     samplesheet_df = format_mlomix_columns(samplesheet_df)
 
     return samplesheet_df, details_df
+
+
+def concatenate_detail_dfs(df1, df2, output_file):
+    details_df = pd.concat([df1, df2], axis=0)
+    details_df = details_df[~details_df.index.duplicated(keep='first')]
+    summarize_patient_details(details_df)
+    details_df.to_csv(output_file, index=True)
+    return details_df
+
+
+def concatenate_samplesheets(df1, df2, output_file):
+    g = df1.replace('', pd.NA)
+    d = df2.replace('', pd.NA)
+    samplesheet_df = g.combine_first(d)
+    samplesheet_df.to_csv(output_file, index=True)
+    summarize_modalities(samplesheet_df)
+    return samplesheet_df
