@@ -90,11 +90,11 @@ dnam_samplesheet_df['sample'] = dnam_samplesheet_df.index.map(lambda x: x.split(
 # Set new column as index
 dnam_samplesheet_df = dnam_samplesheet_df.set_index('sample')
 
-# Set 'idats_dir' column to the directory containing the idat files
-dnam_samplesheet_df['idats_dir'] = dnam_data_path
+# Set 'idats_basename' column to the directory containing the idat files
+dnam_samplesheet_df['idats_basename'] = dnam_data_path
 
 # Join the two samplesheets on the sample name, keeping all samples
-samplesheet_df = samplesheet_df.join(dnam_samplesheet_df[['Sentrix Barcode', 'Sample Section', 'idats_dir']], how='left')
+samplesheet_df = samplesheet_df.join(dnam_samplesheet_df[['Sentrix Barcode', 'Sample Section', 'idats_basename']], how='left')
 
 # Rename subtype column
 samplesheet_df = samplesheet_df.rename(columns={'Subtype': 'class'})

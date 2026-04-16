@@ -82,7 +82,7 @@ dnam_cols = [
     'dnam_pvals_file',
     'sentrix_id',
     'sentrix_position',
-    'idats_dir',
+    'idats_basename',
 ]
 
 for col in [gex_col] + dnam_cols:
