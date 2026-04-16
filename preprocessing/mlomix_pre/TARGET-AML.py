@@ -8,7 +8,7 @@ from preprocessing.helpers import add_to_silo, \
     silo_unlabeled, silo_excluded, silo_remaining, \
         format_mlomix_columns, summarize_patient_details, \
             process_dnam_file, process_gdc_gex, process_gdc_dnam, \
-                summarize_modalities
+                summarize_modalities, concatenate_detail_dfs, concatenate_samplesheets
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/TARGET-AML-TCGA-LAML'
@@ -17,7 +17,8 @@ geo_pheno_df_files = [
     f'{data_path}/GSE190931_series_matrix.txt',
 ]
 gex_dir = f'{data_path}/feature_counts'
-dnam_dir = f'{data_path}/betas'
+gdc_dnam_dir = f'{data_path}/gdc_betas'
+idats_dir = f'{data_path}/GSE124413_RAW'
 gex_samples_file = f'{data_path}/TARGET-AML-TCGA-LAML.samples.gex.tsv'
 dnam_samples_file = f'{data_path}/TARGET-AML-TCGA-LAML.samples.dnam.tsv'
 dnam_subtypes_file = f'{data_path}/TARGET-AML-TCGA-LAML.subtypes.dnam.tsv'
@@ -30,18 +31,33 @@ preprocessed_dir = f'{PREPROCESSED_DATA_DIR}/{dataset_name}'
 gex_output_dir = f'{preprocessed_dir}/gex'
 dnam_output_dir = f'{preprocessed_dir}/dnam'
 
-# samplesheet_df, details_df = process_gdc_gex(
-#     dataset_name,
-#     clinical_file,
-#     gex_samples_file,
-#     gex_dir,
-#     gex_output_dir)
+# First grab all the DNAm samples from GDC
 
-# # Save files to output dir
-# samplesheet_output_file = f'{preprocessed_dir}/samplesheet.csv'
-# details_output_file = f'{preprocessed_dir}/patient_details.csv'
-# samplesheet_df.to_csv(samplesheet_output_file, index=True)
-# details_df.to_csv(details_output_file, index=True)
+gex_samplesheet_df, gex_details_df = process_gdc_gex(
+    dataset_name,
+    clinical_file,
+    gex_samples_file,
+    gex_dir,
+    gex_output_dir)
+
+dnam_samplesheet_df, dnam_details_df = process_gdc_dnam(
+    dataset_name,
+    clinical_file,
+    dnam_samples_file,
+    dnam_subtypes_file,
+    gdc_dnam_dir,
+    dnam_output_dir)
+
+concatenate_detail_dfs(
+    gex_details_df, dnam_details_df, f'{preprocessed_dir}/patient_details.csv')
+
+concatenate_samplesheets(
+    gex_samplesheet_df, dnam_samplesheet_df, f'{preprocessed_dir}/samplesheet.csv')
+
+print(gex_samplesheet_df)
+print(dnam_samplesheet_df)
+exit()
+
 
 
 def process_geo_pheno_file(file_path):
@@ -101,6 +117,19 @@ def process_geo_pheno_file(file_path):
         samples['target_case_id'] = samples.apply(
             lambda row: row['secondary_name'].split('_')[0] if pd.notna(row['secondary_name']) else row['target_case_id'],
             axis=1)
+
+    # Process DNAm data differently based on accession
+    # For GSE124413, we need to point to the raw IDAT files using the file_1 and file_2 columns
+    idats_dir = f'{data_path}/GSE124413_RAW'
+
+    # if geo_dataset == 'GSE124413':
+    #     # Construct paths to raw IDAT data files using the file_1 and file_2 columns
+    #     grn =
+
+    # elif geo_dataset == 'GSE190931':
+    #     # For GSE190931, we need to construct the path to the DNAm data file using the id column
+    #     samples['dnam_file'] = samples['id'].apply(
+    #         lambda x: f'{dnam_dir}/{x}_beta_values.tsv')
 
     return samples
 
