@@ -153,10 +153,6 @@ def process_gdc_gex(dataset_name,
     # Only limit to items where 'Project Id' is the given dataset_name
     pheno_df = pheno_df[pheno_df['Project Id'] == dataset_name]
 
-    # For now, let's only keep Primary non-replicate samples
-    pheno_df = pheno_df[(pheno_df['Tumor Descriptor'] == 'Primary') &
-                        (pheno_df['Replicate'] == False)]
-
     # Read in details file
     # Index should be "cases.submitter_id"
     details_df = pd.read_csv(clinical_file,
@@ -195,9 +191,6 @@ def process_gdc_gex(dataset_name,
     # Fix samplesheet_df
     samplesheet_df = pheno_df
 
-    # Set Case ID as the index
-    samplesheet_df = samplesheet_df.set_index('Case ID', drop=True)
-
     # Rename index
     samplesheet_df.index.name = 'sample'
 
@@ -228,6 +221,20 @@ def process_gdc_gex(dataset_name,
     # Silo excluded and unrecognized
     samplesheet_df = silo_unrecognized(samplesheet_df)
     samplesheet_df = silo_excluded(samplesheet_df)
+
+    # Relapse mask is the samples whose 'Tumor Descriptor' is not 'Primary'
+    relapse_mask = samplesheet_df['Tumor Descriptor'] != 'Primary'
+    samplesheet_df = add_to_silo(
+        samplesheet_df,
+        samplesheet_df[relapse_mask].index,
+        'relapse')
+
+    # Replicate mask is the samples whose 'Replicate' column is True
+    replicate_mask = samplesheet_df['Replicate'] == True
+    samplesheet_df = add_to_silo(
+        samplesheet_df,
+        samplesheet_df[replicate_mask].index,
+        'replicate')
 
     # Silo remaining as labeled_diagnostic
     samplesheet_df = silo_remaining(samplesheet_df)
