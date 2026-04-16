@@ -10,13 +10,8 @@ from preprocessing.helpers import add_to_silo, \
             process_dnam_file, process_gdc_gex, process_gdc_dnam, \
                 summarize_modalities
 
-
-# In this file, we parse all the GDC data (TARGET-AML and TCGA-LAML)
-# plus the GEO data (GSE124413 and GSE190931) for TARGET-AML
-
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/TARGET-AML-TCGA-LAML'
-# clinical_file = f'{data_path}/TARGET-AML-TCGA-LAML.clinical.tsv'
 geo_pheno_df_files = [
     f'{data_path}/GSE124413_series_matrix.txt',
     f'{data_path}/GSE190931_series_matrix.txt',
@@ -26,80 +21,30 @@ dnam_dir = f'{data_path}/betas'
 gex_samples_file = f'{data_path}/TARGET-AML-TCGA-LAML.samples.gex.tsv'
 dnam_samples_file = f'{data_path}/TARGET-AML-TCGA-LAML.samples.dnam.tsv'
 dnam_subtypes_file = f'{data_path}/TARGET-AML-TCGA-LAML.subtypes.dnam.tsv'
+clinical_file = f'{data_path}/TARGET-AML.clinical.tsv'
 
-# First do TCGA, which is simpler because there is no GEO data
-dataset_name = 'TCGA-LAML'
+# OUTPUT FILES ########
+dataset_name = 'TARGET-AML'
 print(f"Processing {dataset_name}...")
 preprocessed_dir = f'{PREPROCESSED_DATA_DIR}/{dataset_name}'
 gex_output_dir = f'{preprocessed_dir}/gex'
 dnam_output_dir = f'{preprocessed_dir}/dnam'
-clinical_file = f'{data_path}/TCGA-LAML.clinical.tsv'
 
-gex_samplesheet_df, gex_details_df = process_gdc_gex(
+samplesheet_df, details_df = process_gdc_gex(
     dataset_name,
     clinical_file,
     gex_samples_file,
     gex_dir,
     gex_output_dir)
 
-dnam_samplesheet_df, dnam_details_df = process_gdc_dnam(
-    dataset_name,
-    clinical_file,
-    dnam_samples_file,
-    dnam_subtypes_file,
-    dnam_dir,
-    dnam_output_dir)
-
-# Concatenate the details dataframes and save
-details_df = pd.concat([gex_details_df, dnam_details_df], axis=0)
-details_df = details_df[~details_df.index.duplicated(keep='first')]
-summarize_patient_details(details_df)
-details_output_file = f'{preprocessed_dir}/patient_details.csv'
-details_df.to_csv(details_output_file, index=True)
-
-# Indices are of the format TCGA-AB-2803-03A
-# Create new column "target_case_id" which removes the last segment, so TCGA-AB-2803
-gex_samplesheet_df['target_case_id'] = gex_samplesheet_df.index.str.rsplit('-', n=1).str[0]
-dnam_samplesheet_df['target_case_id'] = dnam_samplesheet_df.index.str.rsplit('-', n=1).str[0]
-
-# Make target_case_id the index
-gex_samplesheet_df = gex_samplesheet_df.set_index('target_case_id')
-dnam_samplesheet_df = dnam_samplesheet_df.set_index('target_case_id')
-
-g = gex_samplesheet_df.replace('', pd.NA)
-d = dnam_samplesheet_df.replace('', pd.NA)
-samplesheet_df = g.combine_first(d)
+# Save files to output dir
 samplesheet_output_file = f'{preprocessed_dir}/samplesheet.csv'
+details_output_file = f'{preprocessed_dir}/patient_details.csv'
 samplesheet_df.to_csv(samplesheet_output_file, index=True)
-summarize_modalities(samplesheet_df)
+details_df.to_csv(details_output_file, index=True)
 
 
 exit()
-
-
-
-# # Save files to output dir
-# samplesheet_output_file = f'{preprocessed_dir}/samplesheet.csv'
-# details_output_file = f'{preprocessed_dir}/patient_details.csv'
-# samplesheet_df.to_csv(samplesheet_output_file, index=True)
-# details_df.to_csv(details_output_file, index=True)
-
-# Now TARGET-AML
-dataset_name = 'TARGET-AML'
-print(f"Processing {dataset_name}...")
-preprocessed_dir = f'{PREPROCESSED_DATA_DIR}/{dataset_name}'
-
-# samplesheet_df, details_df = process_gdc_gex(dataset_name,
-#                                              gex_clinical_file,
-#                                              gex_samples_file,
-#                                              gex_dir,
-#                                              preprocessed_dir)
-# # Save files to output dir
-# samplesheet_output_file = f'{preprocessed_dir}/samplesheet.csv'
-# details_output_file = f'{preprocessed_dir}/patient_details.csv'
-# samplesheet_df.to_csv(samplesheet_output_file, index=True)
-# details_df.to_csv(details_output_file, index=True)
-
 
 def process_geo_pheno_file(file_path):
     samples = pd.DataFrame(columns=['id', 'target_sample_id', 'class'])

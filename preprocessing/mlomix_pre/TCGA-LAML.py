@@ -13,6 +13,7 @@ dnam_dir = f'{data_path}/betas'
 gex_samples_file = f'{data_path}/TARGET-AML-TCGA-LAML.samples.gex.tsv'
 dnam_samples_file = f'{data_path}/TARGET-AML-TCGA-LAML.samples.dnam.tsv'
 dnam_subtypes_file = f'{data_path}/TARGET-AML-TCGA-LAML.subtypes.dnam.tsv'
+clinical_file = f'{data_path}/TCGA-LAML.clinical.tsv'
 
 dataset_name = 'TCGA-LAML'
 print(f"Processing {dataset_name}...")
@@ -21,7 +22,6 @@ print(f"Processing {dataset_name}...")
 preprocessed_dir = f'{PREPROCESSED_DATA_DIR}/{dataset_name}'
 gex_output_dir = f'{preprocessed_dir}/gex'
 dnam_output_dir = f'{preprocessed_dir}/dnam'
-clinical_file = f'{data_path}/TCGA-LAML.clinical.tsv'
 
 gex_samplesheet_df, gex_details_df = process_gdc_gex(
     dataset_name,
