@@ -195,6 +195,9 @@ for col in gex_df.columns:
 # Set batch column to blank string
 samplesheet_df['batch'] = ''
 
+# If any samples have duplicate sample ids, only keep first entry
+samplesheet_df = samplesheet_df[~samplesheet_df.index.duplicated(keep='first')]
+
 # Order columns
 samplesheet_df = format_mlomix_columns(samplesheet_df)
 
