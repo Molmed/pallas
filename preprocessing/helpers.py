@@ -1,7 +1,8 @@
 import pandas as pd
 import os
 from preprocessing.taxonomy import Taxonomy
-from preprocessing.constants import GEX_EXCLUDE_SUBTYPES
+from preprocessing.constants import GEX_EXCLUDE_SUBTYPES, \
+    DNAM_EXCLUDE_SUBTYPES
 
 # Function to add items to a silo
 def add_to_silo(samplesheet_df, items, silo_name, force=False):
@@ -92,6 +93,19 @@ def summarize_patient_details(df):
     print(f"Missing both: {missing_both}")
 
 
+def summarize_modalities(samplesheet_df):
+    num_gex_total = samplesheet_df['gex_feature_counts_file'].notna().sum()
+    num_dnam_total = samplesheet_df['dnam_beta_matrix_file'].notna().sum()
+    num_gex_only = ((samplesheet_df['gex_feature_counts_file'].notna()) & (samplesheet_df['dnam_beta_matrix_file'].isna())).sum()
+    num_dnam_only = ((samplesheet_df['gex_feature_counts_file'].isna()) & (samplesheet_df['dnam_beta_matrix_file'].notna())).sum()
+    num_both = ((samplesheet_df['gex_feature_counts_file'].notna()) & (samplesheet_df['dnam_beta_matrix_file'].notna())).sum()
+    print(f"Total samples with GEX data: {num_gex_total}")
+    print(f"Total samples with DNAm data: {num_dnam_total}")
+    print(f"Number of samples with GEX data only: {num_gex_only}")
+    print(f"Number of samples with DNAm data only: {num_dnam_only}")
+    print(f"Number of samples with both GEX and DNAm data: {num_both}")
+
+
 def deduplicate_patient_details_using_sample_suffix(suffix, details_df):
     samples = details_df[details_df.index.str.endswith(suffix)]
     print(f"Deduplicating {suffix} samples:")
@@ -137,22 +151,9 @@ def process_dnam_file(samplesheet_df,
     return samplesheet_df
 
 
-def process_gdc_gex(dataset_name,
-                    clinical_file,
-                    subtypes_file,
-                    raw_gex_dir,
-                    output_dir):
-
-    os.makedirs(output_dir, exist_ok=True)
-
-    # We only want the subtyped data, use the pre-processed subtypes file as guide
-    # create multiindex on Sample ID and Replicate
-    # Load the data
-    pheno_df = pd.read_csv(subtypes_file, sep='\t', index_col='Unique Sample ID')
-
-    # Only limit to items where 'Project Id' is the given dataset_name
-    pheno_df = pheno_df[pheno_df['Project Id'] == dataset_name]
-
+def process_gdc_clinical(dataset_name,
+                         clinical_file,
+                         case_ids):
     # Read in details file
     # Index should be "cases.submitter_id"
     details_df = pd.read_csv(clinical_file,
@@ -160,14 +161,13 @@ def process_gdc_gex(dataset_name,
                              sep='\t',
                              index_col='cases.submitter_id')
 
-    # Only keep cases that are in pheno_df 'Case ID' column
-    details_df = details_df[details_df.index.isin(pheno_df['Case ID'])]
+    # Only keep specified cases
+    details_df = details_df[details_df.index.isin(case_ids)]
 
     # Keep the following cols
     # diagnoses.age_at_diagnosis
     # demographic.gender
     details_df = details_df[['diagnoses.age_at_diagnosis', 'demographic.gender']]
-    details_df.index.name = 'case_id'
     details_df['dataset'] = dataset_name
     details_df = details_df.rename(
         columns={'demographic.gender': 'sex',
@@ -188,6 +188,30 @@ def process_gdc_gex(dataset_name,
     # Drop duplicates
     details_df = details_df[~details_df.index.duplicated(keep='first')]
 
+    return details_df
+
+
+def process_gdc_gex(dataset_name,
+                    clinical_file,
+                    samples_file,
+                    raw_gex_dir,
+                    output_dir):
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    # We only want the subtyped data, use the pre-processed subtypes file as guide
+    # create multiindex on Sample ID and Replicate
+    # Load the data
+    pheno_df = pd.read_csv(samples_file, sep='\t', index_col='Unique Sample ID')
+
+    # Only limit to items where 'Project Id' is the given dataset_name
+    pheno_df = pheno_df[pheno_df['Project Id'] == dataset_name]
+
+    # Get details_df
+    details_df = process_gdc_clinical(dataset_name,
+                                      clinical_file,
+                                      pheno_df['Case ID'])
+
     # Fix samplesheet_df
     samplesheet_df = pheno_df
 
@@ -207,7 +231,8 @@ def process_gdc_gex(dataset_name,
         split_delimiter=',',
         exclude_subtypes=GEX_EXCLUDE_SUBTYPES)
 
-    # Set data silo to empty string
+    # Set dataset_name
+    samplesheet_df['dataset'] = dataset_name
     samplesheet_df['data_silo'] = ''
     samplesheet_df['batch'] = ''
 
@@ -272,6 +297,107 @@ def process_gdc_gex(dataset_name,
 
     # Remove all rows from spreadsheet without feature_counts
     samplesheet_df = samplesheet_df[samplesheet_df['gex_feature_counts_file'].notna()]
+
+    # Order columns
+    samplesheet_df = format_mlomix_columns(samplesheet_df)
+
+    return samplesheet_df, details_df
+
+
+def process_gdc_dnam(dataset_name,
+                     clinical_file,
+                     samples_file,
+                     subtypes_file,
+                     betas_dir,
+                     output_dir):
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    # We only want the subtyped data, use the pre-processed subtypes file as guide
+    # create multiindex on Sample ID and Replicate
+    # Load the data
+    samples_df = pd.read_csv(samples_file, sep='\t', index_col='Sample ID')
+
+    # Only limit to items where 'Project Id' is the given dataset_name
+    samples_df = samples_df[samples_df['Project ID'] == dataset_name]
+
+    # Remove all normal samples, where Tissue Type is not 'Tumor'
+    samples_df = samples_df[samples_df['Tissue Type'] == 'Tumor']
+
+    # Read in subtypes file and merge with samples_df on 'Case ID' and 'cases.submitter_id'
+    subtypes_df = pd.read_csv(subtypes_file, sep='\t', index_col='cases.submitter_id')
+    samples_df = samples_df.merge(subtypes_df, left_on='Case ID', right_index=True, how='left')
+
+    # Drop items without a subtype
+    samples_df = samples_df[~samples_df['subtype'].isna()]
+
+    # Get details_df
+    details_df = process_gdc_clinical(dataset_name,
+                                      clinical_file,
+                                      samples_df['Case ID'])
+
+    # Fix samplesheet_df
+    samplesheet_df = samples_df
+
+    # Rename index
+    samplesheet_df.index.name = 'sample'
+
+    # Rename columns
+    samplesheet_df = samplesheet_df.rename(
+        columns={
+            'Project Id': 'dataset',
+            'subtype': 'class'})
+
+    # Get subtype translation
+    tax = Taxonomy()
+    samplesheet_df['class'] = tax.translate_subtype_column(
+        samplesheet_df['class'],
+        split_delimiter=',',
+        exclude_subtypes=DNAM_EXCLUDE_SUBTYPES)
+
+    samplesheet_df['dataset'] = dataset_name
+    samplesheet_df['data_silo'] = ''
+    samplesheet_df['batch'] = ''
+
+    # Put multiclass items in multiclass silo
+    multi_subtype_rows = samplesheet_df['class'].str.contains(';', na=False)
+    if multi_subtype_rows.any():
+        samplesheet_df = add_to_silo(
+            samplesheet_df,
+            samplesheet_df[multi_subtype_rows].index, 'multiclass')
+
+    # Silo excluded and unrecognized
+    samplesheet_df = silo_unrecognized(samplesheet_df)
+    samplesheet_df = silo_excluded(samplesheet_df)
+
+    # Relapse mask is the samples whose 'Tumor Descriptor' is not 'Primary'
+    relapse_mask = samplesheet_df['Tumor Descriptor'] != 'Primary'
+    samplesheet_df = add_to_silo(
+        samplesheet_df,
+        samplesheet_df[relapse_mask].index,
+        'relapse')
+
+    # # Replicate mask is the samples whose 'Replicate' column is True
+    # replicate_mask = samplesheet_df['Replicate'] == True
+    # samplesheet_df = add_to_silo(
+    #     samplesheet_df,
+    #     samplesheet_df[replicate_mask].index,
+    #     'replicate')
+
+    # Silo remaining as labeled_diagnostic
+    samplesheet_df = silo_remaining(samplesheet_df)
+
+    # Convert index to string
+    samplesheet_df.index = samplesheet_df.index.astype(str)
+
+    samplesheet_df['dnam_beta_matrix_file'] = None
+    for idx, row in samplesheet_df.iterrows():
+        # Open the filename and extract the gene_name and unstranded columns
+        betas_file = f"{betas_dir}/{row['File Name']}"
+        samplesheet_df.at[idx, 'dnam_beta_matrix_file'] = betas_file
+
+    # Remove all rows from spreadsheet without feature_counts
+    samplesheet_df = samplesheet_df[samplesheet_df['dnam_beta_matrix_file'].notna()]
 
     # Order columns
     samplesheet_df = format_mlomix_columns(samplesheet_df)
