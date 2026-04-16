@@ -66,7 +66,7 @@ dnam_samplesheet_df = dnam_samplesheet_df.set_index('target_case_id')
 
 g = gex_samplesheet_df.replace('', pd.NA)
 d = dnam_samplesheet_df.replace('', pd.NA)
-samplesheet_df = g.combine_first(d).fillna('')
+samplesheet_df = g.combine_first(d)
 samplesheet_output_file = f'{preprocessed_dir}/samplesheet.csv'
 samplesheet_df.to_csv(samplesheet_output_file, index=True)
 summarize_modalities(samplesheet_df)
