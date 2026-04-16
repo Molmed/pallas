@@ -7,28 +7,41 @@ from preprocessing.constants import \
 from preprocessing.helpers import add_to_silo, \
     silo_unlabeled, silo_excluded, silo_remaining, \
         format_mlomix_columns, summarize_patient_details, \
-            process_dnam_file
+            process_dnam_file, process_gdc_gex
 
 
-dataset_name = 'TARGET-AML'
-print(f"Processing {dataset_name}...")
+# In this file, we parse all the GDC data (TARGET-AML and TCGA-LAML)
+# plus the GEO data (GSE124413 and GSE190931) for TARGET-AML
 
 # INPUT FILES ########
-data_path = f'{RAW_DATA_DIR}/{dataset_name}'
+data_path = f'{RAW_DATA_DIR}/TARGET-AML-TCGA'
 geo_pheno_df_files = [
     f'{data_path}/GSE124413_series_matrix.txt',
     f'{data_path}/GSE190931_series_matrix.txt',
 ]
+gex_dir = f'{data_path}/feature_counts'
+gex_clinical_file = f'{data_path}/TARGET-AML-TCGA.clinical.tsv'
+gex_subtypes_file = f'{data_path}/TARGET-AML-TCGA.subtypes.tsv'
 
-# OUTPUT FILES ########
+# First do TCGA, which is simpler
+dataset_name = 'TCGA-LAML'
+print(f"Processing {dataset_name}...")
 preprocessed_dir = f'{PREPROCESSED_DATA_DIR}/{dataset_name}'
-samplesheet_output_file = \
-    f'{preprocessed_dir}/samplesheet.csv'
-details_file = \
-    f'{preprocessed_dir}/patient_details.csv'
 
-# Make processed dir if not exists
-os.makedirs(preprocessed_dir, exist_ok=True)
+samplesheet_df, details_df = process_gdc_gex(dataset_name,
+                                             gex_clinical_file,
+                                             gex_subtypes_file,
+                                             gex_dir,
+                                             preprocessed_dir)
+# Save files to output dir
+samplesheet_output_file = f'{preprocessed_dir}/samplesheet.csv'
+details_output_file = f'{preprocessed_dir}/patient_details.csv'
+samplesheet_df.to_csv(samplesheet_output_file, index=True)
+details_df.to_csv(details_output_file, index=True)
+
+exit()
+
+dataset_name = 'TARGET-AML'
 
 
 def read_geo_pheno_file(file_path):
