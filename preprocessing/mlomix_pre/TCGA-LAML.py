@@ -9,7 +9,7 @@ from preprocessing.helpers import summarize_patient_details, \
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/TARGET-AML-TCGA-LAML'
 gex_dir = f'{data_path}/feature_counts'
-dnam_dir = f'{data_path}/betas'
+dnam_dir = f'{data_path}/gdc_betas'
 gex_samples_file = f'{data_path}/TARGET-AML-TCGA-LAML.samples.gex.tsv'
 dnam_samples_file = f'{data_path}/TARGET-AML-TCGA-LAML.samples.dnam.tsv'
 dnam_subtypes_file = f'{data_path}/TARGET-AML-TCGA-LAML.subtypes.dnam.tsv'
