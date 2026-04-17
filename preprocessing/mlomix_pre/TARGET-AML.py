@@ -8,7 +8,7 @@ from preprocessing.helpers import add_to_silo, \
     silo_unlabeled, silo_excluded, silo_remaining, \
         format_mlomix_columns, summarize_patient_details, \
             process_dnam_file, process_gdc_gex, process_gdc_dnam, \
-                summarize_modalities, concatenate_detail_dfs, concatenate_samplesheets
+                summarize_modalities, concatenate_detail_dfs, concatenate_samplesheets, process_gdc_clinical
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/TARGET-AML-TCGA-LAML'
@@ -125,19 +125,16 @@ def process_geo_pheno_file(file_path):
 df_GSE124413 = process_geo_pheno_file(pheno_df_GSE124413)
 df_GSE190931 = process_geo_pheno_file(pheno_df_GSE190931)
 
+# Get details_df
+# details_df = process_gdc_clinical(dataset_name,
+#                                     clinical_file,
+#                                     samples_df['Case ID'])
+
 # Post-process them individually since they are formatted differently
 # and have different kinds of input dnam data
 
-# PROCESS GSE124413
-raw_idats_dir = f'{data_path}/GSE124413_RAW'
-processed_idats_dir = f'{dnam_output_dir}/GSE124413'
-# Make if it doesn't exist
-os.makedirs(processed_idats_dir, exist_ok=True)
 
-# Loop through each row and assign dnam file values accordingly
-for index, row in df_GSE124413.iterrows():
-    if row['geo_dataset'] != 'GSE124413':
-        continue
+def process_idat_path(df, index, row, raw_idats_dir, processed_idats_dir):
     # file_name is just the basename, extract end of url
     file_name = os.path.basename(row['file_1']) if pd.notna(row['file_1']) else None
     file_path = f'{raw_idats_dir}/{file_name}'
@@ -149,16 +146,37 @@ for index, row in df_GSE124413.iterrows():
         if not os.path.exists(output_file_path):
             print(f"Processing {file_path} to {output_file_path}...")
             os.system(f"gunzip -c {file_path} > {output_file_path}")
-        df_GSE124413.at[index, 'idats_basename'] = processed_idats_dir
+        df.at[index, 'idats_basename'] = processed_idats_dir
         # Filename is of the format GSM3532234_200991620105_R05C01_Grn.idat.gz
         # Extract the sentrix id and position from the filename
         sentrix_id = file_name.split('_')[1]
         sentrix_position = file_name.split('_')[2].split('.')[0]
-        df_GSE124413.at[index, 'sentrix_id'] = sentrix_id
-        df_GSE124413.at[index, 'sentrix_position'] = sentrix_position
+        df.at[index, 'sentrix_id'] = sentrix_id
+        df.at[index, 'sentrix_position'] = sentrix_position
+
+
+# PROCESS GSE124413
+raw_idats_dir = f'{data_path}/GSE124413_RAW'
+processed_idats_dir = f'{dnam_output_dir}/GSE124413'
+# Make if it doesn't exist
+os.makedirs(processed_idats_dir, exist_ok=True)
+
+# Rename gender column to sex
+df_GSE124413 = df_GSE124413.rename(columns={'gender': 'sex'})
+
+# Loop through each row and assign dnam file values accordingly
+for index, row in df_GSE124413.iterrows():
+    process_idat_path(df_GSE124413, index, row, raw_idats_dir, processed_idats_dir)
+
 
 # PROCESS GSE190931
-# For these samples, we have beta matrix and pvals files
+# For these samples, we have beta matrix and pvals files for most (but not all!) samples
+# First get those few that have raw idats
+raw_idats_dir = f'{data_path}/GSE190931_RAW'
+processed_idats_dir = f'{dnam_output_dir}/GSE190931'
+for index, row in df_GSE190931.iterrows():
+    process_idat_path(df_GSE190931, index, row, raw_idats_dir, processed_idats_dir)
+
 processed_betas_dir = f'{dnam_output_dir}/GSE190931'
 df_GSE190931 = process_dnam_file(
     df_GSE190931,
@@ -172,6 +190,9 @@ df_GSE190931 = process_dnam_file(
     pvals_file,
     'pvals',
     'dnam_pvals_file')
+
+# Copy fusion column to class
+df_GSE190931['class'] = df_GSE190931['fusion']
 
 samplesheet_df = pd.concat([df_GSE124413, df_GSE190931], axis=0)
 print(samplesheet_df)
