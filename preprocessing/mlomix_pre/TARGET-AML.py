@@ -195,6 +195,18 @@ df_GSE190931 = process_dnam_file(
 df_GSE190931['class'] = df_GSE190931['fusion']
 
 samplesheet_df = pd.concat([df_GSE124413, df_GSE190931], axis=0)
+
+# Create new column target-submitter-id which is e.g. "TARGET-20-PARCAU"
+# so preface id with "TARGET-20-"
+samplesheet_df['target-submitter-id'] = 'TARGET-20-' + samplesheet_df['target_case_id']
+
+# Read in '/home/mariya/Data/pallas/raw/TARGET-AML.subtypes.tsv'
+# then join samplesheet on target-submitter-id
+subtypes_df = pd.read_csv('/home/mariya/Data/pallas/raw/TARGET-AML-TCGA-LAML/TARGET-AML.subtypes.tsv', sep=',')
+# rename cases.submitter_id to target-submitter-id
+subtypes_df = subtypes_df.rename(columns={'cases.submitter_id': 'target-submitter-id'})
+samplesheet_df = samplesheet_df.merge(subtypes_df[['target-submitter-id', 'subtype']], on='target-submitter-id', how='left')
+
 print(samplesheet_df)
 # dump to csv
 tmp_output_file = f'{preprocessed_dir}/dnam_samplesheet.csv'
