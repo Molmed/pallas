@@ -270,6 +270,36 @@ samplesheet_df = add_to_silo(
 
 samplesheet_df = silo_remaining(samplesheet_df)
 
+# Rename target-submitter-id to sample
+samplesheet_df = samplesheet_df.rename(columns={'target-submitter-id': 'sample'})
+
+# Set sample as the index
+samplesheet_df = samplesheet_df.set_index('sample')
+
+# Process age
+samplesheet_df['age at diagnosis (days)'] = pd.to_numeric(
+    samplesheet_df['age at diagnosis (days)'], errors='coerce')
+samplesheet_df['age (years)'] = pd.to_numeric(
+    samplesheet_df['age (years)'], errors='coerce')
+
+# Process column "age at diagnosis (days)"
+# For each row, if the value is not empty, convert it to years and copy it to age (years)
+samplesheet_df['age (years)'] = samplesheet_df.apply(
+    lambda row: row['age at diagnosis (days)'] / 365.25 if pd.notna(row['age at diagnosis (days)']) else row['age (years)'],
+    axis=1)
+
+# Round age (years) to 1 decimal place
+samplesheet_df['age (years)'] = samplesheet_df['age (years)'].round(1)
+
+# Rename it to age
+samplesheet_df = samplesheet_df.rename(columns={'age (years)': 'age'})
+
+# Save details
+details_df = samplesheet_df[['dataset', 'sex', 'age']].copy()
+
+print(details_df)
+exit()
+
 print(samplesheet_df)
 # dump to csv
 tmp_output_file = f'{preprocessed_dir}/dnam_samplesheet.csv'
