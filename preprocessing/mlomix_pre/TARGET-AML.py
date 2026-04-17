@@ -14,7 +14,7 @@ from preprocessing.helpers import add_to_silo, \
 data_path = f'{RAW_DATA_DIR}/TARGET-AML-TCGA-LAML'
 geo_pheno_df_files = [
     f'{data_path}/GSE124413_series_matrix.txt',
-    f'{data_path}/GSE190931_series_matrix.txt',
+    # f'{data_path}/GSE190931_series_matrix.txt',
 ]
 gex_dir = f'{data_path}/feature_counts'
 gdc_dnam_dir = f'{data_path}/gdc_betas'
@@ -32,36 +32,34 @@ gex_output_dir = f'{preprocessed_dir}/gex'
 dnam_output_dir = f'{preprocessed_dir}/dnam'
 
 # First grab all the DNAm samples from GDC
+# gex_samplesheet_df, gex_details_df = process_gdc_gex(
+#     dataset_name,
+#     clinical_file,
+#     gex_samples_file,
+#     gex_dir,
+#     gex_output_dir)
 
-gex_samplesheet_df, gex_details_df = process_gdc_gex(
-    dataset_name,
-    clinical_file,
-    gex_samples_file,
-    gex_dir,
-    gex_output_dir)
+# dnam_samplesheet_df, dnam_details_df = process_gdc_dnam(
+#     dataset_name,
+#     clinical_file,
+#     dnam_samples_file,
+#     dnam_subtypes_file,
+#     gdc_dnam_dir,
+#     dnam_output_dir)
 
-dnam_samplesheet_df, dnam_details_df = process_gdc_dnam(
-    dataset_name,
-    clinical_file,
-    dnam_samples_file,
-    dnam_subtypes_file,
-    gdc_dnam_dir,
-    dnam_output_dir)
+# concatenate_detail_dfs(
+#     gex_details_df, dnam_details_df, f'{preprocessed_dir}/patient_details.csv')
 
-concatenate_detail_dfs(
-    gex_details_df, dnam_details_df, f'{preprocessed_dir}/patient_details.csv')
-
-concatenate_samplesheets(
-    gex_samplesheet_df, dnam_samplesheet_df, f'{preprocessed_dir}/samplesheet.csv')
-
-print(gex_samplesheet_df)
-print(dnam_samplesheet_df)
-exit()
-
+# concatenate_samplesheets(
+#     gex_samplesheet_df, dnam_samplesheet_df, f'{preprocessed_dir}/samplesheet.csv')
 
 
 def process_geo_pheno_file(file_path):
-    samples = pd.DataFrame(columns=['id', 'target_case_id', 'class', 'geo_dataset'])
+    samples = pd.DataFrame(columns=['id',
+                                    'target_case_id',
+                                    'class',
+                                    'geo_dataset',
+                                    'idats_basename'])
     geo_dataset = None
     with open(file_path, "r") as file:
         for line in file:
@@ -119,12 +117,47 @@ def process_geo_pheno_file(file_path):
             axis=1)
 
     # Process DNAm data differently based on accession
-    # For GSE124413, we need to point to the raw IDAT files using the file_1 and file_2 columns
-    idats_dir = f'{data_path}/GSE124413_RAW'
+    raw_idats_dir = f'{data_path}/GSE124413_RAW'
+    processed_idats_dir = f'{dnam_output_dir}/GSE124413'
+    # Make if it doesn't exist
+    os.makedirs(processed_idats_dir, exist_ok=True)
+
+    # Loop through each row and assign dnam file values accordingly
+    for index, row in samples.iterrows():
+        # get geo_dataset value for the row
+        row_geo_dataset = row['geo_dataset']
+        print(f"Processing row {index} with geo_dataset {row_geo_dataset}...")
+        if row_geo_dataset == 'GSE124413':
+            # Get file 1
+            file_names = [row.get('file_1', None), row.get('file_2', None)]
+            for file_name in file_names:
+                # file_name is just the basename, extract end of url
+                file_name = os.path.basename(file_name) if pd.notna(file_name) else None
+                print(f"Checking file {file_name}...")
+                file_path = f'{raw_idats_dir}/{file_name}'
+                if pd.notna(file_name) and os.path.exists(file_path):
+                    # ungzip file to processed_idats_dir
+                    # have the same name but strip the sample name
+                    # which is before the first underscore
+                    output_file_path = f"{processed_idats_dir}/{file_name.split('_', 1)[1].replace('.gz', '')}"
+                    if not os.path.exists(output_file_path):
+                        print(f"Processing {file_path} to {output_file_path}...")
+                        os.system(f"gunzip -c {file_path} > {output_file_path}")
+                    samples.at[index, 'idats_basename'] = processed_idats_dir
+                    # Filename is of the format GSM3532234_200991620105_R05C01_Grn.idat.gz
+                    # Extract the sentrix id and position from the filename
+                    sentrix_id = file_name.split('_')[1]
+                    sentrix_position = file_name.split('_')[2].split('.')[0]
+                    samples.at[index, 'sentrix_id'] = sentrix_id
+                    samples.at[index, 'sentrix_position'] = sentrix_position
 
     # if geo_dataset == 'GSE124413':
-    #     # Construct paths to raw IDAT data files using the file_1 and file_2 columns
-    #     grn =
+
+        # For GSE124413, we need to point to the raw IDAT files using the file_1 and file_2 columns
+        # idats_dir = f'{data_path}/GSE124413_RAW'
+        # # Set 'idats_basename' to file_1 minus the "_Grn.idat"
+        # samples['idats_basename'] = samples['file_1'].apply(
+        #     lambda x: f"{idats_dir}/{x.replace('_Grn.idat', '')}" if pd.notna(x) else None)
 
     # elif geo_dataset == 'GSE190931':
     #     # For GSE190931, we need to construct the path to the DNAm data file using the id column
