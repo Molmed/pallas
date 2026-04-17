@@ -5,7 +5,7 @@ from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR, \
         GEX_EXCLUDE_SUBTYPES, DNAM_EXCLUDE_SUBTYPES
 from preprocessing.helpers import add_to_silo, \
-    silo_unlabeled, silo_excluded, silo_remaining, \
+    silo_unlabeled, silo_excluded, silo_unrecognized, silo_remaining, \
         format_mlomix_columns, summarize_patient_details, \
             process_dnam_file, process_gdc_gex, process_gdc_dnam, \
                 summarize_modalities, concatenate_detail_dfs, concatenate_samplesheets, process_gdc_clinical
@@ -121,6 +121,7 @@ def process_geo_pheno_file(file_path):
 
     return samples
 
+
 # Process the GEO pheno files
 df_GSE124413 = process_geo_pheno_file(pheno_df_GSE124413)
 df_GSE190931 = process_geo_pheno_file(pheno_df_GSE190931)
@@ -199,6 +200,10 @@ df_GSE190931['class'] = df_GSE190931['fusion']
 
 samplesheet_df = pd.concat([df_GSE124413, df_GSE190931], axis=0)
 
+# Merge Sex column into sex, keeping all non-empty values
+samplesheet_df['sex'] = samplesheet_df.apply(
+    lambda row: row['Sex'] if pd.notna(row['Sex']) else row['sex'], axis=1)
+
 # Create new column target-submitter-id which is e.g. "TARGET-20-PARCAU"
 # so preface id with "TARGET-20-"
 samplesheet_df['target-submitter-id'] = 'TARGET-20-' + samplesheet_df['target_case_id']
@@ -236,6 +241,34 @@ samplesheet_df['class'] = tax.translate_subtype_column(
 samplesheet_df['class'] = samplesheet_df.apply(
     lambda row: row['subtype_gdc'] if row['class'] == 'AML, other' and pd.notna(row['subtype_gdc']) else row['class'],
     axis=1)
+
+# Set dataset_name
+samplesheet_df['dataset'] = dataset_name
+samplesheet_df['data_silo'] = ''
+samplesheet_df['batch'] = ''
+
+# Put multiclass items in multiclass silo
+multi_subtype_rows = samplesheet_df['class'].str.contains(';', na=False)
+if multi_subtype_rows.any():
+    samplesheet_df = add_to_silo(
+        samplesheet_df,
+        samplesheet_df[multi_subtype_rows].index, 'multiclass')
+
+# Silo unlabeled
+samplesheet_df = silo_unlabeled(samplesheet_df)
+
+# Silo excluded and unrecognized
+samplesheet_df = silo_unrecognized(samplesheet_df)
+samplesheet_df = silo_excluded(samplesheet_df)
+
+# Relapse mask is the samples whose 'timepoint' is 'Relapse'
+relapse_mask = samplesheet_df['timepoint'] == 'Relapse'
+samplesheet_df = add_to_silo(
+    samplesheet_df,
+    samplesheet_df[relapse_mask].index,
+    'relapse')
+
+samplesheet_df = silo_remaining(samplesheet_df)
 
 print(samplesheet_df)
 # dump to csv
