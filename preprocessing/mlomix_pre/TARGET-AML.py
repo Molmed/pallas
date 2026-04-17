@@ -32,26 +32,26 @@ gex_output_dir = f'{preprocessed_dir}/gex'
 dnam_output_dir = f'{preprocessed_dir}/dnam'
 
 # First grab all the DNAm samples from GDC
-# gex_samplesheet_df, gex_details_df = process_gdc_gex(
-#     dataset_name,
-#     clinical_file,
-#     gex_samples_file,
-#     gdc_gex_dir,
-#     gex_output_dir)
+gex_samplesheet_df, gex_details_df = process_gdc_gex(
+    dataset_name,
+    clinical_file,
+    gex_samples_file,
+    gdc_gex_dir,
+    gex_output_dir)
 
-# dnam_samplesheet_df, dnam_details_df = process_gdc_dnam(
-#     dataset_name,
-#     clinical_file,
-#     dnam_samples_file,
-#     dnam_subtypes_file,
-#     gdc_dnam_dir,
-#     dnam_output_dir)
+dnam_samplesheet_df, dnam_details_df = process_gdc_dnam(
+    dataset_name,
+    clinical_file,
+    dnam_samples_file,
+    dnam_subtypes_file,
+    gdc_dnam_dir,
+    dnam_output_dir)
 
-# concatenate_detail_dfs(
-#     gex_details_df, dnam_details_df, f'{preprocessed_dir}/patient_details.csv')
+gdc_details_df = concatenate_detail_dfs(
+    gex_details_df, dnam_details_df, f'{preprocessed_dir}/patient_details.csv')
 
-# concatenate_samplesheets(
-#     gex_samplesheet_df, dnam_samplesheet_df, f'{preprocessed_dir}/samplesheet.csv')
+gdc_samplesheet = concatenate_samplesheets(
+    gex_samplesheet_df, dnam_samplesheet_df, f'{preprocessed_dir}/samplesheet.csv')
 
 
 def process_geo_pheno_file(file_path):
@@ -191,6 +191,9 @@ df_GSE190931 = process_dnam_file(
     'pvals',
     'dnam_pvals_file')
 
+# Set "None" values in fusion column to empty string
+df_GSE190931['fusion'] = df_GSE190931['fusion'].replace('None', '')
+
 # Copy fusion column to class
 df_GSE190931['class'] = df_GSE190931['fusion']
 
@@ -200,12 +203,39 @@ samplesheet_df = pd.concat([df_GSE124413, df_GSE190931], axis=0)
 # so preface id with "TARGET-20-"
 samplesheet_df['target-submitter-id'] = 'TARGET-20-' + samplesheet_df['target_case_id']
 
-# Read in '/home/mariya/Data/pallas/raw/TARGET-AML.subtypes.tsv'
-# then join samplesheet on target-submitter-id
-subtypes_df = pd.read_csv('/home/mariya/Data/pallas/raw/TARGET-AML-TCGA-LAML/TARGET-AML.subtypes.tsv', sep=',')
-# rename cases.submitter_id to target-submitter-id
-subtypes_df = subtypes_df.rename(columns={'cases.submitter_id': 'target-submitter-id'})
-samplesheet_df = samplesheet_df.merge(subtypes_df[['target-submitter-id', 'subtype']], on='target-submitter-id', how='left')
+# Fill in subtypes from all possible sources
+# First, match to samples in the gdc samplesheet. Copy gdc_samplesheet to new df
+gdc_samplesheet_copy = gdc_samplesheet.copy()
+# sample column is in format "TARGET-20-PABHET-03A_R1". Discard everything after underscore
+gdc_samplesheet_copy['target-submitter-id'] = gdc_samplesheet_copy.index.str.split('_').str[0]
+# Now discard everything after the last dash to get the target_case_id
+gdc_samplesheet_copy['target-submitter-id'] = gdc_samplesheet_copy['target-submitter-id'].str.split('-').str[:-1].str.join('-')
+# Rename class to subtype
+gdc_samplesheet_copy.rename(columns={'class': 'subtype_gdc'}, inplace=True)
+
+# Now merge on target-submitter-id to get the subtypes from gdc samplesheet
+gdc_samplesheet_copy = gdc_samplesheet_copy[['target-submitter-id', 'subtype_gdc']]
+
+# Drop duplicates
+gdc_samplesheet_copy = gdc_samplesheet_copy.drop_duplicates(subset=['target-submitter-id'])
+
+# Combine with samplesheet_df
+samplesheet_df = samplesheet_df.merge(gdc_samplesheet_copy, on='target-submitter-id', how='left')
+
+# Replace empty class values with "AML, other"
+samplesheet_df['class'] = samplesheet_df['class'].replace('', 'AMLNOS')
+
+# Translate them
+# Get subtype translation
+tax = Taxonomy()
+samplesheet_df['class'] = tax.translate_subtype_column(
+    samplesheet_df['class'],
+    exclude_subtypes=DNAM_EXCLUDE_SUBTYPES)
+
+# For each row, if class is empty, but subtype_gdc is not empty, copy subtype_gdc to class
+samplesheet_df['class'] = samplesheet_df.apply(
+    lambda row: row['subtype_gdc'] if row['class'] == 'AML, other' and pd.notna(row['subtype_gdc']) else row['class'],
+    axis=1)
 
 print(samplesheet_df)
 # dump to csv
