@@ -124,6 +124,33 @@ def process_dnam_file(samplesheet_df,
                       suffix,
                       samplesheet_col):
     print(f"Processing {filename} for {samplesheet_col}...")
+
+    # First read in samplesheet, get all sample indices, and see if files already exist for all of them
+    # If so, just fill in the relevant column and return to avoid reading in the huge dnam files
+    sample_indices = samplesheet_df.index
+    all_files_exist = True
+    for idx in sample_indices:
+        output_file = f'{dnam_dir}/{idx}.{suffix}.txt'
+
+        # Check if idats_basename at this row is a string with len > 1
+        idats_basename = samplesheet_df.at[idx, 'idats_basename']
+        if isinstance(idats_basename, str) and len(idats_basename) > 1:
+            print(f"Sample {idx} has idats_basename {idats_basename}, skipping checking for {output_file} since we already have raw data for this sample.")
+            continue
+
+        if os.path.exists(output_file):
+            samplesheet_df.at[idx, samplesheet_col] = output_file
+        else:
+            print(f"{output_file} does not exist.")
+            all_files_exist = False
+    if all_files_exist:
+        print(f"All files for {filename} already exist, skipping processing this file.")
+        return samplesheet_df
+
+    print(f"Not all files for {filename} exist, processing this file to extract data for each sample...")
+
+    # Create dnam dir if it doesn't exist
+    os.makedirs(dnam_dir, exist_ok=True)
     df = pd.read_csv(filename, index_col=0, delimiter='\t')
     for col in df.columns:
         # If there is a dot in the col name, remove it and everything after it
@@ -144,6 +171,10 @@ def process_dnam_file(samplesheet_df,
                 print(f"Warning: Sample {col} in {filename} not found in samplesheet_df index")
                 continue
         samplesheet_df.loc[col, samplesheet_col] = output_file
+        # Check that file does not exist before outputting it, otherwise print warning
+        if os.path.exists(output_file):
+            print(f"Warning: {output_file} already exists, skipping writing this file.")
+            continue
         df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
     return samplesheet_df
 
@@ -374,13 +405,6 @@ def process_gdc_dnam(dataset_name,
         samplesheet_df[relapse_mask].index,
         'relapse')
 
-    # # Replicate mask is the samples whose 'Replicate' column is True
-    # replicate_mask = samplesheet_df['Replicate'] == True
-    # samplesheet_df = add_to_silo(
-    #     samplesheet_df,
-    #     samplesheet_df[replicate_mask].index,
-    #     'replicate')
-
     # Silo remaining as labeled_diagnostic
     samplesheet_df = silo_remaining(samplesheet_df)
 
@@ -405,6 +429,8 @@ def process_gdc_dnam(dataset_name,
 def concatenate_detail_dfs(df1, df2, output_file):
     details_df = pd.concat([df1, df2], axis=0)
     details_df = details_df[~details_df.index.duplicated(keep='first')]
+    # Rename index to sample
+    details_df.index.name = 'sample'
     summarize_patient_details(details_df)
     details_df.to_csv(output_file, index=True)
     return details_df
