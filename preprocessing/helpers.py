@@ -447,7 +447,6 @@ def concatenate_samplesheets(df1, df2, output_file):
     g = df1.replace('', pd.NA)
     d = df2.replace('', pd.NA)
     samplesheet_df = g.combine_first(d)
-    samplesheet_df.to_csv(output_file, index=True)
     # Rename index to sample
     samplesheet_df.index.name = 'sample'
     # If beta matrix is specified but idats_basename is also specified,
@@ -459,4 +458,5 @@ def concatenate_samplesheets(df1, df2, output_file):
         print(samplesheet_df[mask].index.tolist())
         samplesheet_df.loc[mask, 'dnam_beta_matrix_file'] = pd.NA
     summarize_modalities(samplesheet_df)
+    samplesheet_df.to_csv(output_file, index=True)
     return samplesheet_df
