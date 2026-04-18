@@ -448,5 +448,7 @@ def concatenate_samplesheets(df1, df2, output_file):
     d = df2.replace('', pd.NA)
     samplesheet_df = g.combine_first(d)
     samplesheet_df.to_csv(output_file, index=True)
+    # Rename index to sample
+    samplesheet_df.index.name = 'sample'
     summarize_modalities(samplesheet_df)
     return samplesheet_df
