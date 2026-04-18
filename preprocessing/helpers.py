@@ -264,6 +264,13 @@ def process_gdc_gex(dataset_name,
     samplesheet_df['data_silo'] = ''
     samplesheet_df['batch'] = ''
 
+    # Replicate mask is the samples whose 'Replicate' column is True
+    replicate_mask = samplesheet_df['Replicate'] == True
+    samplesheet_df = add_to_silo(
+        samplesheet_df,
+        samplesheet_df[replicate_mask].index,
+        'replicate')
+
     # Put multiclass items in multiclass silo
     multi_subtype_rows = samplesheet_df['class'].str.contains(';', na=False)
     if multi_subtype_rows.any():
@@ -281,13 +288,6 @@ def process_gdc_gex(dataset_name,
         samplesheet_df,
         samplesheet_df[relapse_mask].index,
         'relapse')
-
-    # Replicate mask is the samples whose 'Replicate' column is True
-    replicate_mask = samplesheet_df['Replicate'] == True
-    samplesheet_df = add_to_silo(
-        samplesheet_df,
-        samplesheet_df[replicate_mask].index,
-        'replicate')
 
     # Silo remaining as labeled_diagnostic
     samplesheet_df = silo_remaining(samplesheet_df)
@@ -386,6 +386,13 @@ def process_gdc_dnam(dataset_name,
     samplesheet_df['dataset'] = dataset_name
     samplesheet_df['data_silo'] = ''
     samplesheet_df['batch'] = ''
+
+    # If index ends in R + digit e.g. "R1", silo it as replicate
+    replicate_mask = samplesheet_df.index.str.contains(r'R\d+$')
+    samplesheet_df = add_to_silo(
+        samplesheet_df,
+        samplesheet_df[replicate_mask].index,
+        'replicate')
 
     # Put multiclass items in multiclass silo
     multi_subtype_rows = samplesheet_df['class'].str.contains(';', na=False)

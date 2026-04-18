@@ -200,6 +200,9 @@ df_GSE190931['class'] = df_GSE190931['fusion']
 
 samplesheet_df = pd.concat([df_GSE124413, df_GSE190931], axis=0)
 
+# Copy index to sample_id
+samplesheet_df['sample_id'] = samplesheet_df.index
+
 # Merge Sex column into sex, keeping all non-empty values
 samplesheet_df['sex'] = samplesheet_df.apply(
     lambda row: row['Sex'] if pd.notna(row['Sex']) else row['sex'], axis=1)
@@ -273,6 +276,11 @@ samplesheet_df = silo_remaining(samplesheet_df)
 # Rename target-submitter-id to sample
 samplesheet_df = samplesheet_df.rename(columns={'target-submitter-id': 'sample'})
 
+# Where sample is empty, copy value from sample_id
+samplesheet_df['sample'] = samplesheet_df.apply(
+    lambda row: row['sample_id'] if pd.isna(row['sample']) else row['sample'],
+    axis=1)
+
 # Set sample as the index
 samplesheet_df = samplesheet_df.set_index('sample')
 
@@ -297,11 +305,62 @@ samplesheet_df = samplesheet_df.rename(columns={'age (years)': 'age'})
 # Save details
 details_df = samplesheet_df[['dataset', 'sex', 'age']].copy()
 
-print(details_df)
+# Order columns
+samplesheet_df = format_mlomix_columns(samplesheet_df)
+
+# For both samplesheet_df and gdc_samplesheet, create a new column "target_case_timepoint"
+# which is of the format "TARGET-20-PABHET-D" or "TARGET-20-PABHET-R" based on the timepoint column (Primary or Relapse)
+# In the case of samplesheet_df, just append the existing index with "R" if data_silo is relapse, else "D"
+# For gdc_samplesheet: if data_silo is replicate, leave this new column blank.
+# Else drop the suffix after the last dash (e.g. "-04A") and append "D" if data_silo is not relapse, else "R"
+
+samplesheet_df['target_case_timepoint'] = samplesheet_df.apply(
+    lambda row: row.name if row['class'] == 'Non-leukemic' else (
+        f"{row.name}-R" if row['data_silo'] == 'relapse' else f"{row.name}-D"),
+    axis=1)
+gdc_samplesheet['target_case_timepoint'] = gdc_samplesheet.apply(
+    lambda row: row.name if row['data_silo'] == 'replicate' else f"{row.name.rsplit('-', 1)[0]}-R" if row['data_silo'] == 'relapse' else f"{row.name.rsplit('-', 1)[0]}-D",
+    axis=1)
+
+# In both samplesheets, if there is a duplicate in target_case_timepoint,
+# append a "2" to the value
+samplesheet_dup_mask = (
+    samplesheet_df.groupby('target_case_timepoint').cumcount() == 1)
+samplesheet_df.loc[samplesheet_dup_mask, 'target_case_timepoint'] = (
+    samplesheet_df.loc[samplesheet_dup_mask, 'target_case_timepoint'] + '2')
+
+gdc_dup_mask = (
+    gdc_samplesheet.groupby('target_case_timepoint').cumcount() == 1)
+gdc_samplesheet.loc[gdc_dup_mask, 'target_case_timepoint'] = (
+    gdc_samplesheet.loc[gdc_dup_mask, 'target_case_timepoint'] + '2')
+
+# Check target_case_timepoint for duplicates in both dfs and print
+if samplesheet_df['target_case_timepoint'].duplicated().any():
+    print("Duplicates in samplesheet_df target_case_timepoint:")
+    print(samplesheet_df[samplesheet_df['target_case_timepoint'].duplicated(keep=False)]['target_case_timepoint'])
+if gdc_samplesheet['target_case_timepoint'].duplicated().any():
+    print("Duplicates in gdc_samplesheet target_case_timepoint:")
+    print(gdc_samplesheet[gdc_samplesheet['target_case_timepoint'].duplicated(keep=False)]['target_case_timepoint'])
+
+# Remove all columns except index, data_silo and target_case_timepoint
+samplesheet_df = samplesheet_df[['data_silo', 'target_case_timepoint']]
+gdc_samplesheet = gdc_samplesheet[['data_silo', 'target_case_timepoint']]
+# Dump them both to csv
+samplesheet_df.to_csv(f'{preprocessed_dir}/samplesheet.df.csv', index=True)
+gdc_samplesheet.to_csv(f'{preprocessed_dir}/gdc_samplesheet.df.csv', index=True)
+
 exit()
 
-print(samplesheet_df)
-# dump to csv
-tmp_output_file = f'{preprocessed_dir}/dnam_samplesheet.csv'
-samplesheet_df.to_csv(tmp_output_file, index=True)
-print(samplesheet_df)
+
+# Merge with gdc samplesheet and gdc details
+details_df = concatenate_detail_dfs(
+    gdc_details_df, details_df, f'{preprocessed_dir}/patient_details.csv')
+
+samplesheet_df = concatenate_samplesheets(
+    gdc_samplesheet, samplesheet_df, f'{preprocessed_dir}/samplesheet.csv')
+
+# print(samplesheet_df)
+# # dump to csv
+# tmp_output_file = f'{preprocessed_dir}/dnam_samplesheet.csv'
+# samplesheet_df.to_csv(tmp_output_file, index=True)
+# print(samplesheet_df)
