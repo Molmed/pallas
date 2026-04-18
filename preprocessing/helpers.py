@@ -450,5 +450,13 @@ def concatenate_samplesheets(df1, df2, output_file):
     samplesheet_df.to_csv(output_file, index=True)
     # Rename index to sample
     samplesheet_df.index.name = 'sample'
+    # If beta matrix is specified but idats_basename is also specified,
+    # remove beta matrix file and print warning since we should be using raw data for this sample
+    mask = (samplesheet_df['dnam_beta_matrix_file'].notna()) & (
+        samplesheet_df['idats_basename'].notna())
+    if mask.any():
+        print("Warning: The following samples have both dnam_beta_matrix_file and idats_basename specified. Since we should be using raw data for these samples, we will remove the dnam_beta_matrix_file for these samples.")
+        print(samplesheet_df[mask].index.tolist())
+        samplesheet_df.loc[mask, 'dnam_beta_matrix_file'] = pd.NA
     summarize_modalities(samplesheet_df)
     return samplesheet_df
