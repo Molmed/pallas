@@ -3,12 +3,11 @@ import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR, \
-        GEX_EXCLUDE_SUBTYPES, DNAM_EXCLUDE_SUBTYPES
+    DNAM_EXCLUDE_SUBTYPES
 from preprocessing.helpers import add_to_silo, \
     silo_unlabeled, silo_excluded, silo_unrecognized, silo_remaining, \
-        format_mlomix_columns, summarize_patient_details, \
-            process_dnam_file, process_gdc_gex, process_gdc_dnam, \
-                summarize_modalities, concatenate_detail_dfs, concatenate_samplesheets, process_gdc_clinical
+    format_mlomix_columns, process_dnam_file, process_gdc_gex, \
+    process_gdc_dnam, concatenate_detail_dfs, concatenate_samplesheets
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/TARGET-AML-TCGA-LAML'
@@ -125,14 +124,6 @@ def process_geo_pheno_file(file_path):
 # Process the GEO pheno files
 df_GSE124413 = process_geo_pheno_file(pheno_df_GSE124413)
 df_GSE190931 = process_geo_pheno_file(pheno_df_GSE190931)
-
-# Get details_df
-# details_df = process_gdc_clinical(dataset_name,
-#                                     clinical_file,
-#                                     samples_df['Case ID'])
-
-# Post-process them individually since they are formatted differently
-# and have different kinds of input dnam data
 
 
 def process_idat_path(df, index, row, raw_idats_dir, processed_idats_dir):
@@ -305,6 +296,9 @@ samplesheet_df = samplesheet_df.rename(columns={'age (years)': 'age'})
 # Save details
 details_df = samplesheet_df[['dataset', 'sex', 'age']].copy()
 
+# Remove rows from details_df starting with "GSM"
+details_df = details_df[~details_df.index.str.startswith('GSM')]
+
 # Order columns
 samplesheet_df = format_mlomix_columns(samplesheet_df)
 
@@ -342,15 +336,9 @@ if gdc_samplesheet['target_case_timepoint'].duplicated().any():
     print("Duplicates in gdc_samplesheet target_case_timepoint:")
     print(gdc_samplesheet[gdc_samplesheet['target_case_timepoint'].duplicated(keep=False)]['target_case_timepoint'])
 
-# Remove all columns except index, data_silo and target_case_timepoint
-samplesheet_df = samplesheet_df[['data_silo', 'target_case_timepoint']]
-gdc_samplesheet = gdc_samplesheet[['data_silo', 'target_case_timepoint']]
-# Dump them both to csv
-samplesheet_df.to_csv(f'{preprocessed_dir}/samplesheet.df.csv', index=True)
-gdc_samplesheet.to_csv(f'{preprocessed_dir}/gdc_samplesheet.df.csv', index=True)
-
-exit()
-
+# Set target_case_timepoint as the index for both samplesheets
+samplesheet_df = samplesheet_df.set_index('target_case_timepoint')
+gdc_samplesheet = gdc_samplesheet.set_index('target_case_timepoint')
 
 # Merge with gdc samplesheet and gdc details
 details_df = concatenate_detail_dfs(
@@ -358,9 +346,3 @@ details_df = concatenate_detail_dfs(
 
 samplesheet_df = concatenate_samplesheets(
     gdc_samplesheet, samplesheet_df, f'{preprocessed_dir}/samplesheet.csv')
-
-# print(samplesheet_df)
-# # dump to csv
-# tmp_output_file = f'{preprocessed_dir}/dnam_samplesheet.csv'
-# samplesheet_df.to_csv(tmp_output_file, index=True)
-# print(samplesheet_df)
