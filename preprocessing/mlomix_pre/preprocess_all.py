@@ -17,10 +17,16 @@ MIN_TEST_SAMPLES_PER_CLASS = 5
 modules = [
     "preprocessing.mlomix_pre.SJC-DS-1009",
     "preprocessing.mlomix_pre.SJC-panALL",
+    "preprocessing.mlomix_pre.TARGET-AML",
     "preprocessing.mlomix_pre.Krali-2023",
     "preprocessing.mlomix_pre.Lilljebjorn-2016",
-    "preprocessing.mlomix_pre.Paulsson-2023",
+    "preprocessing.mlomix_pre.Tran-2022",
+    "preprocessing.mlomix_pre.Krali-2021",
     "preprocessing.mlomix_pre.Stratmann-2022",
+    "preprocessing.mlomix_pre.TCGA-LAML",
+    "preprocessing.mlomix_pre.Enblad-2025",
+    "preprocessing.mlomix_pre.Diedrich-2021",
+    "preprocessing.mlomix_pre.Paulsson-2023",
 ]
 
 for mod in modules:

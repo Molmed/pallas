@@ -190,7 +190,9 @@ for col in gex_df.columns:
     output_file = f'{preprocessed_dir}/{meta_col}.txt'
     # Set feature_counts column for this sample in samplesheet_df
     samplesheet_df.loc[meta_col, 'gex_feature_counts_file'] = output_file
-    gex_df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
+    # Check if file exists first
+    if not os.path.exists(output_file):
+        gex_df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
 
 # Set batch column to blank string
 samplesheet_df['batch'] = ''
