@@ -11,13 +11,8 @@ MLOMIX_SAMPLESHEETS_DIR = os.getenv('MLOMIX_SAMPLESHEETS_DIR')
 GEX_EXCLUDE_SUBTYPES = [
     'low hyperdiploid',
     'RUNX1::RUNX1T1-like',
-    'IGH::CEBPD',
-    'PICALM::MLLT10',
-    'BCR::ABL1 AML'
+    'IGH::CEBPD'
 ]
 DNAM_EXCLUDE_SUBTYPES = [
     'low hyperdiploid',
-    'KAT6A-r',
-    'RBM15::MKL1',
-    'NUTM1-r'
 ]

@@ -579,8 +579,8 @@ T-ALL                       178
 AML, CBFB::MYH11            167
 B-ALL, DUX4-r               164
 B-ALL, BCR::ABL1            139
-B-ALL, TCF3::PBX1           126
 B-ALL, hypodiploid          126
+B-ALL, TCF3::PBX1           126
 AML, CEBPAalt               113
 AML, NUP98-r                 96
 B-ALL, ZNF384-r              80
@@ -603,8 +603,6 @@ B-ALL, IKZF1 N159Y            7
 AML, MECOM-r                  6
 AML, RBM15::MKL1              6
 AML, BCR::ABL1                4
-AML, RUNX1::RUNX1T1-like      3
-B-ALL, IGH::CEBPD             3
 Name: count, dtype: int64
 
 Class distribution in gex before splitting into calibration/test:
@@ -615,7 +613,7 @@ B-ALL, ETV6::RUNX1          139
 B-ALL, BCR::ABL1-like       112
 AML, RUNX1::RUNX1T1         108
 AML, NPM1alt                 68
-B-ALL, KMT2A-r               65
+B-ALL, KMT2A-r               66
 B-ALL, PAX5alt               61
 T-ALL                        53
 AML, CBFB::MYH11             50
@@ -634,22 +632,20 @@ B-ALL, PAX5 P80R             11
 AML, CBFA2T3::GLIS2          11
 Non-leukemic                  7
 AML, APL-PML::RARA            6
-B-ALL, NUTM1-r                5
 B-ALL, MYC-r                  5
+B-ALL, NUTM1-r                5
 AML, KAT6A-r                  4
 B-ALL, HLF-r                  3
 AML, ETV6-r                   3
 AML, FUS::ERG                 2
 AML, RBM15::MKL1              2
-B-ALL, IKZF1 N159Y            2
 AML, PICALM::MLLT10           2
+B-ALL, IKZF1 N159Y            2
 AML, MECOM-r                  2
-B-ALL, IGH::CEBPD             1
 AML, BCR::ABL1                1
-AML, RUNX1::RUNX1T1-like      1
 Name: count, dtype: int64
 
-In modality gex, excluding 15 class(es) from calibration/test split since they have fewer than 10 samples: ['Non-leukemic', 'AML, APL-PML::RARA', 'B-ALL, NUTM1-r', 'B-ALL, MYC-r', 'AML, KAT6A-r', 'B-ALL, HLF-r', 'AML, ETV6-r', 'AML, FUS::ERG', 'AML, RBM15::MKL1', 'B-ALL, IKZF1 N159Y', 'AML, PICALM::MLLT10', 'AML, MECOM-r', 'B-ALL, IGH::CEBPD', 'AML, BCR::ABL1', 'AML, RUNX1::RUNX1T1-like']
+In modality gex, excluding 13 class(es) from calibration/test split since they have fewer than 10 samples: ['Non-leukemic', 'AML, APL-PML::RARA', 'B-ALL, MYC-r', 'B-ALL, NUTM1-r', 'AML, KAT6A-r', 'B-ALL, HLF-r', 'AML, ETV6-r', 'AML, FUS::ERG', 'AML, RBM15::MKL1', 'AML, PICALM::MLLT10', 'B-ALL, IKZF1 N159Y', 'AML, MECOM-r', 'AML, BCR::ABL1']
 Splitting remaining 30% of gex samples into calibration (50%) and test (50%)...
 
 Class distribution in dnam before splitting:
@@ -764,14 +760,14 @@ B-ALL, NUTM1-r                3
 AML, MECOM-r                  2
 Name: count, dtype: int64
 Saved samplesheet_all.csv with 8944 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_all.csv
-Saved samplesheet_labeled_diagnostic.csv with 5778 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic.csv
+Saved samplesheet_labeled_diagnostic.csv with 5772 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic.csv
 Saved samplesheet_unlabeled.csv with 973 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_unlabeled.csv
-Saved samplesheet_misc.csv with 2193 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_misc.csv
-Saved samplesheet_labeled_diagnostic_gex.csv with 4550 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic_gex.csv
+Saved samplesheet_misc.csv with 2199 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_misc.csv
+Saved samplesheet_labeled_diagnostic_gex.csv with 4544 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic_gex.csv
 Saved samplesheet_labeled_diagnostic_dnam.csv with 2433 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic_dnam.csv
 Saved samplesheet_labeled_diagnostic_bimodal.csv with 1205 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic_bimodal.csv
-Saved samplesheet_train_gex.csv with 3185 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_train_gex.csv
-Saved samplesheet_calibrate_gex.csv with 705 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_calibrate_gex.csv
+Saved samplesheet_train_gex.csv with 3180 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_train_gex.csv
+Saved samplesheet_calibrate_gex.csv with 704 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_calibrate_gex.csv
 Saved samplesheet_test_gex.csv with 660 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_test_gex.csv
 Saved samplesheet_train_dnam.csv with 1703 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_train_dnam.csv
 Saved samplesheet_calibrate_dnam.csv with 403 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_calibrate_dnam.csv
