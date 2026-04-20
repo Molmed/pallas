@@ -64,7 +64,7 @@ def format_mlomix_columns(df):
     df.index.name = 'sample'
     for col in expected_cols:
         if col not in df.columns:
-            df[col] = ''
+            df[col] = pd.NA
     return df[expected_cols]
 
 
