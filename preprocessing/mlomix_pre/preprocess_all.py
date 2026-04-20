@@ -13,7 +13,7 @@ RANDOM_SEED = 42
 SPLIT_TRAIN_FRAC = 0.7
 SPLIT_CALIB_FRAC = 0.15
 SPLIT_TEST_FRAC = 0.15
-MIN_TEST_SAMPLES_PER_CLASS = 5
+MIN_SAMPLES_PER_CLASS_FOR_CALIBRATION_SPLIT = 10
 
 modules = [
     "preprocessing.mlomix_pre.SJC-DS-1009",
@@ -30,9 +30,9 @@ modules = [
     "preprocessing.mlomix_pre.Paulsson-2023",
 ]
 
-# for mod in modules:
-#     print(f"\n\n\n*****RUNNING ML_OMIX_PRE FOR DATASET {mod}...*****\n\n")
-#     runpy.run_module(mod, run_name="__main__")
+for mod in modules:
+    print(f"\n\n\n*****RUNNING ML_OMIX_PRE FOR DATASET {mod}...*****\n\n")
+    runpy.run_module(mod, run_name="__main__")
 
 # All the samplesheets we will save:
 # - all
@@ -150,8 +150,11 @@ for modality in ["gex", "dnam", "bimodal"]:
     # Get the samplesheet for this modality
     modality_samplesheet = samplesheets_to_save[f'labeled_diagnostic_{modality}']
 
+    # Print class distribution before split
+    print(f"\nClass distribution in {modality} before splitting:")
+    print(modality_samplesheet['class'].value_counts())
+
     # Split into train/calib/test
-    print(f"\nSplitting {modality} samples into train and calib/test...")
     y = modality_samplesheet['class']
     y_train, y_temp = safe_train_test_split(
         y,
@@ -167,6 +170,27 @@ for modality in ["gex", "dnam", "bimodal"]:
         continue
 
     # For gex and dnam, we do train/calib/test split
+    # But first see what samples should be excluded from split
+    class_counts = y_temp.value_counts()
+
+    print(f"\nClass distribution in {modality} before splitting into calibration/test:")
+    print(class_counts)
+
+    classes_to_exclude_from_split = class_counts[
+        class_counts < MIN_SAMPLES_PER_CLASS_FOR_CALIBRATION_SPLIT
+    ].index.tolist()
+    if len(classes_to_exclude_from_split) > 0:
+        print(
+            f"\nIn modality {modality}, excluding {len(classes_to_exclude_from_split)} "
+            f"class(es) from calibration/test split since they have fewer than "
+            f"{MIN_SAMPLES_PER_CLASS_FOR_CALIBRATION_SPLIT} samples: "
+            f"{classes_to_exclude_from_split}"
+        )
+        split_mask = ~y_temp.isin(classes_to_exclude_from_split)
+        y_temp_for_split = y_temp[split_mask]
+    else:
+        y_temp_for_split = y_temp
+
     calib_frac_of_temp = SPLIT_CALIB_FRAC / (
         SPLIT_CALIB_FRAC + SPLIT_TEST_FRAC)
     print(
@@ -175,33 +199,15 @@ for modality in ["gex", "dnam", "bimodal"]:
         f"({1 - calib_frac_of_temp:.0%})..."
     )
     y_calib, y_test = safe_train_test_split(
-        y_temp,
+        y_temp_for_split,
         train_size=calib_frac_of_temp,
         random_state=RANDOM_SEED,
-        stratify=y_temp,
+        stratify=y_temp_for_split,
     )
 
-    # Move classes with too few samples in test back to calibration and report
-    test_class_counts = y_test.value_counts()
-    underrepresented_classes = test_class_counts[
-        test_class_counts < MIN_TEST_SAMPLES_PER_CLASS
-    ].index.tolist()
-    if len(underrepresented_classes) > 0:
-        min_test_str = str(MIN_TEST_SAMPLES_PER_CLASS)
-        print(
-            f"\nIn modality {modality}, moving {len(underrepresented_classes)} "
-            f"underrepresented class(es) from test to calibration "
-            f"(MIN_TEST_SAMPLES_PER_CLASS={min_test_str}):"
-        )
-        print(f"  {underrepresented_classes}")
-
-        # Find indices of underrepresented classes in test
-        move_to_calib_mask = y_test.isin(underrepresented_classes)
-        indices_to_move = y_test[move_to_calib_mask].index
-
-        # Move from test to calibration
-        y_calib = y_calib._append(y_test[move_to_calib_mask])
-        y_test = y_test[~move_to_calib_mask]
+    # Add back the excluded classes to the calibration set
+    if len(classes_to_exclude_from_split) > 0:
+        y_calib = y_calib._append(y_temp[~split_mask])
 
     # Save the splits
     sample_splits[f'train_{modality}'] = y_train.index
@@ -214,61 +220,6 @@ for split_name, indices in sample_splits.items():
     samplesheets_to_save[split_name] = samplesheets_to_save[
         f'labeled_diagnostic_{modality}'].loc[indices]
 
-# print(samplesheets_to_save)
-exit()
-
-
-print("Class distribution in train_large_model:")
-print(y_large_train.value_counts())
-print("\nClass distribution in calibration_large_model:")
-print(y_large_calib.value_counts())
-print("\nClass distribution in test_large_model:")
-print(y_large_test.value_counts())
-
-# Move classes with too few samples in test back to calibration
-test_class_counts = y_large_test.value_counts()
-underrepresented_classes = test_class_counts[
-    test_class_counts < MIN_TEST_SAMPLES_PER_CLASS
-].index.tolist()
-
-if len(underrepresented_classes) > 0:
-    min_test_str = str(MIN_TEST_SAMPLES_PER_CLASS)
-    print(
-        f"\nMoving {len(underrepresented_classes)} underrepresented "
-        f"class(es) from test to calibration "
-        f"(MIN_TEST_SAMPLES_PER_CLASS={min_test_str}):"
-    )
-    print(f"  {underrepresented_classes}")
-
-    # Find indices of underrepresented classes in test
-    move_to_calib_mask = y_large_test.isin(underrepresented_classes)
-    indices_to_move = y_large_test[move_to_calib_mask].index
-
-    # Move from test to calibration
-    y_large_calib = y_large_calib._append(y_large_test[move_to_calib_mask])
-    y_large_test = y_large_test[~move_to_calib_mask]
-
-    print("\nUpdated class distribution in calibration_large_model:")
-    print(y_large_calib.value_counts())
-    print("\nUpdated class distribution in test_large_model:")
-    print(y_large_test.value_counts())
-
-if n_bimodal > 0:
-    # SPLIT BIMODAL INTO TRAIN/TEST
-    y_bimodal = bimodal_df['class']
-    y_bimodal_train, y_bimodal_test = safe_train_test_split(
-        y_bimodal,
-        train_size=SPLIT_TRAIN_FRAC,
-        random_state=RANDOM_SEED,
-        stratify=y_bimodal,
-    )
-
-    print("\nClass distribution in train_bimodal_model:")
-    print(y_bimodal_train.value_counts())
-    print("\nClass distribution in test_bimodal_model:")
-    print(y_bimodal_test.value_counts())
-    print("\n")
-
 
 # SAVE SAMPLESHEETS
 def save_samplesheet(df, filename):
@@ -278,65 +229,6 @@ def save_samplesheet(df, filename):
     print(f"Saved {filename} with {df.shape[0]} samples to {output_path}")
 
 
-# Save the following samplesheets:
-save_samplesheet(
-    combined_samplesheet_df,
-    'samplesheet_complete.csv'
-)
-
-save_samplesheet(
-    labeled_diagnostic_df,
-    'samplesheet_labeled_diagnostic.csv'
-)
-save_samplesheet(
-    bimodal_df,
-    'samplesheet_labeled_diagnostic_bimodal.csv'
-)
-save_samplesheet(
-    combined_samplesheet_df[
-        combined_samplesheet_df['data_silo'] == 'unlabeled'
-    ],
-    'samplesheet_unlabeled.csv'
-)
-save_samplesheet(
-    combined_samplesheet_df[
-        ~combined_samplesheet_df['data_silo'].isin(
-            ['labeled_diagnostic', 'unlabeled']
-        )
-    ],
-    'samplesheet_misc.csv'
-)
-save_samplesheet(
-    labeled_diagnostic_df.loc[y_large_train.index],
-    'samplesheet_train_large_model.csv'
-)
-save_samplesheet(
-    labeled_diagnostic_df.loc[y_large_calib.index],
-    'samplesheet_calibration_large_model.csv'
-)
-save_samplesheet(
-    labeled_diagnostic_df.loc[y_large_test.index],
-    'samplesheet_test_large_model.csv'
-)
-
-if n_bimodal > 0:
-    save_samplesheet(
-        bimodal_df.loc[y_bimodal_train.index],
-        'samplesheet_train_bimodal_model.csv'
-    )
-    save_samplesheet(
-        bimodal_df.loc[y_bimodal_test.index],
-        'samplesheet_test_bimodal_model.csv'
-    )
-
-# Print final counts in all sets
-print("\nFinal counts in all sets:")
-print(f" - TOTAL DATA POINTS: {combined_samplesheet_df.shape[0]} samples")
-print(f" - LABELED_DIAGNOSTIC: {labeled_diagnostic_df.shape[0]} samples")
-print(f" - LABELED_DIAGNOSTIC_BIMODAL: {bimodal_df.shape[0]} samples")
-print(f" - TRAIN_LARGE_MODEL: {y_large_train.shape[0]} samples")
-print(f" - CALIBRATION_LARGE_MODEL: {y_large_calib.shape[0]} samples")
-print(f" - TEST_LARGE_MODEL: {y_large_test.shape[0]} samples")
-if n_bimodal > 0:
-    print(f" - TRAIN_BIMODAL_MODEL: {y_bimodal_train.shape[0]} samples")
-    print(f" - TEST_BIMODAL_MODEL: {y_bimodal_test.shape[0]} samples")
+# Save each samplesheet and report on its contents
+for name, df in samplesheets_to_save.items():
+    save_samplesheet(df, f'samplesheet_{name}.csv')

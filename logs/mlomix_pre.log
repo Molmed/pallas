@@ -763,3 +763,18 @@ AML, RBM15::MKL1              4
 B-ALL, NUTM1-r                3
 AML, MECOM-r                  2
 Name: count, dtype: int64
+Saved samplesheet_all.csv with 8944 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_all.csv
+Saved samplesheet_labeled_diagnostic.csv with 5778 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic.csv
+Saved samplesheet_unlabeled.csv with 973 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_unlabeled.csv
+Saved samplesheet_misc.csv with 2193 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_misc.csv
+Saved samplesheet_labeled_diagnostic_gex.csv with 4550 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic_gex.csv
+Saved samplesheet_labeled_diagnostic_dnam.csv with 2433 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic_dnam.csv
+Saved samplesheet_labeled_diagnostic_bimodal.csv with 1205 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic_bimodal.csv
+Saved samplesheet_train_gex.csv with 3185 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_train_gex.csv
+Saved samplesheet_calibrate_gex.csv with 705 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_calibrate_gex.csv
+Saved samplesheet_test_gex.csv with 660 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_test_gex.csv
+Saved samplesheet_train_dnam.csv with 1703 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_train_dnam.csv
+Saved samplesheet_calibrate_dnam.csv with 403 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_calibrate_dnam.csv
+Saved samplesheet_test_dnam.csv with 327 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_test_dnam.csv
+Saved samplesheet_train_bimodal.csv with 843 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_train_bimodal.csv
+Saved samplesheet_test_bimodal.csv with 362 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_test_bimodal.csv
