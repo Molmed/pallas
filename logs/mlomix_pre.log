@@ -1,0 +1,993 @@
+Running preprocessing.mlomix_pre.SJC-DS-1009...
+Processing SJC-DS-1009...
+Processing phenotype data...
+Warning: The following sample names are duplicated and secondary occurrences will be removed:
+['SJBALL021900_D1', 'SJBALL237_D', 'SJCBF041_D', 'SJETV093_D', 'SJETV092_D', 'SJMLL014_D', 'SJMLL019_D', 'SJPHALL005_D', 'SJPHALL003_D', 'SJBALL021305_D1', 'SJERG020299_D1', 'SJBALL021530_D1', 'SJBALL021109_D1', 'SJBALL021080_D1', 'SJAML030025_D1', 'SJAML030004_D1', 'SJAML030286_R1', 'SJMLL001_D', 'SJMLL002_D']
+Warning: The following NOS samples actually have a subtype:
+['SJBALL021047_D1', 'SJALL015948_D1', 'SJBALL043631_D1', 'SJBALL013392_D1', 'SJBALL022671_D1', 'SJBALL016237_D1', 'SJBALL020607_D1', 'SJTALL022664_D1', 'SJALL015987_D1', 'SJALL015942_D1', 'SJALL015970_D1', 'SJBALL020592_D1', 'SJBALL013357_D1', 'SJBALL016307_D1', 'SJBALL020943_D1', 'SJBALL016296_D1', 'SJBALL022606_D1', 'SJBALL020972_D1', 'SJBALL020776_D1']
+Info: Sample SJBALL030983_R1 has known subtype BALLHYPO in sj_associated_diagnoses.
+Info: Sample SJAML031051_R1 has known subtype AMLKMT2A in sj_associated_diagnoses.
+Info: Sample SJBALL031052_R1 has known subtype BALLHYPO in sj_associated_diagnoses.
+Info: Sample SJBALL030894_D2 has known subtype BALLPAX5 in sj_associated_diagnoses.
+Info: Sample SJAML016582_D1 has known subtype AMLNUP98 in sj_associated_diagnoses.
+Info: Sample SJAML016570_D1 has known subtype AMLNUP98 in sj_associated_diagnoses.
+Info: Sample SJAML016560_D1 has known subtype AMLKMT2A in sj_associated_diagnoses.
+Info: Sample SJAML016551_D1 has known subtype AMLKMT2A in sj_associated_diagnoses.
+Info: Sample SJAML016537_D1 has known subtype AMLKMT2A in sj_associated_diagnoses.
+Info: Sample SJAML001444_D1 has known subtype AMLKMT2A in sj_associated_diagnoses.
+Info: Sample SJAML001427_D2 has known subtype AMLNPM1 in sj_associated_diagnoses.
+Info: Sample SJAML061501_R1 has known subtype AMLPICALMMLLT10 in sj_associated_diagnoses.
+Info: Sample SJAML060291_R1 has known subtype AMLNPM1 in sj_associated_diagnoses.
+Info: Sample SJAML045737_R1 has known subtype AMLBCL11B in sj_associated_diagnoses.
+Info: Sample SJAML040281_R1 has known subtype AMLMECOM in sj_associated_diagnoses.
+Info: Sample SJAML040277_R1 has known subtype AMLDEKNUP214 in sj_associated_diagnoses.
+Info: Sample SJAML031043_R1 has known subtype AMLUBTF in sj_associated_diagnoses.
+Info: Sample SJAML010730_R4 has known subtype AMLUBTF in sj_associated_diagnoses.
+Info: Sample SJAML031254_D1 has known subtype AMLNUP98 in sj_associated_diagnoses.
+Info: Sample SJBALL030413_D2 has known subtype BALLHYPER in sj_associated_diagnoses.
+Warning: The following samples have invalid sample_type and will be removed:
+['SJBALL020016_C1', 'SJBALL020579_X1', 'SJHYPO010000_C4', 'SJHYPO010000_C34', 'SJHYPO010000_C47', 'SJHYPO010000_C1', 'SJHYPO010000_C48', 'SJHYPO010000_C11', 'SJHYPO010000_C46', 'SJHYPO010000_C10', 'SJHYPO010000_C6', 'SJHYPO010000_C49', 'SJHYPO010000_C5', 'SJHYPO010000_C7', 'SJHYPO010000_C8', 'SJHYPO010000_C9']
+Warning: The following 'other' samples have biomarkers that might help refine the subtype:
+['SJAML030560_D1', 'SJAML030459_D1', 'SJAML030773_D1', 'SJAML030714_D1', 'SJAML030988_D1', 'SJAML031312_D1', 'SJTALL030880_D1', 'SJTALL030907_D1', 'SJTALL031201_D1', 'SJAML030006_D1', 'SJAML030004_D1', 'SJTALL030263_D1', 'SJTALL002_D', 'SJTALL031798_D1', 'SJTALL032007_D1', 'SJTALL031662_D1', 'SJTALL031594_D1', 'SJTALL031991_D1', 'SJTALL031832_D1', 'SJTALL031632_D1', 'SJHM031652_D1', 'SJAML031719_D1', 'SJBALL031906_D1', 'SJBALL031749_D1', 'SJBALL031942_D1', 'SJAML031781_D1', 'SJBALL031268_D2', 'SJAML031924_D1', 'SJBALL031488_D1', 'SJTALL032088_D1', 'SJBALL032078_D1', 'SJAML032172_D1', 'SJAML032178_D1', 'SJAML032325_D1', 'SJAML032347_D1', 'SJTALL032368_D1', 'SJAML032070_D1', 'SJTALL032380_D1', 'SJTALL032246_D1', 'SJTALL032041_D1', 'SJHM032516_D1', 'SJTALL032568_D1', 'SJAML030286_R1', 'SJAML067625_R1', 'SJAML061536_R1', 'SJAML061511_R1', 'SJAML060294_R1', 'SJBALL032691_D1', 'SJAML032297_D1', 'SJAML032056_D1', 'SJAML030586_D1', 'SJBALL032005_D1', 'SJAML032934_D1', 'SJAML032715_D1', 'SJAML031769_D1', 'SJTALL032972_D1', 'SJTALL032835_D1', 'SJTALL031634_D1', 'SJTALL031901_D2', 'SJTALL031944_D1', 'SJTALL032610_D2', 'SJTALL032798_D1', 'SJTALL033025_D1', 'SJBALL031556_D1', 'SJBALL032509_D1', 'SJTALL033105_D1', 'SJTALL033207_D1', 'SJTALL033273_D1', 'SJAML033350_D1', 'SJAML033580_D1', 'SJTALL033523_D1', 'SJBALL030463_R1', 'SJTALL033645_D1', 'SJBALL033703_D1', 'SJTALL033715_D1', 'SJBALL034424_D1', 'SJTALL034354_D1', 'SJAML060298_D1', 'SJAML074169_D1']
+Sample SJAML030560_D1 has biomarkers: MECOM
+Sample SJAML030459_D1 has biomarkers: PICALM-MLLT10
+Sample SJAML030773_D1 has biomarkers: TEC-MLLT10
+Sample SJAML030714_D1 has biomarkers: CEBPA S21fs;CEBPA LOH
+Sample SJAML030988_D1 has biomarkers: PICALM-MLLT10
+Sample SJAML031312_D1 has biomarkers: CEBPA K313>KK;CEBPA P115_A118fs
+Sample SJTALL030880_D1 has biomarkers: PICALM-MLLT10
+Sample SJTALL030907_D1 has biomarkers: PICALM-MLLT10
+Sample SJTALL031201_D1 has biomarkers: TCF7-SPI1
+Sample SJAML030006_D1 has biomarkers: DEK-NUP214
+Sample SJAML030004_D1 has biomarkers: KAT6A-CREBBP
+Sample SJTALL030263_D1 has biomarkers: SPI1-TCF7
+Sample SJTALL002_D has biomarkers: ETV6-INO80D
+Sample SJTALL031798_D1 has biomarkers: PICALM-MLLT10
+Sample SJTALL032007_D1 has biomarkers: STIL-TAL1
+Sample SJTALL031662_D1 has biomarkers: PICALM-MLLT10
+Sample SJTALL031594_D1 has biomarkers: TCRA-LMO2
+Sample SJTALL031991_D1 has biomarkers: TCRA-LMO2
+Sample SJTALL031832_D1 has biomarkers: TRB-TLX1
+Sample SJTALL031632_D1 has biomarkers: TCRA-LMO2
+Sample SJHM031652_D1 has biomarkers: BCR-ABL1
+Sample SJAML031719_D1 has biomarkers: TBL1XR1-RARB
+Sample SJBALL031906_D1 has biomarkers: P2RY8-CRLF2
+Sample SJBALL031749_D1 has biomarkers: P2RY8-CRLF2
+Sample SJBALL031942_D1 has biomarkers: IGH-CRLF2
+Sample SJAML031781_D1 has biomarkers: MECOM
+Sample SJBALL031268_D2 has biomarkers: KMT2A-MLLT3
+Sample SJAML031924_D1 has biomarkers: DEK-NUP214
+Sample SJBALL031488_D1 has biomarkers: C11orf74-CRLF2
+Sample SJTALL032088_D1 has biomarkers: FLT3 ITD
+Sample SJBALL032078_D1 has biomarkers: MLLT3 truncation
+Sample SJAML032172_D1 has biomarkers: FLT3
+Sample SJAML032178_D1 has biomarkers: RUNX1 Y285fs
+Sample SJAML032325_D1 has biomarkers: GATA2 N365>TH;NPM1 W288fs
+Sample SJAML032347_D1 has biomarkers: FLT3 ITD
+Sample SJTALL032368_D1 has biomarkers: BCL11B D122fs
+Sample SJAML032070_D1 has biomarkers: FLT3 ITD
+Sample SJTALL032380_D1 has biomarkers: FBXW7 R479Q
+Sample SJTALL032246_D1 has biomarkers: BCL11B Y221fs
+Sample SJTALL032041_D1 has biomarkers: FLT3 ITD
+Sample SJHM032516_D1 has biomarkers: NOTCH Duplication
+Sample SJTALL032568_D1 has biomarkers: RBPMS-FGFR1;RUNX1 R205_E6splice;RUNX1 T196I
+Sample SJAML030286_R1 has biomarkers: FLT3 ITD
+Sample SJAML067625_R1 has biomarkers: CEBPA ITD
+Sample SJAML061536_R1 has biomarkers: CBFA2T3-GLIS3
+Sample SJAML061511_R1 has biomarkers: CBFA2T3-GLIS2
+Sample SJAML060294_R1 has biomarkers: CBFA2T3-GLIS2
+Sample SJBALL032691_D1 has biomarkers: PAX5 LOSS
+Sample SJAML032297_D1 has biomarkers: FUS-FLI1
+Sample SJAML032056_D1 has biomarkers: RUNX1 P301fs;FLT3 D835Y
+Sample SJAML030586_D1 has biomarkers: FLT3 ITD
+Sample SJBALL032005_D1 has biomarkers: PAX5-ETV6
+Sample SJAML032934_D1 has biomarkers: KMT2A ITD;FLT3 ITD
+Sample SJAML032715_D1 has biomarkers: FNDC3B-RARB
+Sample SJAML031769_D1 has biomarkers: FLT3 I836del
+Sample SJTALL032972_D1 has biomarkers: FLT3 N676K;WT1 R413*
+Sample SJTALL032835_D1 has biomarkers: FLT3 D835Y;CREBBP Y1705*;WT1 R368fs;WT1 V268fs;CNOT3 Y209*
+Sample SJTALL031634_D1 has biomarkers: NOTCH1 Q2391*;NOTCH1 A19P
+Sample SJTALL031901_D2 has biomarkers: TRB-NOTCH1
+Sample SJTALL031944_D1 has biomarkers: MLLT10-PICALM
+Sample SJTALL032610_D2 has biomarkers: TP53 R282W;FBXW7 G423V;RPL22 V4_E1splice;NOTCH1 R1598P;FBXW7 R465C;MYB gain;CDKN2A loss;LIN28A gain
+Sample SJTALL032798_D1 has biomarkers: NOTCH1 proximity effect;CDKN2A loss;CDKN2B loss;IKZF2 loss
+Sample SJTALL033025_D1 has biomarkers: TRIM25-JAK2
+Sample SJBALL031556_D1 has biomarkers: ETV6-ETV5
+Sample SJBALL032509_D1 has biomarkers: KDM6A LOSS
+Sample SJTALL033105_D1 has biomarkers: TRB-NOTCH1
+Sample SJTALL033207_D1 has biomarkers: ETV6 Deletion;CDK6 cnv gain;NOTCH1 frameshift
+Sample SJTALL033273_D1 has biomarkers: SET-NUP214
+Sample SJAML033350_D1 has biomarkers: FLT3 DUP
+Sample SJAML033580_D1 has biomarkers: FUS-ERG
+Sample SJTALL033523_D1 has biomarkers: FBXW7 R465C
+Sample SJBALL030463_R1 has biomarkers: KDM6A
+Sample SJTALL033645_D1 has biomarkers: NOTCH1 DUP
+Sample SJBALL033703_D1 has biomarkers: IGH-CEBPA
+Sample SJTALL033715_D1 has biomarkers: USP7 V302_E8splice;NOTCH1 L1585P;FBXW7 R479Q
+Sample SJBALL034424_D1 has biomarkers: ETV6 truncation;IKZF1 truncation
+Sample SJTALL034354_D1 has biomarkers: TCRB@-NOTCH1
+Sample SJAML060298_D1 has biomarkers: FUS-ERG
+Sample SJAML074169_D1 has biomarkers: FUS-FEV
+Warning: The following samples have ambiguous status (relapse or remission) and will be excluded:
+['SJBALL033857_D1', 'SJTALL033892_D1', 'SJBALL034002_D1', 'SJBALL034140_D1', 'SJBALL034128_D1', 'SJBALL034158_D1', 'SJBALL034271_D1', 'SJAML034342_D1', 'SJBALL034403_D1', 'SJBALL034329_D1', 'SJBALL034418_D1']
+Deduplicating _D8 samples:
+Warning: Dropping sample SJCBF001018_D8 from details_df because there is another sample with the same unique_patient_id SJCBF001018 that does not end with _D8.
+Deduplicating _D7 samples:
+Warning: Dropping sample SJCBF001018_D7 from details_df because there is another sample with the same unique_patient_id SJCBF001018 that does not end with _D7.
+Deduplicating _D6 samples:
+Warning: Dropping sample SJCBF001018_D6 from details_df because there is another sample with the same unique_patient_id SJCBF001018 that does not end with _D6.
+Deduplicating _D5 samples:
+Warning: Dropping sample SJCBF001018_D5 from details_df because there is another sample with the same unique_patient_id SJCBF001018 that does not end with _D5.
+Warning: Dropping sample SJAML015363_D5 from details_df because there is another sample with the same unique_patient_id SJAML015363 that does not end with _D5.
+Deduplicating _D4 samples:
+Warning: Dropping sample SJCBF001018_D4 from details_df because there is another sample with the same unique_patient_id SJCBF001018 that does not end with _D4.
+Deduplicating _D3 samples:
+Warning: Dropping sample SJCBF001018_D3 from details_df because there is another sample with the same unique_patient_id SJCBF001018 that does not end with _D3.
+Warning: Dropping sample SJAML016569_D3 from details_df because there is another sample with the same unique_patient_id SJAML016569 that does not end with _D3.
+Warning: Dropping sample SJAML040277_D3 from details_df because there is another sample with the same unique_patient_id SJAML040277 that does not end with _D3.
+Warning: Dropping sample SJAML003322_D3 from details_df because there is another sample with the same unique_patient_id SJAML003322 that does not end with _D3.
+Warning: Dropping sample SJAML001441_D3 from details_df because there is another sample with the same unique_patient_id SJAML001441 that does not end with _D3.
+Warning: Dropping sample SJAML001414_D3 from details_df because there is another sample with the same unique_patient_id SJAML001414 that does not end with _D3.
+Warning: Dropping sample SJAML040281_D3 from details_df because there is another sample with the same unique_patient_id SJAML040281 that does not end with _D3.
+Warning: Dropping sample SJAML043625_D3 from details_df because there is another sample with the same unique_patient_id SJAML043625 that does not end with _D3.
+Warning: Dropping sample SJAML001427_D3 from details_df because there is another sample with the same unique_patient_id SJAML001427 that does not end with _D3.
+Warning: Dropping sample SJAML030200_D3 from details_df because there is another sample with the same unique_patient_id SJAML030200 that does not end with _D3.
+Deduplicating _D2 samples:
+Warning: Dropping sample SJAMLM7011109_D2 from details_df because there is another sample with the same unique_patient_id SJAMLM7011109 that does not end with _D2.
+Warning: Dropping sample SJAMLM7011108_D2 from details_df because there is another sample with the same unique_patient_id SJAMLM7011108 that does not end with _D2.
+Warning: Dropping sample SJCBF001018_D2 from details_df because there is another sample with the same unique_patient_id SJCBF001018 that does not end with _D2.
+Warning: Dropping sample SJBALL031881_D2 from details_df because there is another sample with the same unique_patient_id SJBALL031881 that does not end with _D2.
+Warning: Dropping sample SJBALL031268_D2 from details_df because there is another sample with the same unique_patient_id SJBALL031268 that does not end with _D2.
+Warning: Dropping sample SJBALL031288_D2 from details_df because there is another sample with the same unique_patient_id SJBALL031288 that does not end with _D2.
+Warning: Dropping sample SJTALL032432_D2 from details_df because there is another sample with the same unique_patient_id SJTALL032432 that does not end with _D2.
+Warning: Dropping sample SJHM031965_D2 from details_df because there is another sample with the same unique_patient_id SJHM031965 that does not end with _D2.
+Warning: Dropping sample SJBALL030894_D2 from details_df because there is another sample with the same unique_patient_id SJBALL030894 that does not end with _D2.
+Warning: Dropping sample SJAML016582_D2 from details_df because there is another sample with the same unique_patient_id SJAML016582 that does not end with _D2.
+Warning: Dropping sample SJAML016581_D2 from details_df because there is another sample with the same unique_patient_id SJAML016581 that does not end with _D2.
+Warning: Dropping sample SJAML016575_D2 from details_df because there is another sample with the same unique_patient_id SJAML016575 that does not end with _D2.
+Warning: Dropping sample SJAML016565_D2 from details_df because there is another sample with the same unique_patient_id SJAML016565 that does not end with _D2.
+Warning: Dropping sample SJAML016560_D2 from details_df because there is another sample with the same unique_patient_id SJAML016560 that does not end with _D2.
+Warning: Dropping sample SJAML016551_D2 from details_df because there is another sample with the same unique_patient_id SJAML016551 that does not end with _D2.
+Warning: Dropping sample SJAML016542_D2 from details_df because there is another sample with the same unique_patient_id SJAML016542 that does not end with _D2.
+Warning: Dropping sample SJAML016537_D2 from details_df because there is another sample with the same unique_patient_id SJAML016537 that does not end with _D2.
+Warning: Dropping sample SJAML001444_D2 from details_df because there is another sample with the same unique_patient_id SJAML001444 that does not end with _D2.
+Warning: Dropping sample SJBALL031079_D2 from details_df because there is another sample with the same unique_patient_id SJBALL031079 that does not end with _D2.
+Warning: Dropping sample SJAML032873_D2 from details_df because there is another sample with the same unique_patient_id SJAML032873 that does not end with _D2.
+Warning: Dropping sample SJBALL030413_D2 from details_df because there is another sample with the same unique_patient_id SJBALL030413 that does not end with _D2.
+Warning: Dropping sample SJHM032149_D2 from details_df because there is another sample with the same unique_patient_id SJHM032149 that does not end with _D2.
+Warning: Dropping sample SJAML010730_D2 from details_df because there is another sample with the same unique_patient_id SJAML010730 that does not end with _D2.
+Warning: Dropping sample SJAML045737_D2 from details_df because there is another sample with the same unique_patient_id SJAML045737 that does not end with _D2.
+Warning: Dropping sample SJAML001409_D2 from details_df because there is another sample with the same unique_patient_id SJAML001409 that does not end with _D2.
+Warning: Dropping sample SJAML001442_D2 from details_df because there is another sample with the same unique_patient_id SJAML001442 that does not end with _D2.
+Warning: Dropping sample SJAML015345_D2 from details_df because there is another sample with the same unique_patient_id SJAML015345 that does not end with _D2.
+Warning: Dropping sample SJAML061501_D2 from details_df because there is another sample with the same unique_patient_id SJAML061501 that does not end with _D2.
+Deduplicating _R4 samples:
+Deduplicating _R3 samples:
+Deduplicating _R2 samples:
+Warning: Dropping sample SJBALL030123_R2 from details_df because there is another sample with the same unique_patient_id SJBALL030123 that does not end with _R2.
+Warning: Dropping sample SJAMLM7010949_R2 from details_df because there is another sample with the same unique_patient_id SJAMLM7010949 that does not end with _R2.
+Deduplicating _R1 samples:
+Warning: Dropping sample SJBALL030052_R1 from details_df because there is another sample with the same unique_patient_id SJBALL030052 that does not end with _R1.
+Warning: Dropping sample SJBALL030133_R1 from details_df because there is another sample with the same unique_patient_id SJBALL030133 that does not end with _R1.
+Warning: Dropping sample SJBALL030123_R1 from details_df because there is another sample with the same unique_patient_id SJBALL030123 that does not end with _R1.
+Warning: Dropping sample SJBALL030523_R1 from details_df because there is another sample with the same unique_patient_id SJBALL030523 that does not end with _R1.
+Warning: Dropping sample SJBALL030983_R1 from details_df because there is another sample with the same unique_patient_id SJBALL030983 that does not end with _R1.
+Warning: Dropping sample SJAMLM7010949_R1 from details_df because there is another sample with the same unique_patient_id SJAMLM7010949 that does not end with _R1.
+Warning: Dropping sample SJAMLM7010955_R1 from details_df because there is another sample with the same unique_patient_id SJAMLM7010955 that does not end with _R1.
+Warning: Dropping sample SJAMLM7015549_R1 from details_df because there is another sample with the same unique_patient_id SJAMLM7015549 that does not end with _R1.
+Warning: Dropping sample SJTALL031014_R1 from details_df because there is another sample with the same unique_patient_id SJTALL031014 that does not end with _R1.
+Warning: Dropping sample SJAML031469_R1 from details_df because there is another sample with the same unique_patient_id SJAML031469 that does not end with _R1.
+Warning: Dropping sample SJAML031051_R1 from details_df because there is another sample with the same unique_patient_id SJAML031051 that does not end with _R1.
+Warning: Dropping sample SJBALL031052_R1 from details_df because there is another sample with the same unique_patient_id SJBALL031052 that does not end with _R1.
+Warning: Dropping sample SJAML031409_R1 from details_df because there is another sample with the same unique_patient_id SJAML031409 that does not end with _R1.
+Warning: Dropping sample SJTALL030047_R1 from details_df because there is another sample with the same unique_patient_id SJTALL030047 that does not end with _R1.
+Warning: Dropping sample SJBALL031116_R1 from details_df because there is another sample with the same unique_patient_id SJBALL031116 that does not end with _R1.
+Warning: Dropping sample SJBALL030414_R1 from details_df because there is another sample with the same unique_patient_id SJBALL030414 that does not end with _R1.
+Warning: Dropping sample SJAML031311_R1 from details_df because there is another sample with the same unique_patient_id SJAML031311 that does not end with _R1.
+Warning: Dropping sample SJAML030286_R1 from details_df because there is another sample with the same unique_patient_id SJAML030286 that does not end with _R1.
+Warning: Dropping sample SJAML067622_R1 from details_df because there is another sample with the same unique_patient_id SJAML067622 that does not end with _R1.
+Warning: Dropping sample SJAML061532_R1 from details_df because there is another sample with the same unique_patient_id SJAML061532 that does not end with _R1.
+Warning: Dropping sample SJAML061497_R1 from details_df because there is another sample with the same unique_patient_id SJAML061497 that does not end with _R1.
+Warning: Dropping sample SJAML061494_R1 from details_df because there is another sample with the same unique_patient_id SJAML061494 that does not end with _R1.
+Warning: Dropping sample SJAML061493_R1 from details_df because there is another sample with the same unique_patient_id SJAML061493 that does not end with _R1.
+Warning: Dropping sample SJAML061492_R1 from details_df because there is another sample with the same unique_patient_id SJAML061492 that does not end with _R1.
+Warning: Dropping sample SJAML060298_R1 from details_df because there is another sample with the same unique_patient_id SJAML060298 that does not end with _R1.
+Warning: Dropping sample SJAML060297_R1 from details_df because there is another sample with the same unique_patient_id SJAML060297 that does not end with _R1.
+Warning: Dropping sample SJAML060295_R1 from details_df because there is another sample with the same unique_patient_id SJAML060295 that does not end with _R1.
+Warning: Dropping sample SJAML060294_R1 from details_df because there is another sample with the same unique_patient_id SJAML060294 that does not end with _R1.
+Warning: Dropping sample SJAML060293_R1 from details_df because there is another sample with the same unique_patient_id SJAML060293 that does not end with _R1.
+Warning: Dropping sample SJAML060292_R1 from details_df because there is another sample with the same unique_patient_id SJAML060292 that does not end with _R1.
+Warning: Dropping sample SJAML060291_R1 from details_df because there is another sample with the same unique_patient_id SJAML060291 that does not end with _R1.
+Warning: Dropping sample SJAML060289_R1 from details_df because there is another sample with the same unique_patient_id SJAML060289 that does not end with _R1.
+Warning: Dropping sample SJAML060229_R1 from details_df because there is another sample with the same unique_patient_id SJAML060229 that does not end with _R1.
+Warning: Dropping sample SJAML060227_R1 from details_df because there is another sample with the same unique_patient_id SJAML060227 that does not end with _R1.
+Warning: Dropping sample SJAML060226_R1 from details_df because there is another sample with the same unique_patient_id SJAML060226 that does not end with _R1.
+Warning: Dropping sample SJAML060224_R1 from details_df because there is another sample with the same unique_patient_id SJAML060224 that does not end with _R1.
+Warning: Dropping sample SJAML031043_R1 from details_df because there is another sample with the same unique_patient_id SJAML031043 that does not end with _R1.
+Warning: Dropping sample SJAML016570_R1 from details_df because there is another sample with the same unique_patient_id SJAML016570 that does not end with _R1.
+Warning: Dropping sample SJAML003321_R1 from details_df because there is another sample with the same unique_patient_id SJAML003321 that does not end with _R1.
+Warning: Dropping sample SJBALL031680_R1 from details_df because there is another sample with the same unique_patient_id SJBALL031680 that does not end with _R1.
+Warning: Dropping sample SJBALL031408_R1 from details_df because there is another sample with the same unique_patient_id SJBALL031408 that does not end with _R1.
+Warning: Dropping sample SJBALL030215_R1 from details_df because there is another sample with the same unique_patient_id SJBALL030215 that does not end with _R1.
+Warning: Dropping sample SJAML031254_R1 from details_df because there is another sample with the same unique_patient_id SJAML031254 that does not end with _R1.
+Warning: Dropping sample SJBALL032458_R1 from details_df because there is another sample with the same unique_patient_id SJBALL032458 that does not end with _R1.
+Warning: Dropping sample SJBALL030463_R1 from details_df because there is another sample with the same unique_patient_id SJBALL030463 that does not end with _R1.
+Warning: Dropping sample SJBALL031799_R1 from details_df because there is another sample with the same unique_patient_id SJBALL031799 that does not end with _R1.
+Warning: Dropping sample SJBALL033161_R1 from details_df because there is another sample with the same unique_patient_id SJBALL033161 that does not end with _R1.
+Warning: Dropping sample SJAML032732_R1 from details_df because there is another sample with the same unique_patient_id SJAML032732 that does not end with _R1.
+Deduplicating _E samples:
+Warning: Dropping sample SJCBF100_E from details_df because there is another sample with the same unique_patient_id SJCBF100 that does not end with _E.
+Warning: Dropping sample SJINF001_E from details_df because there is another sample with the same unique_patient_id SJINF001 that does not end with _E.
+Warning: Dropping sample SJINF002_E from details_df because there is another sample with the same unique_patient_id SJINF002 that does not end with _E.
+Deduplicating _R samples:
+Warning: Dropping sample SJETV010_R from details_df because there is another sample with the same unique_patient_id SJETV010 that does not end with _R.
+Warning: Dropping sample SJETV043_R from details_df because there is another sample with the same unique_patient_id SJETV043 that does not end with _R.
+Warning: Dropping sample SJETV047_R from details_df because there is another sample with the same unique_patient_id SJETV047 that does not end with _R.
+Warning: Dropping sample SJETV136_R from details_df because there is another sample with the same unique_patient_id SJETV136 that does not end with _R.
+Warning: Dropping sample SJETV190_R from details_df because there is another sample with the same unique_patient_id SJETV190 that does not end with _R.
+Warning: Dropping sample SJETV191_R from details_df because there is another sample with the same unique_patient_id SJETV191 that does not end with _R.
+Warning: Dropping sample SJINF060_R from details_df because there is another sample with the same unique_patient_id SJINF060 that does not end with _R.
+Warning: Dropping sample SJINF061_R from details_df because there is another sample with the same unique_patient_id SJINF061 that does not end with _R.
+Warning: Dropping sample SJINF073_R from details_df because there is another sample with the same unique_patient_id SJINF073 that does not end with _R.
+Deduplicating _S samples:
+Warning: Dropping sample SJETV047_S from details_df because there is another sample with the same unique_patient_id SJETV047 that does not end with _S.
+Deduplicating _F samples:
+Warning: Dropping sample SJINF068_F from details_df because there is another sample with the same unique_patient_id SJINF068 that does not end with _F.
+Patient details summary:
+Number of unique patients: 2517
+Mean age at dx: 8.9 ± (5.9)
+Male/Female: 1300/971
+Missing age: 289
+Missing sex: 246
+Missing both: 239
+Running preprocessing.mlomix_pre.SJC-panALL...
+Processing SJC-panALL...
+Processing phenotype data...
+Warning: Dropping rows with invalid sample names:
+                                                   fusion  ... FLT3 mut‡
+sample                                                     ...          
+* age Group: Childhood, age <16 years; adolesce...    NaN  ...       NaN
+† focal CNA, ≤10 gene in the CNA region; partia...    NaN  ...       NaN
+‡ amino acid changes and mutant allele frequenc...    NaN  ...       NaN
+
+[3 rows x 28 columns]
+Patient details summary:
+Number of unique patients: 1988
+Mean age at dx: 19.4 ± (19.0)
+Male/Female: 1042/850
+Missing age: 62
+Missing sex: 96
+Missing both: 58
+Running preprocessing.mlomix_pre.TARGET-AML...
+Processing TARGET-AML...
+Patient details summary:
+Number of unique patients: 1164
+Mean age at dx: 9.8 ± (6.2)
+Male/Female: 588/576
+Missing age: 0
+Missing sex: 0
+Missing both: 0
+Total samples with GEX data: 1534
+Total samples with DNAm data: 122
+Number of samples with GEX data only: 1440
+Number of samples with DNAm data only: 28
+Number of samples with both GEX and DNAm data: 94
+Processing /home/mariya/Data/pallas/raw/TARGET-AML-TCGA-LAML/GSE190931.beta_matrix.tsv for dnam_beta_matrix_file...
+Sample GSM5735299 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735299.betas.txt since we already have raw data for this sample.
+Sample GSM5735300 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735300.betas.txt since we already have raw data for this sample.
+Sample GSM5735301 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735301.betas.txt since we already have raw data for this sample.
+Sample GSM5735302 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735302.betas.txt since we already have raw data for this sample.
+Sample GSM5735303 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735303.betas.txt since we already have raw data for this sample.
+Sample GSM5735304 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735304.betas.txt since we already have raw data for this sample.
+Sample GSM5735305 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735305.betas.txt since we already have raw data for this sample.
+Sample GSM5735306 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735306.betas.txt since we already have raw data for this sample.
+Sample GSM5735307 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735307.betas.txt since we already have raw data for this sample.
+All files for /home/mariya/Data/pallas/raw/TARGET-AML-TCGA-LAML/GSE190931.beta_matrix.tsv already exist, skipping processing this file.
+Processing /home/mariya/Data/pallas/raw/TARGET-AML-TCGA-LAML/GSE190931.pvals.tsv for dnam_pvals_file...
+Sample GSM5735299 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735299.pvals.txt since we already have raw data for this sample.
+Sample GSM5735300 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735300.pvals.txt since we already have raw data for this sample.
+Sample GSM5735301 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735301.pvals.txt since we already have raw data for this sample.
+Sample GSM5735302 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735302.pvals.txt since we already have raw data for this sample.
+Sample GSM5735303 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735303.pvals.txt since we already have raw data for this sample.
+Sample GSM5735304 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735304.pvals.txt since we already have raw data for this sample.
+Sample GSM5735305 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735305.pvals.txt since we already have raw data for this sample.
+Sample GSM5735306 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735306.pvals.txt since we already have raw data for this sample.
+Sample GSM5735307 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735307.pvals.txt since we already have raw data for this sample.
+All files for /home/mariya/Data/pallas/raw/TARGET-AML-TCGA-LAML/GSE190931.pvals.tsv already exist, skipping processing this file.
+Patient details summary:
+Number of unique patients: 1663
+Mean age at dx: 9.7 ± (6.3)
+Male/Female: 867/796
+Missing age: 0
+Missing sex: 0
+Missing both: 0
+Warning: The following samples have both dnam_beta_matrix_file and idats_basename specified. Since we should be using raw data for these samples, we will remove the dnam_beta_matrix_file for these samples.
+['TARGET-20-PAMYAS-D', 'TARGET-20-PANCSC-D', 'TARGET-20-PANGTF-D', 'TARGET-20-PANYNR-D', 'TARGET-20-PARDMG-D', 'TARGET-20-PARVAI-D', 'TARGET-20-PASBBE-D', 'TARGET-20-PASRTP-D']
+Total samples with GEX data: 1534
+Total samples with DNAm data: 1153
+Number of samples with GEX data only: 894
+Number of samples with DNAm data only: 513
+Number of samples with both GEX and DNAm data: 640
+Running preprocessing.mlomix_pre.Krali-2023...
+Processing Krali-2023...
+Processing /home/mariya/Data/pallas/raw/Krali-2023/ALL_Krali_2023_n=384_beta_matrix.tsv for dnam_beta_matrix_file...
+All files for /home/mariya/Data/pallas/raw/Krali-2023/ALL_Krali_2023_n=384_beta_matrix.tsv already exist, skipping processing this file.
+Processing /home/mariya/Data/pallas/raw/Krali-2023/ALL_Nordlund_Inaki_n=828_beta_matrix.tsv for dnam_beta_matrix_file...
+All files for /home/mariya/Data/pallas/raw/Krali-2023/ALL_Nordlund_Inaki_n=828_beta_matrix.tsv already exist, skipping processing this file.
+Processing /home/mariya/Data/pallas/raw/Krali-2023/ALL_relapse_Nordlund_Inaki_n=27_beta_matrix.tsv for dnam_beta_matrix_file...
+All files for /home/mariya/Data/pallas/raw/Krali-2023/ALL_relapse_Nordlund_Inaki_n=27_beta_matrix.tsv already exist, skipping processing this file.
+Processing /home/mariya/Data/pallas/raw/Krali-2023/ALL_Krali_2023_n=384_detection_pvals.tsv for dnam_pvals_file...
+All files for /home/mariya/Data/pallas/raw/Krali-2023/ALL_Krali_2023_n=384_detection_pvals.tsv already exist, skipping processing this file.
+Processing /home/mariya/Data/pallas/raw/Krali-2023/ALL_Nordlund_Inaki_n=828_detection_pvals.tsv for dnam_pvals_file...
+All files for /home/mariya/Data/pallas/raw/Krali-2023/ALL_Nordlund_Inaki_n=828_detection_pvals.tsv already exist, skipping processing this file.
+Processing /home/mariya/Data/pallas/raw/Krali-2023/ALL_relapse_Nordlund_Inaki_n=27_detection_pvals.tsv for dnam_pvals_file...
+All files for /home/mariya/Data/pallas/raw/Krali-2023/ALL_relapse_Nordlund_Inaki_n=27_detection_pvals.tsv already exist, skipping processing this file.
+Total samples with GEX data: 340
+Total samples with DNAm data: 1244
+Number of samples with GEX data only: 29
+Number of samples with DNAm data only: 933
+Number of samples with both GEX and DNAm data: 311
+Processing phenotype data...
+Total samples with GEX data: 405
+Total samples with DNAm data: 1244
+Number of samples with GEX data only: 94
+Number of samples with DNAm data only: 933
+Number of samples with both GEX and DNAm data: 311
+Patient details summary:
+Number of unique patients: 1196
+Mean age at dx: 6.3 ± (4.4)
+Male/Female: 649/547
+Missing age: 1
+Missing sex: 0
+Missing both: 0
+Running preprocessing.mlomix_pre.Lilljebjorn-2016...
+Processing Lilljebjorn-2016...
+Patient details summary:
+Number of unique patients: 195
+Mean age at dx: 5.0 ± (3.9)
+Male/Female: 108/87
+Missing age: 0
+Missing sex: 0
+Missing both: 0
+Processing phenotype data...
+Running preprocessing.mlomix_pre.Tran-2022...
+Processing Tran-2022...
+Patient details summary:
+Number of unique patients: 173
+Mean age at dx: 8.2 ± (5.2)
+Male/Female: 95/78
+Missing age: 0
+Missing sex: 0
+Missing both: 0
+Processing phenotype data...
+Running preprocessing.mlomix_pre.Krali-2021...
+Processing Krali-2021...
+Processing phenotype data...
+Deduplicating _r samples:
+Warning: Dropping sample AML_004_r from details_df because there is another sample with the same unique_patient_id AML_004 that does not end with _r.
+Warning: Dropping sample AML_019_r from details_df because there is another sample with the same unique_patient_id AML_019 that does not end with _r.
+Warning: Dropping sample AML_028_r from details_df because there is another sample with the same unique_patient_id AML_028 that does not end with _r.
+Warning: Dropping sample AML_033_r from details_df because there is another sample with the same unique_patient_id AML_033 that does not end with _r.
+Warning: Dropping sample AML_039_r from details_df because there is another sample with the same unique_patient_id AML_039 that does not end with _r.
+Warning: Dropping sample AML_044_r from details_df because there is another sample with the same unique_patient_id AML_044 that does not end with _r.
+Warning: Dropping sample AML_047_r from details_df because there is another sample with the same unique_patient_id AML_047 that does not end with _r.
+Warning: Dropping sample AML_060_r from details_df because there is another sample with the same unique_patient_id AML_060 that does not end with _r.
+Warning: Dropping sample AML_065_r from details_df because there is another sample with the same unique_patient_id AML_065 that does not end with _r.
+Warning: Dropping sample AML_079_r from details_df because there is another sample with the same unique_patient_id AML_079 that does not end with _r.
+Warning: Dropping sample AML_029_r from details_df because there is another sample with the same unique_patient_id AML_029 that does not end with _r.
+Warning: Dropping sample AML_077_r from details_df because there is another sample with the same unique_patient_id AML_077 that does not end with _r.
+Warning: Dropping sample AML_072_r from details_df because there is another sample with the same unique_patient_id AML_072 that does not end with _r.
+Warning: Dropping sample AML_104_r from details_df because there is another sample with the same unique_patient_id AML_104 that does not end with _r.
+Warning: Dropping sample AML_001_r from details_df because there is another sample with the same unique_patient_id AML_001 that does not end with _r.
+Warning: Dropping sample AML_043_r from details_df because there is another sample with the same unique_patient_id AML_043 that does not end with _r.
+Warning: Dropping sample AML_093_r from details_df because there is another sample with the same unique_patient_id AML_093 that does not end with _r.
+Patient details summary:
+Number of unique patients: 125
+Mean age at dx: 7.9 ± (5.4)
+Male/Female: 74/51
+Missing age: 0
+Missing sex: 0
+Missing both: 0
+Processing /home/mariya/Data/pallas/raw/Krali-2021/AML_Krali_Pelle_2021_n=142_beta_matrix_test.tsv for dnam_beta_matrix_file...
+All files for /home/mariya/Data/pallas/raw/Krali-2021/AML_Krali_Pelle_2021_n=142_beta_matrix_test.tsv already exist, skipping processing this file.
+Processing /home/mariya/Data/pallas/raw/Krali-2021/AML_Krali_Pelle_2021_n=142_detection_pvals_test.tsv for dnam_pvals_file...
+All files for /home/mariya/Data/pallas/raw/Krali-2021/AML_Krali_Pelle_2021_n=142_detection_pvals_test.tsv already exist, skipping processing this file.
+Running preprocessing.mlomix_pre.Stratmann-2022...
+Processing Stratmann-2022...
+Deduplicating R3 samples:
+Warning: Dropping sample AML015-R3 from details_df because there is another sample with the same unique_patient_id AML015 that does not end with R3.
+Warning: Dropping sample AML044-R3 from details_df because there is another sample with the same unique_patient_id AML044 that does not end with R3.
+Deduplicating R2 samples:
+Warning: Dropping sample AML047-R2 from details_df because there is another sample with the same unique_patient_id AML047 that does not end with R2.
+Warning: Dropping sample AML048-R2 from details_df because there is another sample with the same unique_patient_id AML048 that does not end with R2.
+Warning: Dropping sample AML050-R2 from details_df because there is another sample with the same unique_patient_id AML050 that does not end with R2.
+Warning: Dropping sample AML051-R2 from details_df because there is another sample with the same unique_patient_id AML051 that does not end with R2.
+Warning: Dropping sample AML072-R2 from details_df because there is another sample with the same unique_patient_id AML072 that does not end with R2.
+Warning: Dropping sample AML076-R2 from details_df because there is another sample with the same unique_patient_id AML076 that does not end with R2.
+Deduplicating R2-P samples:
+Warning: Dropping sample AML072-R2-P from details_df because there is another sample with the same unique_patient_id AML072 that does not end with R2-P.
+Warning: Dropping sample AML076-R2-P from details_df because there is another sample with the same unique_patient_id AML076 that does not end with R2-P.
+Deduplicating R1 samples:
+Warning: Dropping sample AML002-R1 from details_df because there is another sample with the same unique_patient_id AML002 that does not end with R1.
+Warning: Dropping sample AML009-R1 from details_df because there is another sample with the same unique_patient_id AML009 that does not end with R1.
+Warning: Dropping sample AML011-R1 from details_df because there is another sample with the same unique_patient_id AML011 that does not end with R1.
+Warning: Dropping sample AML023-R1 from details_df because there is another sample with the same unique_patient_id AML023 that does not end with R1.
+Warning: Dropping sample AML024-R1 from details_df because there is another sample with the same unique_patient_id AML024 that does not end with R1.
+Warning: Dropping sample AML035-R1 from details_df because there is another sample with the same unique_patient_id AML035 that does not end with R1.
+Warning: Dropping sample AML036-R1 from details_df because there is another sample with the same unique_patient_id AML036 that does not end with R1.
+Warning: Dropping sample AML037-R1 from details_df because there is another sample with the same unique_patient_id AML037 that does not end with R1.
+Warning: Dropping sample AML040-R1 from details_df because there is another sample with the same unique_patient_id AML040 that does not end with R1.
+Warning: Dropping sample AML042-R1 from details_df because there is another sample with the same unique_patient_id AML042 that does not end with R1.
+Warning: Dropping sample AML043-R1 from details_df because there is another sample with the same unique_patient_id AML043 that does not end with R1.
+Warning: Dropping sample AML045-R1 from details_df because there is another sample with the same unique_patient_id AML045 that does not end with R1.
+Warning: Dropping sample AML050-R1 from details_df because there is another sample with the same unique_patient_id AML050 that does not end with R1.
+Warning: Dropping sample AML051-R1 from details_df because there is another sample with the same unique_patient_id AML051 that does not end with R1.
+Warning: Dropping sample AML052-R1 from details_df because there is another sample with the same unique_patient_id AML052 that does not end with R1.
+Warning: Dropping sample AML054-R1 from details_df because there is another sample with the same unique_patient_id AML054 that does not end with R1.
+Warning: Dropping sample AML057-R1 from details_df because there is another sample with the same unique_patient_id AML057 that does not end with R1.
+Warning: Dropping sample AML069-R1 from details_df because there is another sample with the same unique_patient_id AML069 that does not end with R1.
+Warning: Dropping sample AML070-R1 from details_df because there is another sample with the same unique_patient_id AML070 that does not end with R1.
+Warning: Dropping sample AML071-R1 from details_df because there is another sample with the same unique_patient_id AML071 that does not end with R1.
+Warning: Dropping sample AML072-R1 from details_df because there is another sample with the same unique_patient_id AML072 that does not end with R1.
+Warning: Dropping sample AML074-R1 from details_df because there is another sample with the same unique_patient_id AML074 that does not end with R1.
+Warning: Dropping sample AML075-R1 from details_df because there is another sample with the same unique_patient_id AML075 that does not end with R1.
+Warning: Dropping sample AML076-R1 from details_df because there is another sample with the same unique_patient_id AML076 that does not end with R1.
+Warning: Dropping sample AML081-R1 from details_df because there is another sample with the same unique_patient_id AML081 that does not end with R1.
+Warning: Dropping sample AML082-R1 from details_df because there is another sample with the same unique_patient_id AML082 that does not end with R1.
+Warning: Dropping sample AML085-R1 from details_df because there is another sample with the same unique_patient_id AML085 that does not end with R1.
+Warning: Dropping sample AML087-R1 from details_df because there is another sample with the same unique_patient_id AML087 that does not end with R1.
+Warning: Dropping sample AML092-R1 from details_df because there is another sample with the same unique_patient_id AML092 that does not end with R1.
+Warning: Dropping sample AML094-R1 from details_df because there is another sample with the same unique_patient_id AML094 that does not end with R1.
+Warning: Dropping sample AML095-R1 from details_df because there is another sample with the same unique_patient_id AML095 that does not end with R1.
+Warning: Dropping sample AML097-R1 from details_df because there is another sample with the same unique_patient_id AML097 that does not end with R1.
+Warning: Dropping sample AML100-R1 from details_df because there is another sample with the same unique_patient_id AML100 that does not end with R1.
+Warning: Dropping sample AML101-R1 from details_df because there is another sample with the same unique_patient_id AML101 that does not end with R1.
+Warning: Dropping sample AML103-R1 from details_df because there is another sample with the same unique_patient_id AML103 that does not end with R1.
+Deduplicating R1-P samples:
+Warning: Dropping sample AML073-R1-P from details_df because there is another sample with the same unique_patient_id AML073 that does not end with R1-P.
+Warning: Dropping sample AML074-R1-P from details_df because there is another sample with the same unique_patient_id AML074 that does not end with R1-P.
+Warning: Dropping sample AML091-R1-P from details_df because there is another sample with the same unique_patient_id AML091 that does not end with R1-P.
+Deduplicating PR samples:
+Warning: Dropping sample AML008-PR from details_df because there is another sample with the same unique_patient_id AML008 that does not end with PR.
+Warning: Dropping sample AML020-PR from details_df because there is another sample with the same unique_patient_id AML020 that does not end with PR.
+Warning: Dropping sample AML028-PR from details_df because there is another sample with the same unique_patient_id AML028 that does not end with PR.
+Warning: Dropping sample AML093-PR from details_df because there is another sample with the same unique_patient_id AML093 that does not end with PR.
+Patient details summary:
+Number of unique patients: 70
+Mean age at dx: 42.5 ± (27.0)
+Male/Female: 33/37
+Missing age: 0
+Missing sex: 0
+Missing both: 0
+Processing phenotype data...
+Loading samplesheet...
+Processing gene expression data...
+Total samples with GEX data: 140
+Total samples with DNAm data: 131
+Number of samples with GEX data only: 12
+Number of samples with DNAm data only: 3
+Number of samples with both GEX and DNAm data: 128
+Running preprocessing.mlomix_pre.TCGA-LAML...
+Processing TCGA-LAML...
+Patient details summary:
+Number of unique patients: 79
+Mean age at dx: 53.1 ± (16.0)
+Male/Female: 37/42
+Missing age: 0
+Missing sex: 0
+Missing both: 0
+Total samples with GEX data: 60
+Total samples with DNAm data: 77
+Number of samples with GEX data only: 2
+Number of samples with DNAm data only: 19
+Number of samples with both GEX and DNAm data: 58
+Running preprocessing.mlomix_pre.Enblad-2025...
+Processing Enblad-2025...
+Processing /home/mariya/Data/pallas/raw/Enblad-2025/ALL_FMCA_EPIC2_n=55_beta_matrix.tsv for dnam_beta_matrix_file...
+All files for /home/mariya/Data/pallas/raw/Enblad-2025/ALL_FMCA_EPIC2_n=55_beta_matrix.tsv already exist, skipping processing this file.
+Processing /home/mariya/Data/pallas/raw/Enblad-2025/ALL_FMCA_EPIC2_n=55_detection_pvals.tsv for dnam_pvals_file...
+All files for /home/mariya/Data/pallas/raw/Enblad-2025/ALL_FMCA_EPIC2_n=55_detection_pvals.tsv already exist, skipping processing this file.
+Total samples with GEX data: 0
+Total samples with DNAm data: 55
+Number of samples with GEX data only: 0
+Number of samples with DNAm data only: 55
+Number of samples with both GEX and DNAm data: 0
+Patient details summary:
+Number of unique patients: 55
+Mean age at dx: 6.2 ± (4.4)
+Male/Female: 29/26
+Missing age: 0
+Missing sex: 0
+Missing both: 0
+Running preprocessing.mlomix_pre.Diedrich-2021...
+Processing Diedrich-2021...
+Processing phenotype data...
+Patient details summary:
+Number of unique patients: 19
+Mean age at dx: 5.8 ± (3.9)
+Male/Female: 12/7
+Missing age: 0
+Missing sex: 0
+Missing both: 0
+Running preprocessing.mlomix_pre.Paulsson-2023...
+Processing Paulsson-2023...
+Combining all samplesheets...
+
+Total number of samples: 8944
+
+dataset
+SJC-DS-1009         2625
+TARGET-AML          2183
+SJC-panALL          1988
+Krali-2023          1338
+Lilljebjorn-2016     195
+Tran-2022            173
+Stratmann-2022       143
+Krali-2021           142
+TCGA-LAML             79
+Enblad-2025           55
+Diedrich-2021         19
+Paulsson-2023          4
+Name: count, dtype: int64
+
+
+data_silo
+labeled_diagnostic    5780
+unlabeled              975
+replicate              887
+relapse                501
+unrecognized           448
+multiclass             203
+excluded               150
+Name: count, dtype: int64
+
+
+data_silo_detailed
+labeled_diagnostic    5780
+misc                  2189
+unlabeled              975
+Name: count, dtype: int64
+
+
+Class distribution in labeled_diagnostic:
+class
+B-ALL, high hyperdiploid                            573
+AML, KMT2A-r                                        570
+B-ALL, ETV6::RUNX1                                  472
+AML, RUNX1::RUNX1T1                                 389
+B-ALL, BCR::ABL1-like                               373
+AML, CBFB::MYH11                                    265
+Disease,B-ALL,aneuploidy,high hyperdiploid          265
+AML, NPM1alt                                        248
+Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1         243
+B-ALL, KMT2A-r                                      218
+B-ALL, PAX5alt                                      202
+T-ALL                                               178
+B-ALL, DUX4-r                                       164
+AML, NUP98-r                                        164
+B-ALL, BCR::ABL1                                    139
+B-ALL, TCF3::PBX1                                   126
+B-ALL, hypodiploid                                  122
+AML, CEBPAalt                                       120
+Disease,T-ALL                                        87
+Disease,Non-leukemic                                 85
+B-ALL, ZNF384-r                                      80
+Non-leukemic                                         63
+B-ALL, ETV6::RUNX1-like                              62
+B-ALL, MEF2D-r                                       57
+AML, CBFA2T3::GLIS2                                  55
+B-ALL, iAMP21                                        51
+Disease,B-ALL,KMT2A-r                                48
+AML, DEK::NUP214                                     44
+B-ALL, PAX5 P80R                                     38
+AML, APL-PML::RARA                                   29
+Disease,B-ALL,TCF3::PBX1                             27
+AML, ETV6-r                                          25
+Disease,B-ALL,PAX5alt                                21
+B-ALL, NUTM1-r                                       18
+B-ALL, MYC-r                                         17
+AML, KAT6A-r                                         16
+Disease,B-ALL,BCR::ABL1-group,BCR::ABL1              15
+AML, PICALM::MLLT10                                  13
+AML, RBM15::MKL1                                     13
+AML, MECOM-r                                         11
+Disease,B-ALL,aneuploidy,hypodiploid                 10
+AML, FUS::ERG                                        10
+B-ALL, HLF-r                                          9
+Disease,B-ALL,aneuploidy,iAMP21                       7
+B-ALL, IKZF1 N159Y                                    7
+hypodiploid                                           4
+Disease,B-ALL,PAX5 P80R                               4
+Disease,B-ALL,BCR::ABL1-group,BCR::ABL1-like          4
+Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1-like      4
+AML, BCR::ABL1                                        4
+AML, RUNX1::RUNX1T1-like                              3
+B-ALL, IGH::CEBPD                                     3
+Disease,B-ALL,aneuploidy,low hyperdiploid             2
+Disease,B-ALL,NUTM1-r                                 1
+Disease,B-ALL,MEF2D-r                                 1
+Disease,B-ALL,DUX4-r                                  1
+Name: count, dtype: int64
+
+
+Number of bimodal samples: 1205
+
+Class distribution in labeled_diagnostic bimodal:
+class
+AML, KMT2A-r                302
+AML, RUNX1::RUNX1T1         220
+AML, NPM1alt                166
+AML, CBFB::MYH11             82
+AML, CEBPAalt                71
+B-ALL, high hyperdiploid     45
+B-ALL, ETV6::RUNX1           31
+AML, NUP98-r                 30
+B-ALL, PAX5alt               29
+AML, DEK::NUP214             27
+B-ALL, DUX4-r                19
+T-ALL                        18
+B-ALL, ZNF384-r              17
+B-ALL, iAMP21                15
+AML, APL-PML::RARA           14
+AML, CBFA2T3::GLIS2          13
+B-ALL, KMT2A-r               13
+B-ALL, TCF3::PBX1            10
+Non-leukemic                 10
+B-ALL, ETV6::RUNX1-like      10
+B-ALL, BCR::ABL1             10
+AML, ETV6-r                   9
+B-ALL, MEF2D-r                8
+B-ALL, BCR::ABL1-like         7
+AML, KAT6A-r                  7
+AML, FUS::ERG                 5
+B-ALL, PAX5 P80R              4
+AML, BCR::ABL1                4
+AML, RBM15::MKL1              4
+B-ALL, NUTM1-r                3
+AML, MECOM-r                  2
+Name: count, dtype: int64
+
+
+Warning: stratified split failed (The least populated class in y has only 1 member, which is too few. The minimum number of groups for any class cannot be less than 2.). Falling back to unstratified split.
+Warning: stratified split failed (The least populated class in y has only 1 member, which is too few. The minimum number of groups for any class cannot be less than 2.). Falling back to unstratified split.
+Class distribution in train_large_model:
+class
+AML, KMT2A-r                                        406
+B-ALL, high hyperdiploid                            395
+B-ALL, ETV6::RUNX1                                  328
+AML, RUNX1::RUNX1T1                                 278
+B-ALL, BCR::ABL1-like                               249
+AML, CBFB::MYH11                                    192
+Disease,B-ALL,aneuploidy,high hyperdiploid          184
+Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1         163
+AML, NPM1alt                                        156
+B-ALL, KMT2A-r                                      154
+B-ALL, PAX5alt                                      149
+T-ALL                                               125
+AML, NUP98-r                                        116
+B-ALL, DUX4-r                                       115
+B-ALL, BCR::ABL1                                    104
+B-ALL, TCF3::PBX1                                    92
+AML, CEBPAalt                                        88
+B-ALL, hypodiploid                                   84
+B-ALL, ZNF384-r                                      62
+Disease,T-ALL                                        56
+Disease,Non-leukemic                                 55
+Non-leukemic                                         44
+AML, CBFA2T3::GLIS2                                  43
+B-ALL, iAMP21                                        41
+B-ALL, ETV6::RUNX1-like                              38
+B-ALL, MEF2D-r                                       35
+Disease,B-ALL,KMT2A-r                                31
+AML, DEK::NUP214                                     30
+B-ALL, PAX5 P80R                                     30
+AML, APL-PML::RARA                                   23
+AML, ETV6-r                                          20
+Disease,B-ALL,TCF3::PBX1                             19
+Disease,B-ALL,PAX5alt                                15
+AML, KAT6A-r                                         13
+B-ALL, MYC-r                                         12
+B-ALL, NUTM1-r                                       11
+Disease,B-ALL,BCR::ABL1-group,BCR::ABL1              11
+AML, RBM15::MKL1                                     10
+AML, FUS::ERG                                         9
+Disease,B-ALL,aneuploidy,hypodiploid                  8
+AML, MECOM-r                                          7
+AML, PICALM::MLLT10                                   7
+B-ALL, HLF-r                                          7
+Disease,B-ALL,aneuploidy,iAMP21                       5
+B-ALL, IKZF1 N159Y                                    4
+AML, RUNX1::RUNX1T1-like                              3
+hypodiploid                                           3
+Disease,B-ALL,PAX5 P80R                               3
+Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1-like      3
+Disease,B-ALL,aneuploidy,low hyperdiploid             2
+B-ALL, IGH::CEBPD                                     2
+AML, BCR::ABL1                                        1
+Disease,B-ALL,NUTM1-r                                 1
+Disease,B-ALL,DUX4-r                                  1
+Disease,B-ALL,MEF2D-r                                 1
+Disease,B-ALL,BCR::ABL1-group,BCR::ABL1-like          1
+Name: count, dtype: int64
+
+Class distribution in calibration_large_model:
+class
+B-ALL, high hyperdiploid                            93
+AML, KMT2A-r                                        85
+B-ALL, ETV6::RUNX1                                  69
+B-ALL, BCR::ABL1-like                               59
+AML, RUNX1::RUNX1T1                                 58
+AML, NPM1alt                                        49
+AML, CBFB::MYH11                                    41
+Disease,B-ALL,aneuploidy,high hyperdiploid          40
+Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1         38
+B-ALL, KMT2A-r                                      33
+B-ALL, PAX5alt                                      28
+B-ALL, DUX4-r                                       26
+AML, NUP98-r                                        23
+AML, CEBPAalt                                       18
+T-ALL                                               18
+B-ALL, TCF3::PBX1                                   17
+Disease,Non-leukemic                                17
+B-ALL, hypodiploid                                  17
+B-ALL, BCR::ABL1                                    15
+B-ALL, MEF2D-r                                      14
+Disease,T-ALL                                       13
+Non-leukemic                                        13
+B-ALL, ETV6::RUNX1-like                             12
+B-ALL, ZNF384-r                                     11
+Disease,B-ALL,KMT2A-r                                9
+B-ALL, PAX5 P80R                                     6
+B-ALL, iAMP21                                        5
+AML, CBFA2T3::GLIS2                                  5
+Disease,B-ALL,PAX5alt                                5
+Disease,B-ALL,TCF3::PBX1                             4
+AML, DEK::NUP214                                     4
+AML, ETV6-r                                          3
+B-ALL, MYC-r                                         2
+Disease,B-ALL,BCR::ABL1-group,BCR::ABL1-like         2
+AML, MECOM-r                                         2
+B-ALL, HLF-r                                         2
+AML, RBM15::MKL1                                     2
+AML, APL-PML::RARA                                   2
+B-ALL, NUTM1-r                                       1
+B-ALL, IKZF1 N159Y                                   1
+AML, FUS::ERG                                        1
+Disease,B-ALL,PAX5 P80R                              1
+Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1-like     1
+AML, PICALM::MLLT10                                  1
+Disease,B-ALL,aneuploidy,iAMP21                      1
+Name: count, dtype: int64
+
+Class distribution in test_large_model:
+class
+B-ALL, high hyperdiploid                        85
+AML, KMT2A-r                                    79
+B-ALL, ETV6::RUNX1                              75
+B-ALL, BCR::ABL1-like                           65
+AML, RUNX1::RUNX1T1                             53
+AML, NPM1alt                                    43
+Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1     42
+Disease,B-ALL,aneuploidy,high hyperdiploid      41
+T-ALL                                           35
+AML, CBFB::MYH11                                32
+B-ALL, KMT2A-r                                  31
+AML, NUP98-r                                    25
+B-ALL, PAX5alt                                  25
+B-ALL, DUX4-r                                   23
+B-ALL, hypodiploid                              21
+B-ALL, BCR::ABL1                                20
+Disease,T-ALL                                   18
+B-ALL, TCF3::PBX1                               17
+AML, CEBPAalt                                   14
+Disease,Non-leukemic                            13
+B-ALL, ETV6::RUNX1-like                         12
+AML, DEK::NUP214                                10
+B-ALL, MEF2D-r                                   8
+Disease,B-ALL,KMT2A-r                            8
+AML, CBFA2T3::GLIS2                              7
+B-ALL, ZNF384-r                                  7
+Non-leukemic                                     6
+B-ALL, NUTM1-r                                   6
+B-ALL, iAMP21                                    5
+AML, PICALM::MLLT10                              5
+Disease,B-ALL,TCF3::PBX1                         4
+Disease,B-ALL,BCR::ABL1-group,BCR::ABL1          4
+AML, APL-PML::RARA                               4
+AML, KAT6A-r                                     3
+B-ALL, MYC-r                                     3
+AML, BCR::ABL1                                   3
+AML, ETV6-r                                      2
+Disease,B-ALL,aneuploidy,hypodiploid             2
+B-ALL, IKZF1 N159Y                               2
+B-ALL, PAX5 P80R                                 2
+AML, MECOM-r                                     2
+B-ALL, IGH::CEBPD                                1
+Disease,B-ALL,BCR::ABL1-group,BCR::ABL1-like     1
+AML, RBM15::MKL1                                 1
+Disease,B-ALL,PAX5alt                            1
+Disease,B-ALL,aneuploidy,iAMP21                  1
+hypodiploid                                      1
+Name: count, dtype: int64
+
+Moving 17 underrepresented class(es) from test to calibration (MIN_TEST_SAMPLES_PER_CLASS=5):
+  ['Disease,B-ALL,TCF3::PBX1', 'Disease,B-ALL,BCR::ABL1-group,BCR::ABL1', 'AML, APL-PML::RARA', 'AML, KAT6A-r', 'B-ALL, MYC-r', 'AML, BCR::ABL1', 'AML, ETV6-r', 'Disease,B-ALL,aneuploidy,hypodiploid', 'B-ALL, IKZF1 N159Y', 'B-ALL, PAX5 P80R', 'AML, MECOM-r', 'B-ALL, IGH::CEBPD', 'Disease,B-ALL,BCR::ABL1-group,BCR::ABL1-like', 'AML, RBM15::MKL1', 'Disease,B-ALL,PAX5alt', 'Disease,B-ALL,aneuploidy,iAMP21', 'hypodiploid']
+
+Updated class distribution in calibration_large_model:
+class
+B-ALL, high hyperdiploid                            93
+AML, KMT2A-r                                        85
+B-ALL, ETV6::RUNX1                                  69
+B-ALL, BCR::ABL1-like                               59
+AML, RUNX1::RUNX1T1                                 58
+AML, NPM1alt                                        49
+AML, CBFB::MYH11                                    41
+Disease,B-ALL,aneuploidy,high hyperdiploid          40
+Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1         38
+B-ALL, KMT2A-r                                      33
+B-ALL, PAX5alt                                      28
+B-ALL, DUX4-r                                       26
+AML, NUP98-r                                        23
+T-ALL                                               18
+AML, CEBPAalt                                       18
+Disease,Non-leukemic                                17
+B-ALL, hypodiploid                                  17
+B-ALL, TCF3::PBX1                                   17
+B-ALL, BCR::ABL1                                    15
+B-ALL, MEF2D-r                                      14
+Non-leukemic                                        13
+Disease,T-ALL                                       13
+B-ALL, ETV6::RUNX1-like                             12
+B-ALL, ZNF384-r                                     11
+Disease,B-ALL,KMT2A-r                                9
+Disease,B-ALL,TCF3::PBX1                             8
+B-ALL, PAX5 P80R                                     8
+Disease,B-ALL,PAX5alt                                6
+AML, APL-PML::RARA                                   6
+B-ALL, MYC-r                                         5
+AML, ETV6-r                                          5
+AML, CBFA2T3::GLIS2                                  5
+B-ALL, iAMP21                                        5
+AML, DEK::NUP214                                     4
+AML, MECOM-r                                         4
+Disease,B-ALL,BCR::ABL1-group,BCR::ABL1              4
+Disease,B-ALL,BCR::ABL1-group,BCR::ABL1-like         3
+AML, RBM15::MKL1                                     3
+AML, BCR::ABL1                                       3
+AML, KAT6A-r                                         3
+B-ALL, IKZF1 N159Y                                   3
+Disease,B-ALL,aneuploidy,hypodiploid                 2
+B-ALL, HLF-r                                         2
+Disease,B-ALL,aneuploidy,iAMP21                      2
+B-ALL, NUTM1-r                                       1
+AML, FUS::ERG                                        1
+Disease,B-ALL,PAX5 P80R                              1
+Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1-like     1
+AML, PICALM::MLLT10                                  1
+B-ALL, IGH::CEBPD                                    1
+hypodiploid                                          1
+Name: count, dtype: int64
+
+Updated class distribution in test_large_model:
+class
+B-ALL, high hyperdiploid                       85
+AML, KMT2A-r                                   79
+B-ALL, ETV6::RUNX1                             75
+B-ALL, BCR::ABL1-like                          65
+AML, RUNX1::RUNX1T1                            53
+AML, NPM1alt                                   43
+Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1    42
+Disease,B-ALL,aneuploidy,high hyperdiploid     41
+T-ALL                                          35
+AML, CBFB::MYH11                               32
+B-ALL, KMT2A-r                                 31
+AML, NUP98-r                                   25
+B-ALL, PAX5alt                                 25
+B-ALL, DUX4-r                                  23
+B-ALL, hypodiploid                             21
+B-ALL, BCR::ABL1                               20
+Disease,T-ALL                                  18
+B-ALL, TCF3::PBX1                              17
+AML, CEBPAalt                                  14
+Disease,Non-leukemic                           13
+B-ALL, ETV6::RUNX1-like                        12
+AML, DEK::NUP214                               10
+Disease,B-ALL,KMT2A-r                           8
+B-ALL, MEF2D-r                                  8
+AML, CBFA2T3::GLIS2                             7
+B-ALL, ZNF384-r                                 7
+Non-leukemic                                    6
+B-ALL, NUTM1-r                                  6
+B-ALL, iAMP21                                   5
+AML, PICALM::MLLT10                             5
+Name: count, dtype: int64
+
+Class distribution in train_bimodal_model:
+class
+AML, KMT2A-r                211
+AML, RUNX1::RUNX1T1         154
+AML, NPM1alt                116
+AML, CBFB::MYH11             57
+AML, CEBPAalt                50
+B-ALL, high hyperdiploid     31
+B-ALL, ETV6::RUNX1           22
+AML, NUP98-r                 21
+B-ALL, PAX5alt               20
+AML, DEK::NUP214             19
+B-ALL, DUX4-r                13
+T-ALL                        13
+B-ALL, ZNF384-r              12
+AML, APL-PML::RARA           10
+B-ALL, iAMP21                10
+B-ALL, KMT2A-r                9
+AML, CBFA2T3::GLIS2           9
+Non-leukemic                  7
+B-ALL, BCR::ABL1              7
+B-ALL, TCF3::PBX1             7
+B-ALL, ETV6::RUNX1-like       7
+AML, ETV6-r                   6
+B-ALL, MEF2D-r                6
+AML, KAT6A-r                  5
+B-ALL, BCR::ABL1-like         5
+AML, FUS::ERG                 4
+B-ALL, PAX5 P80R              3
+AML, BCR::ABL1                3
+AML, RBM15::MKL1              3
+B-ALL, NUTM1-r                2
+AML, MECOM-r                  1
+Name: count, dtype: int64
+
+Class distribution in test_bimodal_model:
+class
+AML, KMT2A-r                91
+AML, RUNX1::RUNX1T1         66
+AML, NPM1alt                50
+AML, CBFB::MYH11            25
+AML, CEBPAalt               21
+B-ALL, high hyperdiploid    14
+AML, NUP98-r                 9
+B-ALL, ETV6::RUNX1           9
+B-ALL, PAX5alt               9
+AML, DEK::NUP214             8
+B-ALL, DUX4-r                6
+B-ALL, iAMP21                5
+T-ALL                        5
+B-ALL, ZNF384-r              5
+AML, APL-PML::RARA           4
+B-ALL, KMT2A-r               4
+AML, CBFA2T3::GLIS2          4
+B-ALL, ETV6::RUNX1-like      3
+Non-leukemic                 3
+AML, ETV6-r                  3
+B-ALL, BCR::ABL1             3
+B-ALL, TCF3::PBX1            3
+AML, KAT6A-r                 2
+B-ALL, BCR::ABL1-like        2
+B-ALL, MEF2D-r               2
+B-ALL, NUTM1-r               1
+AML, FUS::ERG                1
+B-ALL, PAX5 P80R             1
+AML, RBM15::MKL1             1
+AML, MECOM-r                 1
+AML, BCR::ABL1               1
+Name: count, dtype: int64
+
+
+Saved samplesheet_labeled_diagnostic.csv with 5780 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic.csv
+Saved samplesheet_labeled_diagnostic_bimodal.csv with 1205 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic_bimodal.csv
+Saved samplesheet_unlabeled.csv with 975 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_unlabeled.csv
+Saved samplesheet_misc.csv with 2189 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_misc.csv
+Saved samplesheet_train_large_model.csv with 4047 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_train_large_model.csv
+Saved samplesheet_calibration_large_model.csv with 904 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_calibration_large_model.csv
+Saved samplesheet_test_large_model.csv with 831 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_test_large_model.csv
+Saved samplesheet_train_bimodal_model.csv with 843 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_train_bimodal_model.csv
+Saved samplesheet_test_bimodal_model.csv with 362 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_test_bimodal_model.csv
+
+Final counts in all sets:
+ - LABELED_DIAGNOSTIC: 5780 samples
+ - LABELED_DIAGNOSTIC_BIMODAL: 1205 samples
+ - TRAIN_LARGE_MODEL: 4045 samples
+ - CALIBRATION_LARGE_MODEL: 904 samples
+ - TEST_LARGE_MODEL: 831 samples
+ - TRAIN_BIMODAL_MODEL: 843 samples
+ - TEST_BIMODAL_MODEL: 362 samples
