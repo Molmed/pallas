@@ -158,6 +158,12 @@ else:
 
 # Read in dnam_subtypes_file into samplesheet_dnam
 samplesheet_dnam_df = pd.read_csv(dnam_subtypes_file, index_col=0)
+
+tax = Taxonomy()
+samplesheet_dnam_df['class'] = tax.translate_subtype_column(
+    samplesheet_dnam_df['subtype'],
+    exclude_subtypes=DNAM_EXCLUDE_SUBTYPES)
+
 samplesheet_dnam_df.index.name = 'sample'
 missing_samples = [sample for sample in dnam_samples if sample not in samplesheet_dnam_df.index]
 
@@ -172,7 +178,7 @@ for sample in missing_samples:
     if base_sample in samplesheet_dnam_df.index:
         samplesheet_dnam_df.loc[sample, 'class'] = samplesheet_dnam_df.loc[base_sample, 'class']
     else:
-        samplesheet_dnam_df.loc[sample, 'class'] = 'Disease,B-ALL,B-other'
+        samplesheet_dnam_df.loc[sample, 'class'] = 'Non-leukemic'
 
 # Read in and merge all beta matrix files
 for beta_matrix_file in dnam_beta_matrix_files:

@@ -39,7 +39,7 @@ for root, dirs, files in os.walk(raw_data_path):
 
 samplesheet_df = pd.DataFrame(index=sample_names)
 samplesheet_df.index.name = 'sample'
-samplesheet_df['class'] = 'hypodiploid'
+samplesheet_df['class'] = 'B-ALL, hypodiploid'
 samplesheet_df['batch'] = ''
 samplesheet_df['dataset'] = dataset_name
 samplesheet_df['data_silo'] = 'labeled_diagnostic'
