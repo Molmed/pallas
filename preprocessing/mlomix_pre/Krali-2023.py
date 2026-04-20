@@ -3,30 +3,38 @@ import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR, \
-        GEX_EXCLUDE_SUBTYPES, DNAM_EXCLUDE_SUBTYPES
+    GEX_EXCLUDE_SUBTYPES, DNAM_EXCLUDE_SUBTYPES
 from preprocessing.helpers import add_to_silo, \
     silo_unlabeled, silo_excluded, silo_remaining, \
-    format_mlomix_columns, summarize_patient_details, \
-    process_dnam_file, concatenate_samplesheets, \
-    concatenate_detail_dfs, summarize_modalities
+    format_mlomix_columns, process_dnam_file, \
+    concatenate_samplesheets, concatenate_detail_dfs
+
+dataset_name = 'Krali-2023'
+print(f"Processing {dataset_name}...")
+
+# OUTPUT FILES ########
+preprocessed_dir = f'{PREPROCESSED_DATA_DIR}/{dataset_name}'
+samplesheet_output_file = \
+    f'{preprocessed_dir}/samplesheet.csv'
+details_file = \
+    f'{preprocessed_dir}/patient_details.csv'
+dnam_sample_list = f'{preprocessed_dir}/dnam_sample_list.txt'
+gex_sample_list = f'{preprocessed_dir}/gex_sample_list.txt'
+
+# Make output dirs
+dnam_dir = f'{preprocessed_dir}/dnam'
+os.makedirs(dnam_dir, exist_ok=True)
+
+gex_dir = f'{preprocessed_dir}/gex'
+os.makedirs(gex_dir, exist_ok=True)
 
 
 def preprocess_heinaniemi_2023():
-    dataset_name = 'Heinaniemi-2023'
-    print(f"Processing {dataset_name}...")
-
     # INPUT FILES ########
     data_path = f'{RAW_DATA_DIR}/{dataset_name}'
     raw_data_path = f'{data_path}/GSE228632_RNAseq_read_counts.txt'
     pheno_input_file = f'{data_path}/GSE228632_meta.csv'
     details_input_file = f'{data_path}/Clinical_data_ALLIUM_FIN_cohort.xlsx'
-
-    # OUTPUT FILES ########
-    preprocessed_dir = f'{PREPROCESSED_DATA_DIR}/{dataset_name}'
-    samplesheet_output_file = \
-        f'{preprocessed_dir}/samplesheet.csv'
-    details_file = \
-        f'{preprocessed_dir}/patient_details.csv'
 
     # Make processed dir if not exists
     os.makedirs(preprocessed_dir, exist_ok=True)
@@ -77,7 +85,7 @@ def preprocess_heinaniemi_2023():
     # The contents should contain the Gene and the counts for that column
     # delimited by a tab. No header, no index.
     for col in gex_df.columns:
-        output_file = f'{preprocessed_dir}/{col}.txt'
+        output_file = f'{gex_dir}/{col}.txt'
         # Set feature_counts column for this sample in samplesheet_df
         samplesheet_df.loc[col, 'gex_feature_counts_file'] = output_file
         gex_df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
@@ -116,9 +124,6 @@ def preprocess_heinaniemi_2023():
     return samplesheet_df, details_df
 
 
-dataset_name = 'Krali-2023'
-print(f"Processing {dataset_name}...")
-
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
 raw_data_path = f'{data_path}/GSE227832_RNAseq_read_counts.txt'
@@ -137,26 +142,10 @@ dnam_pvals_files = [
     f'{data_path}/ALL_relapse_Nordlund_Inaki_n=27_detection_pvals.tsv'
 ]
 
-# OUTPUT FILES ########
-preprocessed_dir = f'{PREPROCESSED_DATA_DIR}/{dataset_name}'
-samplesheet_output_file = \
-    f'{preprocessed_dir}/samplesheet.csv'
-details_file = \
-    f'{preprocessed_dir}/patient_details.csv'
-dnam_sample_list = f'{preprocessed_dir}/dnam_sample_list.txt'
-
-# Make processed dir if not exists
-os.makedirs(preprocessed_dir, exist_ok=True)
-
 # PROCESS DNAm
-dnam_dir = f'{preprocessed_dir}/dnam'
-os.makedirs(dnam_dir, exist_ok=True)
 
-# If dnam_sample_sheet does not exist,
 # Get the first column from all the dnam_beta_matrix_files
 # and merge them into a single sample list
-
-# Make it a list, not a set, so duplicates are included
 if not os.path.exists(dnam_sample_list):
     dnam_samples = []
     for beta_matrix_file in dnam_beta_matrix_files:
@@ -204,9 +193,6 @@ for pvals_file in dnam_pvals_files:
         'pvals',
         'dnam_pvals_file')
 
-# Write to samplesheet_dnam.csv
-samplesheet_dnam_df.to_csv(f'{preprocessed_dir}/samplesheet_dnam.csv', index=True)
-
 # Set 'dataset' column to dataset name
 samplesheet_dnam_df['dataset'] = dataset_name
 
@@ -231,22 +217,7 @@ samplesheet_dnam_df = silo_remaining(samplesheet_dnam_df)
 # Format cols
 samplesheet_dnam_df = format_mlomix_columns(samplesheet_dnam_df)
 
-# Save as csv
-samplesheet_dnam_df.to_csv(f'{preprocessed_dir}/samplesheet_dnam.csv', index=True)
-
-print(samplesheet_dnam_df)
-exit()
-
-# Read in clinical file
-# Report all samples not in it
-# clinical_df = pd.read_csv(clinical_file, index_col=0)
-# missing_clinical_samples = [sample for sample in dnam_samples if sample not in clinical_df.index]
-# if missing_clinical_samples:
-#     print(f"Samples in dnam beta matrix files but not in clinical file: {missing_clinical_samples}")
-
-
-# PROCESS PHENO ########
-print("Processing phenotype data...")
+# PROCESS GEX
 # Load the data
 samplesheet_df = pd.read_excel(pheno_input_file,
                                sheet_name='Supplementary Data 2',
@@ -302,20 +273,26 @@ samplesheet_df['gex_feature_counts_file'] = None
 
 # PROCESS GEX ########
 # Break up the gene expression file
-gex_dir = f'{preprocessed_dir}/gex'
-os.makedirs(gex_dir, exist_ok=True)
 gex_df = pd.read_csv(raw_data_path, index_col=0, delimiter='\t')
 
 # For each column:
 # Create a new file with the column name as the file name
 # The contents should contain the Gene and the counts for that column
 # delimited by a tab. No header, no index.
+
+# Store gex_samples in list
+gex_sample_list = []
 for col in gex_df.columns:
     output_file = f'{gex_dir}/{col}.txt'
     # Set feature_counts column for this sample in samplesheet_df
     samplesheet_df.loc[col, 'gex_feature_counts_file'] = output_file
     if not os.path.exists(output_file):
         gex_df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
+    gex_sample_list.append(col)
+
+with open(f'{preprocessed_dir}/gex_sample_list.txt', 'w') as f:
+    for sample in sorted(set(gex_sample_list)):
+        f.write(sample + '\n')
 
 
 # For items where subtype is null and sample ends in "_2", "_3", or "_r",
@@ -350,8 +327,8 @@ samplesheet_df['class'] = tax.translate_subtype_column(
     samplesheet_df['class'],
     exclude_subtypes=all_excluded_subtypes)
 
-# Set batch to null if there is no gene expression data, since batch is only relevant for gene expression
-samplesheet_df.loc[samplesheet_df['gex_feature_counts_file'].isna(), 'batch'] = None
+# Remove any rows without gex features
+samplesheet_df = samplesheet_df[samplesheet_df['gex_feature_counts_file'].notna()]
 
 # Set 'dataset' column to dataset name
 samplesheet_df['dataset'] = dataset_name
@@ -380,18 +357,26 @@ samplesheet_df = add_to_silo(
 # Put the rest in the labeled_diagnostic silo
 samplesheet_df = silo_remaining(samplesheet_df)
 
-# remove all rows from spreadsheet missing both gex and dnam data, since there is no point in keeping them
-# and report on these samples
-has_gex = samplesheet_df['gex_feature_counts_file'].notna()
-has_dnam = samplesheet_df['dnam_beta_matrix_file'].notna()
-missing_gex_and_dnam = (~has_gex) & (~has_dnam)
-if missing_gex_and_dnam.any():
-    print("Samples missing both gex and dnam data:")
-    print(samplesheet_df[missing_gex_and_dnam].index.to_list())
-samplesheet_df = samplesheet_df[~missing_gex_and_dnam]
-
 # Order columns
 samplesheet_df = format_mlomix_columns(samplesheet_df)
+
+# Concat the dnam and samplesheet dfs
+samplesheet_df = concatenate_samplesheets(
+    samplesheet_df,
+    samplesheet_dnam_df)
+
+# Read in clinical file and filter it to all samples
+# that are in either dnam_samples or gex_samples
+details_df = pd.read_csv(clinical_file, index_col=0)
+details_df.index.name = 'sample'
+details_df['dataset'] = dataset_name
+details_df = details_df.loc[details_df.index.isin(set(dnam_samples) | set(gex_sample_list))]
+
+# Rename columns in details_df to match desired output format
+details_df = details_df.rename(columns={'Sex': 'sex', 'Age': 'age'})
+
+# Just keep the sex and age cols
+details_df = details_df[['dataset', 'sex', 'age']]
 
 # Get heinaniemi dataset
 h_samplesheet_df, h_details_df = preprocess_heinaniemi_2023()
@@ -399,55 +384,11 @@ h_samplesheet_df, h_details_df = preprocess_heinaniemi_2023()
 # Merge it in
 samplesheet_df = concatenate_samplesheets(
     samplesheet_df,
-    h_samplesheet_df)
-
-# Merge with the dnam
-samplesheet_df = concatenate_samplesheets(
-    samplesheet_df,
-    samplesheet_dnam_df,
+    h_samplesheet_df,
     samplesheet_output_file)
-
-summarize_modalities(samplesheet_df)
-
-# GET ALL PATIENT DETAILS
-# Copy df
-krali_df = samplesheet_df.copy()
-krali_samples = krali_df.index.to_list()
-
-# join on details file to see what we have
-details_df = pd.read_csv(details_input_file, index_col=0)
-details_df.index.name = 'sample'
-# Only keep entries that are in krali_samples
-details_df = details_df.loc[details_df.index.isin(krali_samples)]
 
 # Merge in heinaniemi details
 details_df = concatenate_detail_dfs(
     details_df,
-    h_details_df)
-
-details_df['dataset'] = dataset_name
-
-# Get list of samples in krali_samples but not in details_df and print them
-missing_samples = [s for s in krali_samples if s not in details_df.index]
-print(f"Samples in {dataset_name} but not in details file: {missing_samples}")
-
-# Rename columns in details_df to match desired output format
-details_df = details_df.rename(columns={'Sex': 'sex', 'Age': 'age'})
-
-# Drop all rows with "_r", "_2", or "_3" in the index, since those are replicates or relapses and we don't want to include them in the details file
-details_df = details_df[~details_df.index.str.endswith(("_r", "_2", "_3"))]
-
-# Drop all rows ending with "_B" or "_T" in the index, since those are controls and we don't want to include them in the details file
-details_df = details_df[~details_df.index.str.endswith(("_B", "_T"))]
-
-# Drop all rows starting with "Constitutional" in the index, since those are controls and we don't want to include them in the details file
-details_df = details_df[~details_df.index.str.startswith("Constitutional")]
-
-print(details_df)
-exit()
-
-# Report details
-summarize_patient_details(details_df)
-
-# Save details file
-details_df.to_csv(details_file, index=True)
+    h_details_df,
+    details_file)

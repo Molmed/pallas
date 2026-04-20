@@ -133,7 +133,8 @@ def process_dnam_file(samplesheet_df,
         output_file = f'{dnam_dir}/{idx}.{suffix}.txt'
 
         # Check if idats_basename at this row is a string with len > 1
-        idats_basename = samplesheet_df.at[idx, 'idats_basename']
+        # Check if idats_basename exists first before trying to access it, since it may not exist in the samplesheet_df yet
+        idats_basename = samplesheet_df.at[idx, 'idats_basename'] if 'idats_basename' in samplesheet_df.columns else None
         if isinstance(idats_basename, str) and len(idats_basename) > 1:
             print(f"Sample {idx} has idats_basename {idats_basename}, skipping checking for {output_file} since we already have raw data for this sample.")
             continue
@@ -433,17 +434,18 @@ def process_gdc_dnam(dataset_name,
     return samplesheet_df, details_df
 
 
-def concatenate_detail_dfs(df1, df2, output_file):
+def concatenate_detail_dfs(df1, df2, output_file=None):
     details_df = pd.concat([df1, df2], axis=0)
     details_df = details_df[~details_df.index.duplicated(keep='first')]
     # Rename index to sample
     details_df.index.name = 'sample'
     summarize_patient_details(details_df)
-    details_df.to_csv(output_file, index=True)
+    if output_file:
+        details_df.to_csv(output_file, index=True)
     return details_df
 
 
-def concatenate_samplesheets(df1, df2, output_file):
+def concatenate_samplesheets(df1, df2, output_file=None):
     g = df1.replace('', pd.NA)
     d = df2.replace('', pd.NA)
     samplesheet_df = g.combine_first(d)
@@ -458,5 +460,6 @@ def concatenate_samplesheets(df1, df2, output_file):
         print(samplesheet_df[mask].index.tolist())
         samplesheet_df.loc[mask, 'dnam_beta_matrix_file'] = pd.NA
     summarize_modalities(samplesheet_df)
-    samplesheet_df.to_csv(output_file, index=True)
+    if output_file:
+        samplesheet_df.to_csv(output_file, index=True)
     return samplesheet_df
