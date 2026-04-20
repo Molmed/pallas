@@ -25,7 +25,6 @@ clinical_file = f'{data_path}/TARGET-AML.clinical.tsv'
 
 # OUTPUT FILES ########
 dataset_name = 'TARGET-AML'
-print(f"Processing {dataset_name}...")
 preprocessed_dir = f'{PREPROCESSED_DATA_DIR}/{dataset_name}'
 gex_output_dir = f'{preprocessed_dir}/gex'
 dnam_output_dir = f'{preprocessed_dir}/dnam'
@@ -46,11 +45,14 @@ dnam_samplesheet_df, dnam_details_df = process_gdc_dnam(
     gdc_dnam_dir,
     dnam_output_dir)
 
-gdc_details_df = concatenate_detail_dfs(
-    gex_details_df, dnam_details_df, f'{preprocessed_dir}/patient_details.csv')
-
 gdc_samplesheet = concatenate_samplesheets(
-    gex_samplesheet_df, dnam_samplesheet_df, f'{preprocessed_dir}/samplesheet.csv')
+    gex_samplesheet_df,
+    dnam_samplesheet_df,
+    report=False)
+
+gdc_details_df = concatenate_detail_dfs(
+    gex_details_df, dnam_details_df,
+    report=False)
 
 
 def process_geo_pheno_file(file_path):
@@ -341,8 +343,8 @@ samplesheet_df = samplesheet_df.set_index('target_case_timepoint')
 gdc_samplesheet = gdc_samplesheet.set_index('target_case_timepoint')
 
 # Merge with gdc samplesheet and gdc details
-details_df = concatenate_detail_dfs(
-    gdc_details_df, details_df, f'{preprocessed_dir}/patient_details.csv')
-
 samplesheet_df = concatenate_samplesheets(
     gdc_samplesheet, samplesheet_df, f'{preprocessed_dir}/samplesheet.csv')
+
+details_df = concatenate_detail_dfs(
+    gdc_details_df, details_df, f'{preprocessed_dir}/patient_details.csv')

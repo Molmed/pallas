@@ -5,10 +5,9 @@ from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR
 from preprocessing.helpers import silo_unlabeled, \
     silo_remaining, format_mlomix_columns, \
-    summarize_patient_details
+    summarize_patient_details, summarize_modalities
 
 dataset_name = 'Lilljebjorn-2016'
-print(f"Processing {dataset_name}...")
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
@@ -46,11 +45,8 @@ details_df['sex'] = details_df['sex'].replace({'M': 'Male', 'F': 'Female'})
 details_df = details_df[
     ['dataset', 'sex', 'age']]
 
-summarize_patient_details(details_df)
 details_df.to_csv(details_file)
 
-# PROCESS PHENO ########
-print("Processing phenotype data...")
 # Load the data
 samplesheet_df = pd.read_csv(pheno_input_file, index_col=0, sep=';')
 
@@ -110,3 +106,6 @@ samplesheet_df = format_mlomix_columns(samplesheet_df)
 
 # Save the samplesheet
 samplesheet_df.to_csv(samplesheet_output_file)
+
+summarize_modalities(samplesheet_df)
+summarize_patient_details(details_df)

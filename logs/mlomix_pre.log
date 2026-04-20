@@ -1,6 +1,9 @@
-Running preprocessing.mlomix_pre.SJC-DS-1009...
-Processing SJC-DS-1009...
-Processing phenotype data...
+
+
+
+*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.SJC-DS-1009...*****
+
+
 Warning: The following sample names are duplicated and secondary occurrences will be removed:
 ['SJBALL021900_D1', 'SJBALL237_D', 'SJCBF041_D', 'SJETV093_D', 'SJETV092_D', 'SJMLL014_D', 'SJMLL019_D', 'SJPHALL005_D', 'SJPHALL003_D', 'SJBALL021305_D1', 'SJERG020299_D1', 'SJBALL021530_D1', 'SJBALL021109_D1', 'SJBALL021080_D1', 'SJAML030025_D1', 'SJAML030004_D1', 'SJAML030286_R1', 'SJMLL001_D', 'SJMLL002_D']
 Warning: The following NOS samples actually have a subtype:
@@ -233,6 +236,11 @@ Deduplicating _S samples:
 Warning: Dropping sample SJETV047_S from details_df because there is another sample with the same unique_patient_id SJETV047 that does not end with _S.
 Deduplicating _F samples:
 Warning: Dropping sample SJINF068_F from details_df because there is another sample with the same unique_patient_id SJINF068 that does not end with _F.
+Total samples with GEX data: 2625
+Total samples with DNAm data: 0
+Number of samples with GEX data only: 2625
+Number of samples with DNAm data only: 0
+Number of samples with both GEX and DNAm data: 0
 Patient details summary:
 Number of unique patients: 2517
 Mean age at dx: 8.9 ± (5.9)
@@ -240,9 +248,12 @@ Male/Female: 1300/971
 Missing age: 289
 Missing sex: 246
 Missing both: 239
-Running preprocessing.mlomix_pre.SJC-panALL...
-Processing SJC-panALL...
-Processing phenotype data...
+
+
+
+*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.SJC-panALL...*****
+
+
 Warning: Dropping rows with invalid sample names:
                                                    fusion  ... FLT3 mut‡
 sample                                                     ...          
@@ -251,6 +262,11 @@ sample                                                     ...
 ‡ amino acid changes and mutant allele frequenc...    NaN  ...       NaN
 
 [3 rows x 28 columns]
+Total samples with GEX data: 1988
+Total samples with DNAm data: 0
+Number of samples with GEX data only: 1988
+Number of samples with DNAm data only: 0
+Number of samples with both GEX and DNAm data: 0
 Patient details summary:
 Number of unique patients: 1988
 Mean age at dx: 19.4 ± (19.0)
@@ -258,20 +274,12 @@ Male/Female: 1042/850
 Missing age: 62
 Missing sex: 96
 Missing both: 58
-Running preprocessing.mlomix_pre.TARGET-AML...
-Processing TARGET-AML...
-Patient details summary:
-Number of unique patients: 1164
-Mean age at dx: 9.8 ± (6.2)
-Male/Female: 588/576
-Missing age: 0
-Missing sex: 0
-Missing both: 0
-Total samples with GEX data: 1534
-Total samples with DNAm data: 122
-Number of samples with GEX data only: 1440
-Number of samples with DNAm data only: 28
-Number of samples with both GEX and DNAm data: 94
+
+
+
+*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.TARGET-AML...*****
+
+
 Processing /home/mariya/Data/pallas/raw/TARGET-AML-TCGA-LAML/GSE190931.beta_matrix.tsv for dnam_beta_matrix_file...
 Sample GSM5735299 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735299.betas.txt since we already have raw data for this sample.
 Sample GSM5735300 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735300.betas.txt since we already have raw data for this sample.
@@ -294,6 +302,13 @@ Sample GSM5735305 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-
 Sample GSM5735306 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735306.pvals.txt since we already have raw data for this sample.
 Sample GSM5735307 has idats_basename /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931, skipping checking for /home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735307.pvals.txt since we already have raw data for this sample.
 All files for /home/mariya/Data/pallas/raw/TARGET-AML-TCGA-LAML/GSE190931.pvals.tsv already exist, skipping processing this file.
+Warning: The following samples have both dnam_beta_matrix_file and idats_basename specified. Since we should be using raw data for these samples, we will remove the dnam_beta_matrix_file for these samples.
+['TARGET-20-PAMYAS-D', 'TARGET-20-PANCSC-D', 'TARGET-20-PANGTF-D', 'TARGET-20-PANYNR-D', 'TARGET-20-PARDMG-D', 'TARGET-20-PARVAI-D', 'TARGET-20-PASBBE-D', 'TARGET-20-PASRTP-D']
+Total samples with GEX data: 1534
+Total samples with DNAm data: 1662
+Number of samples with GEX data only: 521
+Number of samples with DNAm data only: 649
+Number of samples with both GEX and DNAm data: 1013
 Patient details summary:
 Number of unique patients: 1663
 Mean age at dx: 9.7 ± (6.3)
@@ -301,15 +316,12 @@ Male/Female: 867/796
 Missing age: 0
 Missing sex: 0
 Missing both: 0
-Warning: The following samples have both dnam_beta_matrix_file and idats_basename specified. Since we should be using raw data for these samples, we will remove the dnam_beta_matrix_file for these samples.
-['TARGET-20-PAMYAS-D', 'TARGET-20-PANCSC-D', 'TARGET-20-PANGTF-D', 'TARGET-20-PANYNR-D', 'TARGET-20-PARDMG-D', 'TARGET-20-PARVAI-D', 'TARGET-20-PASBBE-D', 'TARGET-20-PASRTP-D']
-Total samples with GEX data: 1534
-Total samples with DNAm data: 1153
-Number of samples with GEX data only: 894
-Number of samples with DNAm data only: 513
-Number of samples with both GEX and DNAm data: 640
-Running preprocessing.mlomix_pre.Krali-2023...
-Processing Krali-2023...
+
+
+
+*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.Krali-2023...*****
+
+
 Processing /home/mariya/Data/pallas/raw/Krali-2023/ALL_Krali_2023_n=384_beta_matrix.tsv for dnam_beta_matrix_file...
 All files for /home/mariya/Data/pallas/raw/Krali-2023/ALL_Krali_2023_n=384_beta_matrix.tsv already exist, skipping processing this file.
 Processing /home/mariya/Data/pallas/raw/Krali-2023/ALL_Nordlund_Inaki_n=828_beta_matrix.tsv for dnam_beta_matrix_file...
@@ -322,12 +334,6 @@ Processing /home/mariya/Data/pallas/raw/Krali-2023/ALL_Nordlund_Inaki_n=828_dete
 All files for /home/mariya/Data/pallas/raw/Krali-2023/ALL_Nordlund_Inaki_n=828_detection_pvals.tsv already exist, skipping processing this file.
 Processing /home/mariya/Data/pallas/raw/Krali-2023/ALL_relapse_Nordlund_Inaki_n=27_detection_pvals.tsv for dnam_pvals_file...
 All files for /home/mariya/Data/pallas/raw/Krali-2023/ALL_relapse_Nordlund_Inaki_n=27_detection_pvals.tsv already exist, skipping processing this file.
-Total samples with GEX data: 340
-Total samples with DNAm data: 1244
-Number of samples with GEX data only: 29
-Number of samples with DNAm data only: 933
-Number of samples with both GEX and DNAm data: 311
-Processing phenotype data...
 Total samples with GEX data: 405
 Total samples with DNAm data: 1244
 Number of samples with GEX data only: 94
@@ -340,8 +346,17 @@ Male/Female: 649/547
 Missing age: 1
 Missing sex: 0
 Missing both: 0
-Running preprocessing.mlomix_pre.Lilljebjorn-2016...
-Processing Lilljebjorn-2016...
+
+
+
+*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.Lilljebjorn-2016...*****
+
+
+Total samples with GEX data: 195
+Total samples with DNAm data: 0
+Number of samples with GEX data only: 195
+Number of samples with DNAm data only: 0
+Number of samples with both GEX and DNAm data: 0
 Patient details summary:
 Number of unique patients: 195
 Mean age at dx: 5.0 ± (3.9)
@@ -349,9 +364,17 @@ Male/Female: 108/87
 Missing age: 0
 Missing sex: 0
 Missing both: 0
-Processing phenotype data...
-Running preprocessing.mlomix_pre.Tran-2022...
-Processing Tran-2022...
+
+
+
+*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.Tran-2022...*****
+
+
+Total samples with GEX data: 173
+Total samples with DNAm data: 0
+Number of samples with GEX data only: 173
+Number of samples with DNAm data only: 0
+Number of samples with both GEX and DNAm data: 0
 Patient details summary:
 Number of unique patients: 173
 Mean age at dx: 8.2 ± (5.2)
@@ -359,10 +382,12 @@ Male/Female: 95/78
 Missing age: 0
 Missing sex: 0
 Missing both: 0
-Processing phenotype data...
-Running preprocessing.mlomix_pre.Krali-2021...
-Processing Krali-2021...
-Processing phenotype data...
+
+
+
+*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.Krali-2021...*****
+
+
 Deduplicating _r samples:
 Warning: Dropping sample AML_004_r from details_df because there is another sample with the same unique_patient_id AML_004 that does not end with _r.
 Warning: Dropping sample AML_019_r from details_df because there is another sample with the same unique_patient_id AML_019 that does not end with _r.
@@ -381,6 +406,15 @@ Warning: Dropping sample AML_104_r from details_df because there is another samp
 Warning: Dropping sample AML_001_r from details_df because there is another sample with the same unique_patient_id AML_001 that does not end with _r.
 Warning: Dropping sample AML_043_r from details_df because there is another sample with the same unique_patient_id AML_043 that does not end with _r.
 Warning: Dropping sample AML_093_r from details_df because there is another sample with the same unique_patient_id AML_093 that does not end with _r.
+Processing /home/mariya/Data/pallas/raw/Krali-2021/AML_Krali_Pelle_2021_n=142_beta_matrix_test.tsv for dnam_beta_matrix_file...
+All files for /home/mariya/Data/pallas/raw/Krali-2021/AML_Krali_Pelle_2021_n=142_beta_matrix_test.tsv already exist, skipping processing this file.
+Processing /home/mariya/Data/pallas/raw/Krali-2021/AML_Krali_Pelle_2021_n=142_detection_pvals_test.tsv for dnam_pvals_file...
+All files for /home/mariya/Data/pallas/raw/Krali-2021/AML_Krali_Pelle_2021_n=142_detection_pvals_test.tsv already exist, skipping processing this file.
+Total samples with GEX data: 0
+Total samples with DNAm data: 142
+Number of samples with GEX data only: 0
+Number of samples with DNAm data only: 142
+Number of samples with both GEX and DNAm data: 0
 Patient details summary:
 Number of unique patients: 125
 Mean age at dx: 7.9 ± (5.4)
@@ -388,12 +422,12 @@ Male/Female: 74/51
 Missing age: 0
 Missing sex: 0
 Missing both: 0
-Processing /home/mariya/Data/pallas/raw/Krali-2021/AML_Krali_Pelle_2021_n=142_beta_matrix_test.tsv for dnam_beta_matrix_file...
-All files for /home/mariya/Data/pallas/raw/Krali-2021/AML_Krali_Pelle_2021_n=142_beta_matrix_test.tsv already exist, skipping processing this file.
-Processing /home/mariya/Data/pallas/raw/Krali-2021/AML_Krali_Pelle_2021_n=142_detection_pvals_test.tsv for dnam_pvals_file...
-All files for /home/mariya/Data/pallas/raw/Krali-2021/AML_Krali_Pelle_2021_n=142_detection_pvals_test.tsv already exist, skipping processing this file.
-Running preprocessing.mlomix_pre.Stratmann-2022...
-Processing Stratmann-2022...
+
+
+
+*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.Stratmann-2022...*****
+
+
 Deduplicating R3 samples:
 Warning: Dropping sample AML015-R3 from details_df because there is another sample with the same unique_patient_id AML015 that does not end with R3.
 Warning: Dropping sample AML044-R3 from details_df because there is another sample with the same unique_patient_id AML044 that does not end with R3.
@@ -452,6 +486,11 @@ Warning: Dropping sample AML008-PR from details_df because there is another samp
 Warning: Dropping sample AML020-PR from details_df because there is another sample with the same unique_patient_id AML020 that does not end with PR.
 Warning: Dropping sample AML028-PR from details_df because there is another sample with the same unique_patient_id AML028 that does not end with PR.
 Warning: Dropping sample AML093-PR from details_df because there is another sample with the same unique_patient_id AML093 that does not end with PR.
+Total samples with GEX data: 140
+Total samples with DNAm data: 131
+Number of samples with GEX data only: 12
+Number of samples with DNAm data only: 3
+Number of samples with both GEX and DNAm data: 128
 Patient details summary:
 Number of unique patients: 70
 Mean age at dx: 42.5 ± (27.0)
@@ -459,16 +498,17 @@ Male/Female: 33/37
 Missing age: 0
 Missing sex: 0
 Missing both: 0
-Processing phenotype data...
-Loading samplesheet...
-Processing gene expression data...
-Total samples with GEX data: 140
-Total samples with DNAm data: 131
-Number of samples with GEX data only: 12
-Number of samples with DNAm data only: 3
-Number of samples with both GEX and DNAm data: 128
-Running preprocessing.mlomix_pre.TCGA-LAML...
-Processing TCGA-LAML...
+
+
+
+*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.TCGA-LAML...*****
+
+
+Total samples with GEX data: 60
+Total samples with DNAm data: 77
+Number of samples with GEX data only: 2
+Number of samples with DNAm data only: 19
+Number of samples with both GEX and DNAm data: 58
 Patient details summary:
 Number of unique patients: 79
 Mean age at dx: 53.1 ± (16.0)
@@ -476,13 +516,12 @@ Male/Female: 37/42
 Missing age: 0
 Missing sex: 0
 Missing both: 0
-Total samples with GEX data: 60
-Total samples with DNAm data: 77
-Number of samples with GEX data only: 2
-Number of samples with DNAm data only: 19
-Number of samples with both GEX and DNAm data: 58
-Running preprocessing.mlomix_pre.Enblad-2025...
-Processing Enblad-2025...
+
+
+
+*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.Enblad-2025...*****
+
+
 Processing /home/mariya/Data/pallas/raw/Enblad-2025/ALL_FMCA_EPIC2_n=55_beta_matrix.tsv for dnam_beta_matrix_file...
 All files for /home/mariya/Data/pallas/raw/Enblad-2025/ALL_FMCA_EPIC2_n=55_beta_matrix.tsv already exist, skipping processing this file.
 Processing /home/mariya/Data/pallas/raw/Enblad-2025/ALL_FMCA_EPIC2_n=55_detection_pvals.tsv for dnam_pvals_file...
@@ -499,9 +538,17 @@ Male/Female: 29/26
 Missing age: 0
 Missing sex: 0
 Missing both: 0
-Running preprocessing.mlomix_pre.Diedrich-2021...
-Processing Diedrich-2021...
-Processing phenotype data...
+
+
+
+*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.Diedrich-2021...*****
+
+
+Total samples with GEX data: 19
+Total samples with DNAm data: 0
+Number of samples with GEX data only: 19
+Number of samples with DNAm data only: 0
+Number of samples with both GEX and DNAm data: 0
 Patient details summary:
 Number of unique patients: 19
 Mean age at dx: 5.8 ± (3.9)
@@ -509,8 +556,12 @@ Male/Female: 12/7
 Missing age: 0
 Missing sex: 0
 Missing both: 0
-Running preprocessing.mlomix_pre.Paulsson-2023...
-Processing Paulsson-2023...
+
+
+
+*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.Paulsson-2023...*****
+
+
 Combining all samplesheets...
 
 Total number of samples: 8944

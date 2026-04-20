@@ -7,7 +7,6 @@ from preprocessing.constants import \
 from preprocessing.helpers import format_mlomix_columns
 
 dataset_name = 'Paulsson-2023'
-print(f"Processing {dataset_name}...")
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'

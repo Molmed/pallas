@@ -30,7 +30,7 @@ modules = [
 ]
 
 for mod in modules:
-    print(f"Running {mod}...")
+    print(f"\n\n\n*****RUNNING ML_OMIX_PRE FOR DATASET {mod}...*****\n\n")
     runpy.run_module(mod, run_name="__main__")
 
 # Find all samplesheet.csv files and combine them

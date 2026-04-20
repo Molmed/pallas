@@ -91,11 +91,12 @@ def summarize_patient_details(df):
 
 
 def summarize_modalities(samplesheet_df):
+    # A sample has dnam if either dnam_beta_matrix_file or sentrix_id is populated
     num_gex_total = samplesheet_df['gex_feature_counts_file'].notna().sum()
-    num_dnam_total = samplesheet_df['dnam_beta_matrix_file'].notna().sum()
-    num_gex_only = ((samplesheet_df['gex_feature_counts_file'].notna()) & (samplesheet_df['dnam_beta_matrix_file'].isna())).sum()
-    num_dnam_only = ((samplesheet_df['gex_feature_counts_file'].isna()) & (samplesheet_df['dnam_beta_matrix_file'].notna())).sum()
-    num_both = ((samplesheet_df['gex_feature_counts_file'].notna()) & (samplesheet_df['dnam_beta_matrix_file'].notna())).sum()
+    num_dnam_total = ((samplesheet_df['dnam_beta_matrix_file'].notna()) | (samplesheet_df['sentrix_id'].notna())).sum()
+    num_gex_only = ((samplesheet_df['gex_feature_counts_file'].notna()) & (samplesheet_df['dnam_beta_matrix_file'].isna()) & (samplesheet_df['sentrix_id'].isna())).sum()
+    num_dnam_only = ((samplesheet_df['gex_feature_counts_file'].isna()) & (samplesheet_df['dnam_beta_matrix_file'].notna() | samplesheet_df['sentrix_id'].notna())).sum()
+    num_both = ((samplesheet_df['gex_feature_counts_file'].notna()) & (samplesheet_df['dnam_beta_matrix_file'].notna() | samplesheet_df['sentrix_id'].notna())).sum()
     print(f"Total samples with GEX data: {num_gex_total}")
     print(f"Total samples with DNAm data: {num_dnam_total}")
     print(f"Number of samples with GEX data only: {num_gex_only}")
@@ -434,18 +435,19 @@ def process_gdc_dnam(dataset_name,
     return samplesheet_df, details_df
 
 
-def concatenate_detail_dfs(df1, df2, output_file=None):
+def concatenate_detail_dfs(df1, df2, output_file=None, report=True):
     details_df = pd.concat([df1, df2], axis=0)
     details_df = details_df[~details_df.index.duplicated(keep='first')]
     # Rename index to sample
     details_df.index.name = 'sample'
-    summarize_patient_details(details_df)
+    if report:
+        summarize_patient_details(details_df)
     if output_file:
         details_df.to_csv(output_file, index=True)
     return details_df
 
 
-def concatenate_samplesheets(df1, df2, output_file=None):
+def concatenate_samplesheets(df1, df2, output_file=None, report=True):
     g = df1.replace('', pd.NA)
     d = df2.replace('', pd.NA)
     samplesheet_df = g.combine_first(d)
@@ -459,7 +461,8 @@ def concatenate_samplesheets(df1, df2, output_file=None):
         print("Warning: The following samples have both dnam_beta_matrix_file and idats_basename specified. Since we should be using raw data for these samples, we will remove the dnam_beta_matrix_file for these samples.")
         print(samplesheet_df[mask].index.tolist())
         samplesheet_df.loc[mask, 'dnam_beta_matrix_file'] = pd.NA
-    summarize_modalities(samplesheet_df)
+    if report:
+        summarize_modalities(samplesheet_df)
     if output_file:
         samplesheet_df.to_csv(output_file, index=True)
     return samplesheet_df

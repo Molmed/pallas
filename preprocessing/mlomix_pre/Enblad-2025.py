@@ -10,7 +10,6 @@ from preprocessing.helpers import add_to_silo, format_mlomix_columns, \
 
 
 dataset_name = 'Enblad-2025'
-print(f"Processing {dataset_name}...")
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'

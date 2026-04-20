@@ -5,11 +5,10 @@ from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR, GEX_EXCLUDE_SUBTYPES
 from preprocessing.helpers import add_to_silo, silo_unlabeled, \
     silo_unrecognized, silo_excluded, silo_remaining, \
-        format_mlomix_columns, summarize_patient_details, \
-        deduplicate_patient_details_using_sample_suffix
+    format_mlomix_columns, summarize_patient_details, \
+    deduplicate_patient_details_using_sample_suffix, summarize_modalities
 
 dataset_name = 'SJC-DS-1009'
-print(f"Processing {dataset_name}...")
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
@@ -44,7 +43,6 @@ nan_idx = panall_df.index.get_indexer_for(
 panall_df = panall_df.iloc[:nan_idx]
 
 # PROCESS PHENO ########
-print("Processing phenotype data...")
 samplesheet_df = pd.read_csv(pheno_input_file, sep='\t', header=0)
 
 # Get all rows where sample_name is duplicated
@@ -443,6 +441,7 @@ if not duplicate_patients.empty:
 details_df = details_df[
     ['dataset', 'sex', 'age']]
 
-summarize_patient_details(details_df)
-
 details_df.to_csv(details_file)
+
+summarize_modalities(samplesheet_df)
+summarize_patient_details(details_df)

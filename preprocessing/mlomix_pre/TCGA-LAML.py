@@ -1,10 +1,9 @@
 import pandas as pd
 from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR
-from preprocessing.helpers import summarize_patient_details, \
+from preprocessing.helpers import \
     process_gdc_gex, process_gdc_dnam, \
-    summarize_modalities, concatenate_detail_dfs, \
-    concatenate_samplesheets
+    concatenate_detail_dfs, concatenate_samplesheets
 
 
 # INPUT FILES ########
@@ -17,7 +16,6 @@ dnam_subtypes_file = f'{data_path}/TARGET-AML-TCGA-LAML.subtypes.dnam.tsv'
 clinical_file = f'{data_path}/TCGA-LAML.clinical.tsv'
 
 dataset_name = 'TCGA-LAML'
-print(f"Processing {dataset_name}...")
 
 # OUTPUT FILES ########
 preprocessed_dir = f'{PREPROCESSED_DATA_DIR}/{dataset_name}'
@@ -39,9 +37,6 @@ dnam_samplesheet_df, dnam_details_df = process_gdc_dnam(
     dnam_dir,
     dnam_output_dir)
 
-concatenate_detail_dfs(
-    gex_details_df, dnam_details_df, f'{preprocessed_dir}/patient_details.csv')
-
 # Indices are of the format TCGA-AB-2803-03A
 # Create new column "target_case_id" which removes the last segment, so TCGA-AB-2803
 gex_samplesheet_df['target_case_id'] = gex_samplesheet_df.index.str.rsplit('-', n=1).str[0]
@@ -53,3 +48,6 @@ dnam_samplesheet_df = dnam_samplesheet_df.set_index('target_case_id')
 
 concatenate_samplesheets(
     gex_samplesheet_df, dnam_samplesheet_df, f'{preprocessed_dir}/samplesheet.csv')
+
+concatenate_detail_dfs(
+    gex_details_df, dnam_details_df, f'{preprocessed_dir}/patient_details.csv')

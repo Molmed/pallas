@@ -4,10 +4,9 @@ from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR
 from preprocessing.helpers import format_mlomix_columns, \
-    summarize_patient_details
+    summarize_patient_details, summarize_modalities
 
 dataset_name = 'Diedrich-2021'
-print(f"Processing {dataset_name}...")
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
@@ -25,7 +24,6 @@ details_file = \
 os.makedirs(preprocessed_dir, exist_ok=True)
 
 # PROCESS PHENO ########
-print("Processing phenotype data...")
 # Load the data
 samplesheet_df = pd.read_excel(pheno_input_file,
                      sheet_name='Supplemental Table 1',
@@ -79,6 +77,8 @@ samplesheet_df = format_mlomix_columns(samplesheet_df)
 
 # Save the samplesheet
 samplesheet_df.to_csv(samplesheet_output_file)
+
+summarize_modalities(samplesheet_df)
 
 # Rename index to sample
 details_df.index.name = 'sample'

@@ -10,7 +10,6 @@ from preprocessing.helpers import add_to_silo, \
     concatenate_samplesheets, concatenate_detail_dfs
 
 dataset_name = 'Krali-2023'
-print(f"Processing {dataset_name}...")
 
 # OUTPUT FILES ########
 preprocessed_dir = f'{PREPROCESSED_DATA_DIR}/{dataset_name}'
@@ -39,8 +38,6 @@ def preprocess_heinaniemi_2023():
     # Make processed dir if not exists
     os.makedirs(preprocessed_dir, exist_ok=True)
 
-    # PROCESS PHENO ########
-    print("Processing phenotype data...")
     # Load the data
     samplesheet_df = pd.read_csv(pheno_input_file, index_col=0)
 
@@ -363,7 +360,8 @@ samplesheet_df = format_mlomix_columns(samplesheet_df)
 # Concat the dnam and samplesheet dfs
 samplesheet_df = concatenate_samplesheets(
     samplesheet_df,
-    samplesheet_dnam_df)
+    samplesheet_dnam_df,
+    report=False)
 
 # Read in clinical file and filter it to all samples
 # that are in either dnam_samples or gex_samples

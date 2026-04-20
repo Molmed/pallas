@@ -8,10 +8,9 @@ from preprocessing.helpers import add_to_silo, format_mlomix_columns, \
     silo_unlabeled, silo_remaining, \
     silo_unrecognized, silo_excluded, \
     format_mlomix_columns, summarize_patient_details, \
-    deduplicate_patient_details_using_sample_suffix
+    summarize_modalities, deduplicate_patient_details_using_sample_suffix
 
 dataset_name = 'Stratmann-2022'
-print(f"Processing {dataset_name}...")
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
@@ -70,17 +69,12 @@ if not duplicate_patients.empty:
 details_df = details_df[
     ['dataset', 'sex', 'age']]
 
-summarize_patient_details(details_df)
-
 details_df.to_csv(details_file)
 
-# PROCESS PHENO ########
-print("Processing phenotype data...")
 # Load the RNA-seq data
 samplesheet_df = pd.read_csv(pheno_input_file, index_col=0)
 
 # Read in dnam samplesheet
-print("Loading samplesheet...")
 dnam_samplesheet_df = pd.read_csv(dnam_raw_samplesheet_input_file, sep='\t', index_col=0)
 
 # Map the raw samplesheet sample name to the sample names in the details file, which are the same as the pheno file
@@ -147,8 +141,6 @@ if relapse_rows.any():
 samplesheet_df = silo_remaining(samplesheet_df)
 
 # PROCESS GEX ########
-print("Processing gene expression data...")
-
 # Break up the gene expression file
 gex_df = pd.read_excel(raw_data_path, index_col=0, header=8)
 
@@ -206,14 +198,5 @@ samplesheet_df = format_mlomix_columns(samplesheet_df)
 # Save the samplesheet
 samplesheet_df.to_csv(samplesheet_output_file)
 
-# Print report: num total GEX, num total DNAm, num samples with GEX data only, num with DNA data only, and num with both
-num_gex_total = samplesheet_df['gex_feature_counts_file'].notna().sum()
-num_dnam_total = samplesheet_df['sentrix_id'].notna().sum()
-num_gex_only = ((samplesheet_df['gex_feature_counts_file'].notna()) & (samplesheet_df['sentrix_id'].isna())).sum()
-num_dnam_only = ((samplesheet_df['gex_feature_counts_file'].isna()) & (samplesheet_df['sentrix_id'].notna())).sum()
-num_both = ((samplesheet_df['gex_feature_counts_file'].notna()) & (samplesheet_df['sentrix_id'].notna())).sum()
-print(f"Total samples with GEX data: {num_gex_total}")
-print(f"Total samples with DNAm data: {num_dnam_total}")
-print(f"Number of samples with GEX data only: {num_gex_only}")
-print(f"Number of samples with DNAm data only: {num_dnam_only}")
-print(f"Number of samples with both GEX and DNAm data: {num_both}")
+summarize_modalities(samplesheet_df)
+summarize_patient_details(details_df)

@@ -5,10 +5,9 @@ from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR, GEX_EXCLUDE_SUBTYPES
 from preprocessing.helpers import add_to_silo, silo_unlabeled, \
     silo_unrecognized, silo_excluded, silo_remaining, \
-        format_mlomix_columns, summarize_patient_details
+    format_mlomix_columns, summarize_patient_details, summarize_modalities
 
 dataset_name = 'SJC-panALL'
-print(f"Processing {dataset_name}...")
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
@@ -25,8 +24,7 @@ details_file = \
 # Make processed dir if not exists
 os.makedirs(preprocessed_dir, exist_ok=True)
 
-# PROCESS PHENO ########
-print("Processing phenotype data...")
+# Load the panALL data
 samplesheet_df = pd.read_excel(pheno_input_file,
                                sheet_name='ST1.Cohort',
                                header=0,
@@ -51,7 +49,7 @@ details_df = details_df.rename(columns={'gender': 'sex'})
 details_df = details_df[
     ['dataset', 'sex', 'age']]
 
-summarize_patient_details(details_df)
+
 
 details_df.to_csv(details_file)
 
@@ -173,3 +171,6 @@ samplesheet_df = format_mlomix_columns(samplesheet_df)
 
 # Save the samplesheet
 samplesheet_df.to_csv(samplesheet_output_file)
+
+summarize_modalities(samplesheet_df)
+summarize_patient_details(details_df)

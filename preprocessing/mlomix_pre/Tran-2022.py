@@ -5,10 +5,9 @@ from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR
 from preprocessing.helpers import add_to_silo, silo_unlabeled, \
     silo_remaining, format_mlomix_columns, \
-    summarize_patient_details
+    summarize_patient_details, summarize_modalities
 
 dataset_name = 'Tran-2022'
-print(f"Processing {dataset_name}...")
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
@@ -38,11 +37,8 @@ details_df['sex'] = details_df['sex'].replace({'M': 'Male', 'F': 'Female'})
 details_df = details_df[
     ['dataset', 'sex', 'age']]
 
-summarize_patient_details(details_df)
 details_df.to_csv(details_file)
 
-# PROCESS PHENO ########
-print("Processing phenotype data...")
 # Load the data
 samplesheet_df = pd.read_csv(pheno_input_file, index_col=0, sep=';')
 
@@ -99,3 +95,6 @@ samplesheet_df = samplesheet_df[samplesheet_df['gex_feature_counts_file'].notna(
 
 # Save the samplesheet
 samplesheet_df.to_csv(samplesheet_output_file)
+
+summarize_modalities(samplesheet_df)
+summarize_patient_details(details_df)

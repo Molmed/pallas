@@ -5,12 +5,11 @@ from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR, DNAM_EXCLUDE_SUBTYPES
 from preprocessing.helpers import add_to_silo, \
     silo_unlabeled, silo_excluded, silo_remaining, silo_unrecognized, \
-        format_mlomix_columns, summarize_patient_details, \
-            deduplicate_patient_details_using_sample_suffix, \
-                process_dnam_file
+    format_mlomix_columns, summarize_patient_details, \
+    deduplicate_patient_details_using_sample_suffix, \
+    process_dnam_file, summarize_modalities
 
 dataset_name = 'Krali-2021'
-print(f"Processing {dataset_name}...")
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
@@ -29,8 +28,6 @@ details_file = \
 # Make processed dir if not exists
 os.makedirs(preprocessed_dir, exist_ok=True)
 
-# PROCESS PHENO ########
-print("Processing phenotype data...")
 samplesheet_df = pd.read_csv(pheno_file, index_col=0)
 details_df = pd.read_csv(details_input_file, index_col=0)
 
@@ -46,7 +43,6 @@ details_df['sex'] = details_df['sex'].replace({'male': 'Male', 'female': 'Female
 # any potential "_r" suffix.
 details_df['unique_patient_id'] = details_df.index.str.split('_r').str[0]
 details_df = deduplicate_patient_details_using_sample_suffix('_r', details_df)
-summarize_patient_details(details_df)
 
 details_df = details_df[
     ['dataset', 'sex', 'age']]
@@ -104,3 +100,6 @@ samplesheet_df = format_mlomix_columns(samplesheet_df)
 
 # Save the samplesheet
 samplesheet_df.to_csv(samplesheet_output_file)
+
+summarize_modalities(samplesheet_df)
+summarize_patient_details(details_df)
