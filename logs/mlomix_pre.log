@@ -564,106 +564,172 @@ Missing both: 0
 
 Combining all samplesheets...
 
-Total number of samples: 8944
 
-dataset
-SJC-DS-1009         2625
-TARGET-AML          2183
-SJC-panALL          1988
-Krali-2023          1338
-Lilljebjorn-2016     195
-Tran-2022            173
-Stratmann-2022       143
-Krali-2021           142
-TCGA-LAML             79
-Enblad-2025           55
-Diedrich-2021         19
-Paulsson-2023          4
-Name: count, dtype: int64
-
-
-data_silo
-labeled_diagnostic    5780
-unlabeled              975
-replicate              887
-relapse                501
-unrecognized           448
-multiclass             203
-excluded               150
-Name: count, dtype: int64
-
-
-data_silo_detailed
-labeled_diagnostic    5780
-misc                  2189
-unlabeled              975
-Name: count, dtype: int64
-
-
-Class distribution in labeled_diagnostic:
+Class distribution in gex before splitting:
 class
-B-ALL, high hyperdiploid                            573
-AML, KMT2A-r                                        570
-B-ALL, ETV6::RUNX1                                  472
-AML, RUNX1::RUNX1T1                                 389
-B-ALL, BCR::ABL1-like                               373
-AML, CBFB::MYH11                                    265
-Disease,B-ALL,aneuploidy,high hyperdiploid          265
-AML, NPM1alt                                        248
-Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1         243
-B-ALL, KMT2A-r                                      218
-B-ALL, PAX5alt                                      202
-T-ALL                                               178
-B-ALL, DUX4-r                                       164
-AML, NUP98-r                                        164
-B-ALL, BCR::ABL1                                    139
-B-ALL, TCF3::PBX1                                   126
-B-ALL, hypodiploid                                  122
-AML, CEBPAalt                                       120
-Disease,T-ALL                                        87
-Disease,Non-leukemic                                 85
-B-ALL, ZNF384-r                                      80
-Non-leukemic                                         63
-B-ALL, ETV6::RUNX1-like                              62
-B-ALL, MEF2D-r                                       57
-AML, CBFA2T3::GLIS2                                  55
-B-ALL, iAMP21                                        51
-Disease,B-ALL,KMT2A-r                                48
-AML, DEK::NUP214                                     44
-B-ALL, PAX5 P80R                                     38
-AML, APL-PML::RARA                                   29
-Disease,B-ALL,TCF3::PBX1                             27
-AML, ETV6-r                                          25
-Disease,B-ALL,PAX5alt                                21
-B-ALL, NUTM1-r                                       18
-B-ALL, MYC-r                                         17
-AML, KAT6A-r                                         16
-Disease,B-ALL,BCR::ABL1-group,BCR::ABL1              15
-AML, PICALM::MLLT10                                  13
-AML, RBM15::MKL1                                     13
-AML, MECOM-r                                         11
-Disease,B-ALL,aneuploidy,hypodiploid                 10
-AML, FUS::ERG                                        10
-B-ALL, HLF-r                                          9
-Disease,B-ALL,aneuploidy,iAMP21                       7
-B-ALL, IKZF1 N159Y                                    7
-hypodiploid                                           4
-Disease,B-ALL,PAX5 P80R                               4
-Disease,B-ALL,BCR::ABL1-group,BCR::ABL1-like          4
-Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1-like      4
-AML, BCR::ABL1                                        4
-AML, RUNX1::RUNX1T1-like                              3
-B-ALL, IGH::CEBPD                                     3
-Disease,B-ALL,aneuploidy,low hyperdiploid             2
-Disease,B-ALL,NUTM1-r                                 1
-Disease,B-ALL,MEF2D-r                                 1
-Disease,B-ALL,DUX4-r                                  1
+B-ALL, high hyperdiploid    556
+AML, KMT2A-r                521
+B-ALL, ETV6::RUNX1          462
+B-ALL, BCR::ABL1-like       373
+AML, RUNX1::RUNX1T1         361
+AML, NPM1alt                227
+B-ALL, KMT2A-r              218
+B-ALL, PAX5alt              202
+T-ALL                       178
+AML, CBFB::MYH11            167
+B-ALL, DUX4-r               164
+B-ALL, BCR::ABL1            139
+B-ALL, TCF3::PBX1           126
+B-ALL, hypodiploid          126
+AML, CEBPAalt               113
+AML, NUP98-r                 96
+B-ALL, ZNF384-r              80
+B-ALL, ETV6::RUNX1-like      62
+B-ALL, MEF2D-r               57
+B-ALL, iAMP21                51
+AML, DEK::NUP214             44
+B-ALL, PAX5 P80R             38
+AML, CBFA2T3::GLIS2          36
+Non-leukemic                 22
+AML, APL-PML::RARA           20
+B-ALL, NUTM1-r               18
+B-ALL, MYC-r                 17
+AML, KAT6A-r                 12
+AML, ETV6-r                  11
+B-ALL, HLF-r                  9
+AML, PICALM::MLLT10           8
+AML, FUS::ERG                 7
+B-ALL, IKZF1 N159Y            7
+AML, MECOM-r                  6
+AML, RBM15::MKL1              6
+AML, BCR::ABL1                4
+AML, RUNX1::RUNX1T1-like      3
+B-ALL, IGH::CEBPD             3
 Name: count, dtype: int64
 
+Class distribution in gex before splitting into calibration/test:
+class
+B-ALL, high hyperdiploid    167
+AML, KMT2A-r                156
+B-ALL, ETV6::RUNX1          139
+B-ALL, BCR::ABL1-like       112
+AML, RUNX1::RUNX1T1         108
+AML, NPM1alt                 68
+B-ALL, KMT2A-r               65
+B-ALL, PAX5alt               61
+T-ALL                        53
+AML, CBFB::MYH11             50
+B-ALL, DUX4-r                49
+B-ALL, BCR::ABL1             42
+B-ALL, TCF3::PBX1            38
+B-ALL, hypodiploid           38
+AML, CEBPAalt                34
+AML, NUP98-r                 29
+B-ALL, ZNF384-r              24
+B-ALL, ETV6::RUNX1-like      19
+B-ALL, MEF2D-r               17
+B-ALL, iAMP21                15
+AML, DEK::NUP214             13
+B-ALL, PAX5 P80R             11
+AML, CBFA2T3::GLIS2          11
+Non-leukemic                  7
+AML, APL-PML::RARA            6
+B-ALL, NUTM1-r                5
+B-ALL, MYC-r                  5
+AML, KAT6A-r                  4
+B-ALL, HLF-r                  3
+AML, ETV6-r                   3
+AML, FUS::ERG                 2
+AML, RBM15::MKL1              2
+B-ALL, IKZF1 N159Y            2
+AML, PICALM::MLLT10           2
+AML, MECOM-r                  2
+B-ALL, IGH::CEBPD             1
+AML, BCR::ABL1                1
+AML, RUNX1::RUNX1T1-like      1
+Name: count, dtype: int64
 
-Number of bimodal samples: 1205
+In modality gex, excluding 15 class(es) from calibration/test split since they have fewer than 10 samples: ['Non-leukemic', 'AML, APL-PML::RARA', 'B-ALL, NUTM1-r', 'B-ALL, MYC-r', 'AML, KAT6A-r', 'B-ALL, HLF-r', 'AML, ETV6-r', 'AML, FUS::ERG', 'AML, RBM15::MKL1', 'B-ALL, IKZF1 N159Y', 'AML, PICALM::MLLT10', 'AML, MECOM-r', 'B-ALL, IGH::CEBPD', 'AML, BCR::ABL1', 'AML, RUNX1::RUNX1T1-like']
+Splitting remaining 30% of gex samples into calibration (50%) and test (50%)...
 
-Class distribution in labeled_diagnostic bimodal:
+Class distribution in dnam before splitting:
+class
+AML, KMT2A-r                351
+B-ALL, high hyperdiploid    327
+B-ALL, ETV6::RUNX1          284
+AML, RUNX1::RUNX1T1         248
+AML, NPM1alt                187
+AML, CBFB::MYH11            180
+Non-leukemic                136
+T-ALL                       105
+AML, NUP98-r                 98
+AML, CEBPAalt                78
+B-ALL, KMT2A-r               61
+B-ALL, PAX5alt               50
+B-ALL, TCF3::PBX1            37
+AML, CBFA2T3::GLIS2          32
+AML, DEK::NUP214             27
+B-ALL, BCR::ABL1             25
+AML, ETV6-r                  23
+AML, APL-PML::RARA           23
+B-ALL, iAMP21                22
+B-ALL, DUX4-r                20
+B-ALL, ZNF384-r              17
+B-ALL, ETV6::RUNX1-like      14
+B-ALL, BCR::ABL1-like        11
+AML, RBM15::MKL1             11
+AML, KAT6A-r                 11
+B-ALL, hypodiploid           10
+B-ALL, MEF2D-r                9
+AML, FUS::ERG                 8
+B-ALL, PAX5 P80R              8
+AML, MECOM-r                  7
+AML, PICALM::MLLT10           5
+B-ALL, NUTM1-r                4
+AML, BCR::ABL1                4
+Name: count, dtype: int64
+
+Class distribution in dnam before splitting into calibration/test:
+class
+AML, KMT2A-r                105
+B-ALL, high hyperdiploid     98
+B-ALL, ETV6::RUNX1           85
+AML, RUNX1::RUNX1T1          75
+AML, NPM1alt                 56
+AML, CBFB::MYH11             54
+Non-leukemic                 41
+T-ALL                        32
+AML, NUP98-r                 30
+AML, CEBPAalt                23
+B-ALL, KMT2A-r               18
+B-ALL, PAX5alt               15
+B-ALL, TCF3::PBX1            11
+AML, CBFA2T3::GLIS2          10
+B-ALL, BCR::ABL1              8
+AML, DEK::NUP214              8
+B-ALL, iAMP21                 7
+AML, ETV6-r                   7
+AML, APL-PML::RARA            7
+B-ALL, DUX4-r                 6
+B-ALL, ZNF384-r               5
+B-ALL, ETV6::RUNX1-like       4
+B-ALL, BCR::ABL1-like         3
+AML, RBM15::MKL1              3
+B-ALL, hypodiploid            3
+B-ALL, MEF2D-r                3
+AML, KAT6A-r                  3
+AML, MECOM-r                  2
+B-ALL, PAX5 P80R              2
+AML, FUS::ERG                 2
+AML, PICALM::MLLT10           2
+AML, BCR::ABL1                1
+B-ALL, NUTM1-r                1
+Name: count, dtype: int64
+
+In modality dnam, excluding 19 class(es) from calibration/test split since they have fewer than 10 samples: ['B-ALL, BCR::ABL1', 'AML, DEK::NUP214', 'B-ALL, iAMP21', 'AML, ETV6-r', 'AML, APL-PML::RARA', 'B-ALL, DUX4-r', 'B-ALL, ZNF384-r', 'B-ALL, ETV6::RUNX1-like', 'B-ALL, BCR::ABL1-like', 'AML, RBM15::MKL1', 'B-ALL, hypodiploid', 'B-ALL, MEF2D-r', 'AML, KAT6A-r', 'AML, MECOM-r', 'B-ALL, PAX5 P80R', 'AML, FUS::ERG', 'AML, PICALM::MLLT10', 'AML, BCR::ABL1', 'B-ALL, NUTM1-r']
+Splitting remaining 30% of dnam samples into calibration (50%) and test (50%)...
+
+Class distribution in bimodal before splitting:
 class
 AML, KMT2A-r                302
 AML, RUNX1::RUNX1T1         220
@@ -697,348 +763,3 @@ AML, RBM15::MKL1              4
 B-ALL, NUTM1-r                3
 AML, MECOM-r                  2
 Name: count, dtype: int64
-
-
-Warning: stratified split failed (The least populated class in y has only 1 member, which is too few. The minimum number of groups for any class cannot be less than 2.). Falling back to unstratified split.
-Warning: stratified split failed (The least populated class in y has only 1 member, which is too few. The minimum number of groups for any class cannot be less than 2.). Falling back to unstratified split.
-Class distribution in train_large_model:
-class
-AML, KMT2A-r                                        406
-B-ALL, high hyperdiploid                            395
-B-ALL, ETV6::RUNX1                                  328
-AML, RUNX1::RUNX1T1                                 278
-B-ALL, BCR::ABL1-like                               249
-AML, CBFB::MYH11                                    192
-Disease,B-ALL,aneuploidy,high hyperdiploid          184
-Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1         163
-AML, NPM1alt                                        156
-B-ALL, KMT2A-r                                      154
-B-ALL, PAX5alt                                      149
-T-ALL                                               125
-AML, NUP98-r                                        116
-B-ALL, DUX4-r                                       115
-B-ALL, BCR::ABL1                                    104
-B-ALL, TCF3::PBX1                                    92
-AML, CEBPAalt                                        88
-B-ALL, hypodiploid                                   84
-B-ALL, ZNF384-r                                      62
-Disease,T-ALL                                        56
-Disease,Non-leukemic                                 55
-Non-leukemic                                         44
-AML, CBFA2T3::GLIS2                                  43
-B-ALL, iAMP21                                        41
-B-ALL, ETV6::RUNX1-like                              38
-B-ALL, MEF2D-r                                       35
-Disease,B-ALL,KMT2A-r                                31
-AML, DEK::NUP214                                     30
-B-ALL, PAX5 P80R                                     30
-AML, APL-PML::RARA                                   23
-AML, ETV6-r                                          20
-Disease,B-ALL,TCF3::PBX1                             19
-Disease,B-ALL,PAX5alt                                15
-AML, KAT6A-r                                         13
-B-ALL, MYC-r                                         12
-B-ALL, NUTM1-r                                       11
-Disease,B-ALL,BCR::ABL1-group,BCR::ABL1              11
-AML, RBM15::MKL1                                     10
-AML, FUS::ERG                                         9
-Disease,B-ALL,aneuploidy,hypodiploid                  8
-AML, MECOM-r                                          7
-AML, PICALM::MLLT10                                   7
-B-ALL, HLF-r                                          7
-Disease,B-ALL,aneuploidy,iAMP21                       5
-B-ALL, IKZF1 N159Y                                    4
-AML, RUNX1::RUNX1T1-like                              3
-hypodiploid                                           3
-Disease,B-ALL,PAX5 P80R                               3
-Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1-like      3
-Disease,B-ALL,aneuploidy,low hyperdiploid             2
-B-ALL, IGH::CEBPD                                     2
-AML, BCR::ABL1                                        1
-Disease,B-ALL,NUTM1-r                                 1
-Disease,B-ALL,DUX4-r                                  1
-Disease,B-ALL,MEF2D-r                                 1
-Disease,B-ALL,BCR::ABL1-group,BCR::ABL1-like          1
-Name: count, dtype: int64
-
-Class distribution in calibration_large_model:
-class
-B-ALL, high hyperdiploid                            93
-AML, KMT2A-r                                        85
-B-ALL, ETV6::RUNX1                                  69
-B-ALL, BCR::ABL1-like                               59
-AML, RUNX1::RUNX1T1                                 58
-AML, NPM1alt                                        49
-AML, CBFB::MYH11                                    41
-Disease,B-ALL,aneuploidy,high hyperdiploid          40
-Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1         38
-B-ALL, KMT2A-r                                      33
-B-ALL, PAX5alt                                      28
-B-ALL, DUX4-r                                       26
-AML, NUP98-r                                        23
-AML, CEBPAalt                                       18
-T-ALL                                               18
-B-ALL, TCF3::PBX1                                   17
-Disease,Non-leukemic                                17
-B-ALL, hypodiploid                                  17
-B-ALL, BCR::ABL1                                    15
-B-ALL, MEF2D-r                                      14
-Disease,T-ALL                                       13
-Non-leukemic                                        13
-B-ALL, ETV6::RUNX1-like                             12
-B-ALL, ZNF384-r                                     11
-Disease,B-ALL,KMT2A-r                                9
-B-ALL, PAX5 P80R                                     6
-B-ALL, iAMP21                                        5
-AML, CBFA2T3::GLIS2                                  5
-Disease,B-ALL,PAX5alt                                5
-Disease,B-ALL,TCF3::PBX1                             4
-AML, DEK::NUP214                                     4
-AML, ETV6-r                                          3
-B-ALL, MYC-r                                         2
-Disease,B-ALL,BCR::ABL1-group,BCR::ABL1-like         2
-AML, MECOM-r                                         2
-B-ALL, HLF-r                                         2
-AML, RBM15::MKL1                                     2
-AML, APL-PML::RARA                                   2
-B-ALL, NUTM1-r                                       1
-B-ALL, IKZF1 N159Y                                   1
-AML, FUS::ERG                                        1
-Disease,B-ALL,PAX5 P80R                              1
-Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1-like     1
-AML, PICALM::MLLT10                                  1
-Disease,B-ALL,aneuploidy,iAMP21                      1
-Name: count, dtype: int64
-
-Class distribution in test_large_model:
-class
-B-ALL, high hyperdiploid                        85
-AML, KMT2A-r                                    79
-B-ALL, ETV6::RUNX1                              75
-B-ALL, BCR::ABL1-like                           65
-AML, RUNX1::RUNX1T1                             53
-AML, NPM1alt                                    43
-Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1     42
-Disease,B-ALL,aneuploidy,high hyperdiploid      41
-T-ALL                                           35
-AML, CBFB::MYH11                                32
-B-ALL, KMT2A-r                                  31
-AML, NUP98-r                                    25
-B-ALL, PAX5alt                                  25
-B-ALL, DUX4-r                                   23
-B-ALL, hypodiploid                              21
-B-ALL, BCR::ABL1                                20
-Disease,T-ALL                                   18
-B-ALL, TCF3::PBX1                               17
-AML, CEBPAalt                                   14
-Disease,Non-leukemic                            13
-B-ALL, ETV6::RUNX1-like                         12
-AML, DEK::NUP214                                10
-B-ALL, MEF2D-r                                   8
-Disease,B-ALL,KMT2A-r                            8
-AML, CBFA2T3::GLIS2                              7
-B-ALL, ZNF384-r                                  7
-Non-leukemic                                     6
-B-ALL, NUTM1-r                                   6
-B-ALL, iAMP21                                    5
-AML, PICALM::MLLT10                              5
-Disease,B-ALL,TCF3::PBX1                         4
-Disease,B-ALL,BCR::ABL1-group,BCR::ABL1          4
-AML, APL-PML::RARA                               4
-AML, KAT6A-r                                     3
-B-ALL, MYC-r                                     3
-AML, BCR::ABL1                                   3
-AML, ETV6-r                                      2
-Disease,B-ALL,aneuploidy,hypodiploid             2
-B-ALL, IKZF1 N159Y                               2
-B-ALL, PAX5 P80R                                 2
-AML, MECOM-r                                     2
-B-ALL, IGH::CEBPD                                1
-Disease,B-ALL,BCR::ABL1-group,BCR::ABL1-like     1
-AML, RBM15::MKL1                                 1
-Disease,B-ALL,PAX5alt                            1
-Disease,B-ALL,aneuploidy,iAMP21                  1
-hypodiploid                                      1
-Name: count, dtype: int64
-
-Moving 17 underrepresented class(es) from test to calibration (MIN_TEST_SAMPLES_PER_CLASS=5):
-  ['Disease,B-ALL,TCF3::PBX1', 'Disease,B-ALL,BCR::ABL1-group,BCR::ABL1', 'AML, APL-PML::RARA', 'AML, KAT6A-r', 'B-ALL, MYC-r', 'AML, BCR::ABL1', 'AML, ETV6-r', 'Disease,B-ALL,aneuploidy,hypodiploid', 'B-ALL, IKZF1 N159Y', 'B-ALL, PAX5 P80R', 'AML, MECOM-r', 'B-ALL, IGH::CEBPD', 'Disease,B-ALL,BCR::ABL1-group,BCR::ABL1-like', 'AML, RBM15::MKL1', 'Disease,B-ALL,PAX5alt', 'Disease,B-ALL,aneuploidy,iAMP21', 'hypodiploid']
-
-Updated class distribution in calibration_large_model:
-class
-B-ALL, high hyperdiploid                            93
-AML, KMT2A-r                                        85
-B-ALL, ETV6::RUNX1                                  69
-B-ALL, BCR::ABL1-like                               59
-AML, RUNX1::RUNX1T1                                 58
-AML, NPM1alt                                        49
-AML, CBFB::MYH11                                    41
-Disease,B-ALL,aneuploidy,high hyperdiploid          40
-Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1         38
-B-ALL, KMT2A-r                                      33
-B-ALL, PAX5alt                                      28
-B-ALL, DUX4-r                                       26
-AML, NUP98-r                                        23
-T-ALL                                               18
-AML, CEBPAalt                                       18
-Disease,Non-leukemic                                17
-B-ALL, hypodiploid                                  17
-B-ALL, TCF3::PBX1                                   17
-B-ALL, BCR::ABL1                                    15
-B-ALL, MEF2D-r                                      14
-Non-leukemic                                        13
-Disease,T-ALL                                       13
-B-ALL, ETV6::RUNX1-like                             12
-B-ALL, ZNF384-r                                     11
-Disease,B-ALL,KMT2A-r                                9
-Disease,B-ALL,TCF3::PBX1                             8
-B-ALL, PAX5 P80R                                     8
-Disease,B-ALL,PAX5alt                                6
-AML, APL-PML::RARA                                   6
-B-ALL, MYC-r                                         5
-AML, ETV6-r                                          5
-AML, CBFA2T3::GLIS2                                  5
-B-ALL, iAMP21                                        5
-AML, DEK::NUP214                                     4
-AML, MECOM-r                                         4
-Disease,B-ALL,BCR::ABL1-group,BCR::ABL1              4
-Disease,B-ALL,BCR::ABL1-group,BCR::ABL1-like         3
-AML, RBM15::MKL1                                     3
-AML, BCR::ABL1                                       3
-AML, KAT6A-r                                         3
-B-ALL, IKZF1 N159Y                                   3
-Disease,B-ALL,aneuploidy,hypodiploid                 2
-B-ALL, HLF-r                                         2
-Disease,B-ALL,aneuploidy,iAMP21                      2
-B-ALL, NUTM1-r                                       1
-AML, FUS::ERG                                        1
-Disease,B-ALL,PAX5 P80R                              1
-Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1-like     1
-AML, PICALM::MLLT10                                  1
-B-ALL, IGH::CEBPD                                    1
-hypodiploid                                          1
-Name: count, dtype: int64
-
-Updated class distribution in test_large_model:
-class
-B-ALL, high hyperdiploid                       85
-AML, KMT2A-r                                   79
-B-ALL, ETV6::RUNX1                             75
-B-ALL, BCR::ABL1-like                          65
-AML, RUNX1::RUNX1T1                            53
-AML, NPM1alt                                   43
-Disease,B-ALL,ETV6::RUNX1-group,ETV6::RUNX1    42
-Disease,B-ALL,aneuploidy,high hyperdiploid     41
-T-ALL                                          35
-AML, CBFB::MYH11                               32
-B-ALL, KMT2A-r                                 31
-AML, NUP98-r                                   25
-B-ALL, PAX5alt                                 25
-B-ALL, DUX4-r                                  23
-B-ALL, hypodiploid                             21
-B-ALL, BCR::ABL1                               20
-Disease,T-ALL                                  18
-B-ALL, TCF3::PBX1                              17
-AML, CEBPAalt                                  14
-Disease,Non-leukemic                           13
-B-ALL, ETV6::RUNX1-like                        12
-AML, DEK::NUP214                               10
-Disease,B-ALL,KMT2A-r                           8
-B-ALL, MEF2D-r                                  8
-AML, CBFA2T3::GLIS2                             7
-B-ALL, ZNF384-r                                 7
-Non-leukemic                                    6
-B-ALL, NUTM1-r                                  6
-B-ALL, iAMP21                                   5
-AML, PICALM::MLLT10                             5
-Name: count, dtype: int64
-
-Class distribution in train_bimodal_model:
-class
-AML, KMT2A-r                211
-AML, RUNX1::RUNX1T1         154
-AML, NPM1alt                116
-AML, CBFB::MYH11             57
-AML, CEBPAalt                50
-B-ALL, high hyperdiploid     31
-B-ALL, ETV6::RUNX1           22
-AML, NUP98-r                 21
-B-ALL, PAX5alt               20
-AML, DEK::NUP214             19
-B-ALL, DUX4-r                13
-T-ALL                        13
-B-ALL, ZNF384-r              12
-AML, APL-PML::RARA           10
-B-ALL, iAMP21                10
-B-ALL, KMT2A-r                9
-AML, CBFA2T3::GLIS2           9
-Non-leukemic                  7
-B-ALL, BCR::ABL1              7
-B-ALL, TCF3::PBX1             7
-B-ALL, ETV6::RUNX1-like       7
-AML, ETV6-r                   6
-B-ALL, MEF2D-r                6
-AML, KAT6A-r                  5
-B-ALL, BCR::ABL1-like         5
-AML, FUS::ERG                 4
-B-ALL, PAX5 P80R              3
-AML, BCR::ABL1                3
-AML, RBM15::MKL1              3
-B-ALL, NUTM1-r                2
-AML, MECOM-r                  1
-Name: count, dtype: int64
-
-Class distribution in test_bimodal_model:
-class
-AML, KMT2A-r                91
-AML, RUNX1::RUNX1T1         66
-AML, NPM1alt                50
-AML, CBFB::MYH11            25
-AML, CEBPAalt               21
-B-ALL, high hyperdiploid    14
-AML, NUP98-r                 9
-B-ALL, ETV6::RUNX1           9
-B-ALL, PAX5alt               9
-AML, DEK::NUP214             8
-B-ALL, DUX4-r                6
-B-ALL, iAMP21                5
-T-ALL                        5
-B-ALL, ZNF384-r              5
-AML, APL-PML::RARA           4
-B-ALL, KMT2A-r               4
-AML, CBFA2T3::GLIS2          4
-B-ALL, ETV6::RUNX1-like      3
-Non-leukemic                 3
-AML, ETV6-r                  3
-B-ALL, BCR::ABL1             3
-B-ALL, TCF3::PBX1            3
-AML, KAT6A-r                 2
-B-ALL, BCR::ABL1-like        2
-B-ALL, MEF2D-r               2
-B-ALL, NUTM1-r               1
-AML, FUS::ERG                1
-B-ALL, PAX5 P80R             1
-AML, RBM15::MKL1             1
-AML, MECOM-r                 1
-AML, BCR::ABL1               1
-Name: count, dtype: int64
-
-
-Saved samplesheet_labeled_diagnostic.csv with 5780 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic.csv
-Saved samplesheet_labeled_diagnostic_bimodal.csv with 1205 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic_bimodal.csv
-Saved samplesheet_unlabeled.csv with 975 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_unlabeled.csv
-Saved samplesheet_misc.csv with 2189 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_misc.csv
-Saved samplesheet_train_large_model.csv with 4047 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_train_large_model.csv
-Saved samplesheet_calibration_large_model.csv with 904 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_calibration_large_model.csv
-Saved samplesheet_test_large_model.csv with 831 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_test_large_model.csv
-Saved samplesheet_train_bimodal_model.csv with 843 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_train_bimodal_model.csv
-Saved samplesheet_test_bimodal_model.csv with 362 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_test_bimodal_model.csv
-
-Final counts in all sets:
- - LABELED_DIAGNOSTIC: 5780 samples
- - LABELED_DIAGNOSTIC_BIMODAL: 1205 samples
- - TRAIN_LARGE_MODEL: 4045 samples
- - CALIBRATION_LARGE_MODEL: 904 samples
- - TEST_LARGE_MODEL: 831 samples
- - TRAIN_BIMODAL_MODEL: 843 samples
- - TEST_BIMODAL_MODEL: 362 samples
