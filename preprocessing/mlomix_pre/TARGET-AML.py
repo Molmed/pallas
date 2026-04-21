@@ -129,24 +129,28 @@ df_GSE190931 = process_geo_pheno_file(pheno_df_GSE190931)
 
 
 def process_idat_path(df, index, row, raw_idats_dir, processed_idats_dir):
+    def process_idat_file(file_name):
+        file_path = f'{raw_idats_dir}/{file_name}'
+        if pd.notna(file_name) and os.path.exists(file_path):
+            # ungzip file to processed_idats_dir
+            # have the same name but strip the sample name
+            # which is before the first underscore
+            output_file_path = f"{processed_idats_dir}/{file_name.split('_', 1)[1].replace('.gz', '')}"
+            if not os.path.exists(output_file_path):
+                print(f"Processing {file_path} to {output_file_path}...")
+                os.system(f"gunzip -c {file_path} > {output_file_path}")
+            df.at[index, 'idats_basename'] = processed_idats_dir
+            # Filename is of the format GSM3532234_200991620105_R05C01_Grn.idat.gz
+            # Extract the sentrix id and position from the filename
+            sentrix_id = file_name.split('_')[1]
+            sentrix_position = file_name.split('_')[2].split('.')[0]
+            df.at[index, 'sentrix_id'] = sentrix_id
+            df.at[index, 'sentrix_position'] = sentrix_position
     # file_name is just the basename, extract end of url
     file_name = os.path.basename(row['file_1']) if pd.notna(row['file_1']) else None
-    file_path = f'{raw_idats_dir}/{file_name}'
-    if pd.notna(file_name) and os.path.exists(file_path):
-        # ungzip file to processed_idats_dir
-        # have the same name but strip the sample name
-        # which is before the first underscore
-        output_file_path = f"{processed_idats_dir}/{file_name.split('_', 1)[1].replace('.gz', '')}"
-        if not os.path.exists(output_file_path):
-            print(f"Processing {file_path} to {output_file_path}...")
-            os.system(f"gunzip -c {file_path} > {output_file_path}")
-        df.at[index, 'idats_basename'] = processed_idats_dir
-        # Filename is of the format GSM3532234_200991620105_R05C01_Grn.idat.gz
-        # Extract the sentrix id and position from the filename
-        sentrix_id = file_name.split('_')[1]
-        sentrix_position = file_name.split('_')[2].split('.')[0]
-        df.at[index, 'sentrix_id'] = sentrix_id
-        df.at[index, 'sentrix_position'] = sentrix_position
+    process_idat_file(file_name)
+    file_name = os.path.basename(row['file_2']) if pd.notna(row['file_2']) else None
+    process_idat_file(file_name)
 
 
 # PROCESS GSE124413
