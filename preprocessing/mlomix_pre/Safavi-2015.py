@@ -49,6 +49,11 @@ samplesheet_df['data_silo'] = 'labeled_diagnostic'
 samplesheet_df['gex_feature_counts_file'] = samplesheet_df.index.map(
     lambda x: os.path.join(preprocessed_dir, f"{x}.txt"))
 
+# Mark 3005_05 and 3204_99 as relapsed, the others as diagnostic
+samplesheet_df['data_silo'] = samplesheet_df.index.map(
+    lambda x: 'relapse' if x in ['3005_05', '3204_99'] else 'labeled_diagnostic'
+)
+
 # Order columns
 samplesheet_df = format_mlomix_columns(samplesheet_df)
 
@@ -56,5 +61,18 @@ samplesheet_df = format_mlomix_columns(samplesheet_df)
 samplesheet_df.to_csv(samplesheet_output_file)
 
 # Patient details as follows:
+# 3756_02 4Dx F 12
+# 3005_05 4R F 15 # Exclude as duplicate
+# 3204_99 5R M 49
+# 4326_10 7Dx M 62
+details_df = pd.DataFrame({
+    'sample': ['3756_02', '3204_99', '4326_10'],
+    'age': [12, pd.NA, 62],
+    'sex': ['Female', 'Male', 'Male']
+})
+
+# Save patient details
+details_df.to_csv(details_file, index=False)
 
 summarize_modalities(samplesheet_df)
+summarize_patient_details(details_df)
