@@ -27,7 +27,7 @@ modules = [
     "preprocessing.mlomix_pre.TCGA-LAML",
     "preprocessing.mlomix_pre.Enblad-2025",
     "preprocessing.mlomix_pre.Diedrich-2021",
-    "preprocessing.mlomix_pre.Paulsson-2023",
+    "preprocessing.mlomix_pre.Safavi-2015",
 ]
 
 for mod in modules:

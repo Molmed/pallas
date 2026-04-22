@@ -4,9 +4,10 @@ import gzip
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
     RAW_DATA_DIR, PREPROCESSED_DATA_DIR
-from preprocessing.helpers import format_mlomix_columns
+from preprocessing.helpers import format_mlomix_columns, \
+    summarize_modalities, summarize_patient_details
 
-dataset_name = 'Paulsson-2023'
+dataset_name = 'Safavi-2015'
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/{dataset_name}'
@@ -16,6 +17,8 @@ raw_data_path = f'{data_path}'
 preprocessed_dir = f'{PREPROCESSED_DATA_DIR}/{dataset_name}'
 samplesheet_output_file = \
     f'{preprocessed_dir}/samplesheet.csv'
+details_file = \
+    f'{preprocessed_dir}/patient_details.csv'
 
 # Make preprocessed dir if not exists
 os.makedirs(preprocessed_dir, exist_ok=True)
@@ -51,3 +54,7 @@ samplesheet_df = format_mlomix_columns(samplesheet_df)
 
 # Save the samplesheet
 samplesheet_df.to_csv(samplesheet_output_file)
+
+# Patient details as follows:
+
+summarize_modalities(samplesheet_df)
