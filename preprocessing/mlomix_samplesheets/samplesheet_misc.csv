@@ -10,6 +10,8 @@ sample,data_silo,dataset,batch,class,gex_feature_counts_file,dnam_beta_matrix_fi
 16-266,misc,Tran-2022,,"B-ALL, BCR::ABL1-like;B-ALL, iAMP21",/home/mariya/Data/pallas/raw/Tran-2022/GSE181157_RAW/GSM5491841_16-266.counts.txt.gz,,,,,
 16-291,misc,Tran-2022,,"B-ALL, high hyperdiploid;B-ALL, PAX5alt",/home/mariya/Data/pallas/raw/Tran-2022/GSE181157_RAW/GSM5491854_16-291.counts.txt.gz,,,,,
 16-341,misc,Tran-2022,,"B-ALL, BCR::ABL1;B-ALL, iAMP21",/home/mariya/Data/pallas/raw/Tran-2022/GSE181157_RAW/GSM5491872_16-341.counts.txt.gz,,,,,
+3005_05_1rec,misc,Safavi-2015,,"B-ALL, hypodiploid",/home/mariya/Data/pallas/mlomix_pre/Safavi-2015/3005_05_1rec.txt,,,,,
+3204_99_3rec,misc,Safavi-2015,,"B-ALL, hypodiploid",/home/mariya/Data/pallas/mlomix_pre/Safavi-2015/3204_99_3rec.txt,,,,,
 ALL_1026_r,misc,Krali-2023,RNAaccess,"B-ALL, PAX5alt",/home/mariya/Data/pallas/mlomix_pre/Krali-2023/gex/ALL_1026_r.txt,,,,,
 ALL_1057,misc,Krali-2023,TruSeq,EXCLUDED: low HeH,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/gex/ALL_1057.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1057.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1057.pvals.txt,,,
 ALL_109r1,misc,Krali-2023,,"B-ALL, ETV6::RUNX1",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_109r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_109r1.pvals.txt,,,

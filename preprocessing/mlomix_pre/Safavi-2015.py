@@ -51,7 +51,7 @@ samplesheet_df['gex_feature_counts_file'] = samplesheet_df.index.map(
 
 # Mark 3005_05 and 3204_99 as relapsed, the others as diagnostic
 samplesheet_df['data_silo'] = samplesheet_df.index.map(
-    lambda x: 'relapse' if x in ['3005_05', '3204_99'] else 'labeled_diagnostic'
+    lambda x: 'relapse' if x in ['3005_05_1rec', '3204_99_3rec'] else 'labeled_diagnostic'
 )
 
 # Order columns
@@ -66,7 +66,7 @@ samplesheet_df.to_csv(samplesheet_output_file)
 # 3204_99 5R M 49
 # 4326_10 7Dx M 62
 details_df = pd.DataFrame({
-    'sample': ['3756_02', '3204_99', '4326_10'],
+    'sample': ['3756_02', '3204_99_3rec', '4326_10'],
     'age': [12, pd.NA, 62],
     'sex': ['Female', 'Male', 'Male']
 })

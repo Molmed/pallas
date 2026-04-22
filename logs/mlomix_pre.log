@@ -559,9 +559,21 @@ Missing both: 0
 
 
 
-*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.Paulsson-2023...*****
+*****RUNNING ML_OMIX_PRE FOR DATASET preprocessing.mlomix_pre.Safavi-2015...*****
 
 
+Total samples with GEX data: 4
+Total samples with DNAm data: 0
+Number of samples with GEX data only: 4
+Number of samples with DNAm data only: 0
+Number of samples with both GEX and DNAm data: 0
+Patient details summary:
+Number of unique patients: 3
+Mean age at dx: 37.0 ± (35.4)
+Male/Female: 2/1
+Missing age: 1
+Missing sex: 0
+Missing both: 0
 Combining all samplesheets...
 
 
@@ -579,8 +591,8 @@ T-ALL                       178
 AML, CBFB::MYH11            167
 B-ALL, DUX4-r               164
 B-ALL, BCR::ABL1            139
-B-ALL, hypodiploid          126
 B-ALL, TCF3::PBX1           126
+B-ALL, hypodiploid          124
 AML, CEBPAalt               113
 AML, NUP98-r                 96
 B-ALL, ZNF384-r              80
@@ -620,7 +632,7 @@ AML, CBFB::MYH11             50
 B-ALL, DUX4-r                49
 B-ALL, BCR::ABL1             42
 B-ALL, TCF3::PBX1            38
-B-ALL, hypodiploid           38
+B-ALL, hypodiploid           37
 AML, CEBPAalt                34
 AML, NUP98-r                 29
 B-ALL, ZNF384-r              24
@@ -759,18 +771,18 @@ AML, RBM15::MKL1              4
 B-ALL, NUTM1-r                3
 AML, MECOM-r                  2
 Name: count, dtype: int64
-Saved samplesheet_all.csv with 8944 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_all.csv
-Saved samplesheet_labeled_diagnostic.csv with 5772 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic.csv
-Saved samplesheet_unlabeled.csv with 973 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_unlabeled.csv
-Saved samplesheet_misc.csv with 2199 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_misc.csv
-Saved samplesheet_labeled_diagnostic_gex.csv with 4544 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic_gex.csv
-Saved samplesheet_labeled_diagnostic_dnam.csv with 2433 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic_dnam.csv
-Saved samplesheet_labeled_diagnostic_bimodal.csv with 1205 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_labeled_diagnostic_bimodal.csv
-Saved samplesheet_train_gex.csv with 3180 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_train_gex.csv
-Saved samplesheet_calibrate_gex.csv with 704 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_calibrate_gex.csv
-Saved samplesheet_test_gex.csv with 660 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_test_gex.csv
-Saved samplesheet_train_dnam.csv with 1703 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_train_dnam.csv
-Saved samplesheet_calibrate_dnam.csv with 403 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_calibrate_dnam.csv
-Saved samplesheet_test_dnam.csv with 327 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_test_dnam.csv
-Saved samplesheet_train_bimodal.csv with 843 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_train_bimodal.csv
-Saved samplesheet_test_bimodal.csv with 362 samples to /home/mariya/Data/pallas/mlomix_samplesheets/samplesheet_test_bimodal.csv
+Saved samplesheet_all.csv with 8944 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_all.csv
+Saved samplesheet_labeled_diagnostic.csv with 5770 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_labeled_diagnostic.csv
+Saved samplesheet_unlabeled.csv with 973 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_unlabeled.csv
+Saved samplesheet_misc.csv with 2201 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_misc.csv
+Saved samplesheet_labeled_diagnostic_gex.csv with 4542 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_labeled_diagnostic_gex.csv
+Saved samplesheet_labeled_diagnostic_dnam.csv with 2433 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_labeled_diagnostic_dnam.csv
+Saved samplesheet_labeled_diagnostic_bimodal.csv with 1205 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_labeled_diagnostic_bimodal.csv
+Saved samplesheet_train_gex.csv with 3179 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_train_gex.csv
+Saved samplesheet_calibrate_gex.csv with 703 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_calibrate_gex.csv
+Saved samplesheet_test_gex.csv with 660 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_test_gex.csv
+Saved samplesheet_train_dnam.csv with 1703 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_train_dnam.csv
+Saved samplesheet_calibrate_dnam.csv with 403 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_calibrate_dnam.csv
+Saved samplesheet_test_dnam.csv with 327 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_test_dnam.csv
+Saved samplesheet_train_bimodal.csv with 843 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_train_bimodal.csv
+Saved samplesheet_test_bimodal.csv with 362 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_test_bimodal.csv
