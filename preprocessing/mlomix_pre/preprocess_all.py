@@ -50,6 +50,8 @@ for mod in modules:
 # - test_dnam
 # - train_bimodal
 # - test_bimodal
+# - train_gex_for_bimodal_evaluation - all samples in labeled_diagnostic_gex that are not in test_bimodal
+# - train_dnam_for_bimodal_evaluation - all samples in labeled_diagnostic_dnam that are not in test_bimodal
 samplesheets_to_save = {}
 
 # Find all samplesheet.csv files and combine them
@@ -220,9 +222,26 @@ for split_name, indices in sample_splits.items():
     samplesheets_to_save[split_name] = samplesheets_to_save[
         f'labeled_diagnostic_{modality}'].loc[indices]
 
+# Bimodal evaluation sets
+# - train_gex_for_bimodal_evaluation - all samples in labeled_diagnostic_gex that are not in test_bimodal
+# - train_dnam_for_bimodal_evaluation - all samples in labeled_diagnostic_dnam that are not in test_bimodal
+test_bimodal_indices = sample_splits['test_bimodal']
+samplesheets_to_save['train_gex_for_bimodal_evaluation'] = samplesheets_to_save['labeled_diagnostic_gex'].drop(index=test_bimodal_indices, errors='ignore')
+samplesheets_to_save['train_dnam_for_bimodal_evaluation'] = samplesheets_to_save['labeled_diagnostic_dnam'].drop(index=test_bimodal_indices, errors='ignore')
+
 
 # SAVE SAMPLESHEETS
 def save_samplesheet(df, filename):
+    # For unimodal samplesheets, remove the modality-specific columns that
+    # won't be used and just take the relevant ones
+
+    # If filename contains 'gex', set empty string
+    # for all columns in dnam_cols
+    if 'gex' in filename:
+        df = df.drop(columns=dnam_cols)
+    elif 'dnam' in filename:
+        df = df.drop(columns=[gex_col])
+
     os.makedirs(MLOMIX_SAMPLESHEETS_DIR, exist_ok=True)
     output_path = os.path.join(MLOMIX_SAMPLESHEETS_DIR, filename)
     format_mlomix_columns(df).to_csv(output_path)

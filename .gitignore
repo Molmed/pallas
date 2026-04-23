@@ -1,5 +1,6 @@
 __pycache__
 *.env
 *~
+*#
 ensembl_to_symbol*.json
 hgnc_complete_set*.json
