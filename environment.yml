@@ -4,6 +4,11 @@ channels:
   - conda-forge
 dependencies:
   - python=3.10
+  - r-base
+  - r-essentials
+  - r-rlang>=1.1.6
+  - r-biocmanager
+  - r-caret
   - pip
   - pip:
     - pandas
