@@ -466,3 +466,27 @@ def concatenate_samplesheets(df1, df2, output_file=None, report=True):
     if output_file:
         samplesheet_df.to_csv(output_file, index=True)
     return samplesheet_df
+
+def get_mlomix_beta_and_pval_paths(dataset_name, dataset_raw_data_dir, sample_name):
+    data_dir = f'{dataset_raw_data_dir}/mlomix_betas'
+    if not os.path.exists(data_dir):
+        return None, None
+    beta_file = f'{data_dir}/{dataset_name}__{sample_name}.normalized_betas.tsv'
+    pval_file = f'{data_dir}/{dataset_name}__{sample_name}.detection_pvalues.tsv'
+    if os.path.exists(beta_file) and os.path.exists(pval_file):
+        return beta_file, pval_file
+    return None, None
+
+def backfill_samplesheet_with_mlomix_dnam(samplesheet_df, dataset_name, dataset_raw_data_dir):
+    for idx, row in samplesheet_df.iterrows():
+        # Check if idats_basename length > 1
+        if  len(str(row['idats_basename'])) > 1:
+            beta_file, pval_file = get_mlomix_beta_and_pval_paths(dataset_name, dataset_raw_data_dir, idx)
+            if beta_file and pval_file:
+                print(f"Backfilling dnam_beta_matrix_file and dnam_pvals_file for sample {idx} with MLOmix-generated files.")
+                samplesheet_df.at[idx, 'dnam_beta_matrix_file'] = beta_file
+                samplesheet_df.at[idx, 'dnam_pvals_file'] = pval_file
+                samplesheet_df.at[idx, 'sentrix_id'] = pd.NA
+                samplesheet_df.at[idx, 'sentrix_position'] = pd.NA
+                samplesheet_df.at[idx, 'idats_basename'] = pd.NA
+    return samplesheet_df

@@ -7,7 +7,8 @@ from preprocessing.constants import \
 from preprocessing.helpers import add_to_silo, \
     silo_unlabeled, silo_excluded, silo_unrecognized, silo_remaining, \
     format_mlomix_columns, process_dnam_file, process_gdc_gex, \
-    process_gdc_dnam, concatenate_detail_dfs, concatenate_samplesheets
+    process_gdc_dnam, concatenate_detail_dfs, concatenate_samplesheets, \
+    backfill_samplesheet_with_mlomix_dnam
 
 # INPUT FILES ########
 data_path = f'{RAW_DATA_DIR}/TARGET-AML-TCGA-LAML'
@@ -345,6 +346,9 @@ if gdc_samplesheet['target_case_timepoint'].duplicated().any():
 # Set target_case_timepoint as the index for both samplesheets
 samplesheet_df = samplesheet_df.set_index('target_case_timepoint')
 gdc_samplesheet = gdc_samplesheet.set_index('target_case_timepoint')
+
+samplesheet_df = backfill_samplesheet_with_mlomix_dnam(samplesheet_df, dataset_name, data_path)
+gdc_samplesheet = backfill_samplesheet_with_mlomix_dnam(gdc_samplesheet, dataset_name, data_path)
 
 # Merge with gdc samplesheet and gdc details
 samplesheet_df = concatenate_samplesheets(

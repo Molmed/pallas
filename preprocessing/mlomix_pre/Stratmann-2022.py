@@ -8,7 +8,8 @@ from preprocessing.helpers import add_to_silo, format_mlomix_columns, \
     silo_unlabeled, silo_remaining, \
     silo_unrecognized, silo_excluded, \
     format_mlomix_columns, summarize_patient_details, \
-    summarize_modalities, deduplicate_patient_details_using_sample_suffix
+    summarize_modalities, deduplicate_patient_details_using_sample_suffix, \
+    backfill_samplesheet_with_mlomix_dnam
 
 dataset_name = 'Stratmann-2022'
 
@@ -194,6 +195,9 @@ samplesheet_df = samplesheet_df[~samplesheet_df.index.duplicated(keep='first')]
 
 # Order columns
 samplesheet_df = format_mlomix_columns(samplesheet_df)
+
+# Backfill with preprocessed data
+samplesheet_df = backfill_samplesheet_with_mlomix_dnam(samplesheet_df, dataset_name, data_path)
 
 # Save the samplesheet
 samplesheet_df.to_csv(samplesheet_output_file)
