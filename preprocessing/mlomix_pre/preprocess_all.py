@@ -110,10 +110,16 @@ labeled_diagnostic_dnam_df = labeled_diagnostic_df[
     labeled_diagnostic_df['has_dnam']
 ].copy()
 
+# Create unlabeled_bimodal_df for potential future use - all samples in unlabeled that have both gex and dnam
+unlabeled_bimodal_df = samplesheets_to_save['unlabeled'][
+    samplesheets_to_save['unlabeled']['has_gex'] & samplesheets_to_save['unlabeled']['has_dnam']
+].copy()
+
 # Samplesheets: labeled_diagnostic_gex, labeled_diagnostic_dnam, labeled_diagnostic_bimodal
 samplesheets_to_save['labeled_diagnostic_gex'] = labeled_diagnostic_gex_df
 samplesheets_to_save['labeled_diagnostic_dnam'] = labeled_diagnostic_dnam_df
 samplesheets_to_save['labeled_diagnostic_bimodal'] = labeled_diagnostic_bimodal_df
+samplesheets_to_save['unlabeled_bimodal'] = unlabeled_bimodal_df
 
 
 def safe_train_test_split(series, train_size, random_state, stratify):
