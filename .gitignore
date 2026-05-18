@@ -5,3 +5,4 @@ __pycache__
 ensembl_to_symbol*.json
 hgnc_complete_set*.json
 .vscode
+.DS_Store
