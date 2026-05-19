@@ -15,6 +15,9 @@ output_report_path = REPORTS_PATH / "subtypes_report.csv"
 # Read in sample report
 all_samples_df = pd.read_csv(sample_report_path, index_col=0)
 
+# For samples of the format "TARGET-20-PANXAF-D", remove trailing "-D"
+all_samples_df.index = all_samples_df.index.str.replace(r'-D$', '', regex=True)
+
 # Read in patient details report
 patient_details_df = pd.read_csv(patient_details_report_path, index_col=0)
 
