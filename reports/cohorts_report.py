@@ -1,74 +1,35 @@
 import pandas as pd
 import os
 import dotenv
+from pathlib import Path
+from preprocessing.helpers import summarize_patient_details
 
 dotenv.load_dotenv()
 
-reports_dir = os.getenv('REPORTS_DIR')
-if not os.path.exists(reports_dir):
-    os.makedirs(reports_dir)
+data_dir = Path(os.getenv("MLOMIX_PRE_DATA_DIR"))
+private_reports_dir = Path(os.getenv("PRIVATE_REPORTS_DIR"))
+
+# Create reports dir if it doesn't exist
+reports_dir = private_reports_dir / "cohorts_report"
+reports_dir.mkdir(parents=True, exist_ok=True)
 
 
-def path_to_df(details_path):
-    details = pd.read_csv(details_path)
+# Find all files named patient_details.csv in data dir
+# The cohort name is the parent directory of patient_details.csv
+patient_summaries = []
 
-    age_summary = f"{details['age'].mean():.1f} ± ({details['age'].std():.1f})"
-    male_female_summary = f"{details['sex'].value_counts().get('Male', 0)} / {details['sex'].value_counts().get('Female', 0)}"
-    cohort_summary = {
-        'cohort': cohort,
-        'num_patients': len(details),
-        'mean_age': age_summary,
-        'sex_summary': male_female_summary
-    }
-    return cohort_summary
+for root, dirs, files in os.walk(data_dir):
+    for file in files:
+        if file == 'patient_details.csv':
+            cohort_name = os.path.basename(root)
+            details = pd.read_csv(os.path.join(root, file))
+            patient_summaries.append(details)
 
+# Merge patient summaries
+patient_summaries = pd.concat(patient_summaries, ignore_index=True)
 
-def save_dfs_to_csv(dfs, file_path):
-    dfs = pd.DataFrame(dfs)
+# Print summary stats across all cohorts
+summarize_patient_details(patient_summaries)
 
-    # Rename cols
-    dfs.rename(columns={'cohort': 'Cohort', 'num_patients': 'Number of samples',
-                        'mean_age': 'Mean age (SD)', 'sex_summary': 'Male/Female'}, inplace=True)
-    dfs.to_csv(file_path, index=False)
-
-
-# Generate age and sex statistics for each cohort
-gex_cohorts = [
-    'SJC-DS-1009',
-    'SJC-panALL',
-    'GSE227832',
-    'EGAS00001001795',
-    'GSE181157',
-    'GSE228632',
-    'GSE161501'
-]
-
-gex_summary = []
-
-for cohort in gex_cohorts:
-    details_path = os.path.join(
-        os.getenv('PROCESSED_DATA_DIR'),
-        cohort,
-        'patient_details.csv')
-    details = pd.read_csv(details_path)
-    gex_summary.append(path_to_df(details_path))
-
-save_dfs_to_csv(gex_summary, os.path.join(reports_dir, 'gex_cohorts_details.csv'))
-
-dnam_cohorts = [
-    'krali2021',
-    'GSE190931',
-    'krali2023',
-    'enblad2025'
-    ]
-dnam_summary = []
-for cohort in dnam_cohorts:
-    details_path = os.path.join(
-        os.getenv('PROCESSED_DATA_DIR'),
-        'dnam',
-        'pheno',
-        cohort,
-        'patient_details.csv')
-    details = pd.read_csv(details_path)
-    dnam_summary.append(path_to_df(details_path))
-save_dfs_to_csv(dnam_summary, os.path.join(reports_dir, 'dnam_cohorts_details.csv'))
+# Save patient summaries to reports dir
+patient_summaries.to_csv(reports_dir / "patient_summaries.csv", index=False)
