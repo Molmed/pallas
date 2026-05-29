@@ -228,6 +228,16 @@ for split_name, indices in sample_splits.items():
     samplesheets_to_save[split_name] = samplesheets_to_save[
         f'labeled_diagnostic_{modality}'].loc[indices]
 
+# Now save samplesheets that merge calibrate and test
+samplesheets_to_save['calibrate_and_test_gex'] = pd.concat([
+    samplesheets_to_save['calibrate_gex'],
+    samplesheets_to_save['test_gex'],
+])
+samplesheets_to_save['calibrate_and_test_dnam'] = pd.concat([
+    samplesheets_to_save['calibrate_dnam'],
+    samplesheets_to_save['test_dnam'],
+])
+
 # Bimodal evaluation sets
 # - train_gex_for_bimodal_evaluation - all samples in labeled_diagnostic_gex that are not in test_bimodal
 # - train_dnam_for_bimodal_evaluation - all samples in labeled_diagnostic_dnam that are not in test_bimodal

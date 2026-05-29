@@ -16,4 +16,6 @@ GEX_EXCLUDE_SUBTYPES = [
 ]
 DNAM_EXCLUDE_SUBTYPES = [
     'low hyperdiploid',
+    'MECOM-r',
+    'hypodiploid'
 ]

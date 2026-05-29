@@ -1478,17 +1478,16 @@ B-ALL, iAMP21                22
 B-ALL, DUX4-r                20
 B-ALL, ZNF384-r              17
 B-ALL, ETV6::RUNX1-like      14
+AML, KAT6A-r                 11
 B-ALL, BCR::ABL1-like        11
 AML, RBM15::MKL1             11
-AML, KAT6A-r                 11
-B-ALL, hypodiploid           10
 B-ALL, MEF2D-r                9
 AML, FUS::ERG                 8
 B-ALL, PAX5 P80R              8
-AML, MECOM-r                  7
 AML, PICALM::MLLT10           5
 B-ALL, NUTM1-r                4
 AML, BCR::ABL1                4
+AML, MECOM-r                  2
 Name: count, dtype: int64
 
 Class distribution in dnam before splitting into calibration/test:
@@ -1507,28 +1506,27 @@ B-ALL, KMT2A-r               18
 B-ALL, PAX5alt               15
 B-ALL, TCF3::PBX1            11
 AML, CBFA2T3::GLIS2          10
-B-ALL, BCR::ABL1              8
 AML, DEK::NUP214              8
-B-ALL, iAMP21                 7
-AML, ETV6-r                   7
+B-ALL, BCR::ABL1              8
 AML, APL-PML::RARA            7
+AML, ETV6-r                   7
+B-ALL, iAMP21                 7
 B-ALL, DUX4-r                 6
 B-ALL, ZNF384-r               5
 B-ALL, ETV6::RUNX1-like       4
 B-ALL, BCR::ABL1-like         3
-AML, RBM15::MKL1              3
-B-ALL, hypodiploid            3
 B-ALL, MEF2D-r                3
 AML, KAT6A-r                  3
-AML, MECOM-r                  2
+AML, RBM15::MKL1              3
 B-ALL, PAX5 P80R              2
-AML, FUS::ERG                 2
 AML, PICALM::MLLT10           2
+AML, FUS::ERG                 2
 AML, BCR::ABL1                1
+AML, MECOM-r                  1
 B-ALL, NUTM1-r                1
 Name: count, dtype: int64
 
-In modality dnam, excluding 19 class(es) from calibration/test split since they have fewer than 10 samples: ['B-ALL, BCR::ABL1', 'AML, DEK::NUP214', 'B-ALL, iAMP21', 'AML, ETV6-r', 'AML, APL-PML::RARA', 'B-ALL, DUX4-r', 'B-ALL, ZNF384-r', 'B-ALL, ETV6::RUNX1-like', 'B-ALL, BCR::ABL1-like', 'AML, RBM15::MKL1', 'B-ALL, hypodiploid', 'B-ALL, MEF2D-r', 'AML, KAT6A-r', 'AML, MECOM-r', 'B-ALL, PAX5 P80R', 'AML, FUS::ERG', 'AML, PICALM::MLLT10', 'AML, BCR::ABL1', 'B-ALL, NUTM1-r']
+In modality dnam, excluding 18 class(es) from calibration/test split since they have fewer than 10 samples: ['AML, DEK::NUP214', 'B-ALL, BCR::ABL1', 'AML, APL-PML::RARA', 'AML, ETV6-r', 'B-ALL, iAMP21', 'B-ALL, DUX4-r', 'B-ALL, ZNF384-r', 'B-ALL, ETV6::RUNX1-like', 'B-ALL, BCR::ABL1-like', 'B-ALL, MEF2D-r', 'AML, KAT6A-r', 'AML, RBM15::MKL1', 'B-ALL, PAX5 P80R', 'AML, PICALM::MLLT10', 'AML, FUS::ERG', 'AML, BCR::ABL1', 'AML, MECOM-r', 'B-ALL, NUTM1-r']
 Splitting remaining 30% of dnam samples into calibration (50%) and test (50%)...
 
 Class distribution in bimodal before splitting:
@@ -1566,20 +1564,22 @@ B-ALL, NUTM1-r                3
 AML, MECOM-r                  2
 Name: count, dtype: int64
 Saved samplesheet_all.csv with 8944 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_all.csv
-Saved samplesheet_labeled_diagnostic.csv with 5762 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_labeled_diagnostic.csv
+Saved samplesheet_labeled_diagnostic.csv with 5747 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_labeled_diagnostic.csv
 Saved samplesheet_unlabeled.csv with 973 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_unlabeled.csv
-Saved samplesheet_misc.csv with 2209 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_misc.csv
+Saved samplesheet_misc.csv with 2224 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_misc.csv
 Saved samplesheet_labeled_diagnostic_gex.csv with 4534 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_labeled_diagnostic_gex.csv
-Saved samplesheet_labeled_diagnostic_dnam.csv with 2433 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_labeled_diagnostic_dnam.csv
+Saved samplesheet_labeled_diagnostic_dnam.csv with 2418 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_labeled_diagnostic_dnam.csv
 Saved samplesheet_labeled_diagnostic_bimodal.csv with 1205 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_labeled_diagnostic_bimodal.csv
 Saved samplesheet_unlabeled_bimodal.csv with 95 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_unlabeled_bimodal.csv
 Saved samplesheet_train_gex.csv with 3173 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_train_gex.csv
 Saved samplesheet_calibrate_gex.csv with 701 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_calibrate_gex.csv
 Saved samplesheet_test_gex.csv with 660 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_test_gex.csv
-Saved samplesheet_train_dnam.csv with 1703 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_train_dnam.csv
-Saved samplesheet_calibrate_dnam.csv with 403 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_calibrate_dnam.csv
+Saved samplesheet_train_dnam.csv with 1692 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_train_dnam.csv
+Saved samplesheet_calibrate_dnam.csv with 399 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_calibrate_dnam.csv
 Saved samplesheet_test_dnam.csv with 327 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_test_dnam.csv
 Saved samplesheet_train_bimodal.csv with 843 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_train_bimodal.csv
 Saved samplesheet_test_bimodal.csv with 362 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_test_bimodal.csv
+Saved samplesheet_calibrate_and_test_gex.csv with 1361 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_calibrate_and_test_gex.csv
+Saved samplesheet_calibrate_and_test_dnam.csv with 726 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_calibrate_and_test_dnam.csv
 Saved samplesheet_train_gex_for_bimodal_evaluation.csv with 4172 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_train_gex_for_bimodal_evaluation.csv
-Saved samplesheet_train_dnam_for_bimodal_evaluation.csv with 2071 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_train_dnam_for_bimodal_evaluation.csv
+Saved samplesheet_train_dnam_for_bimodal_evaluation.csv with 2056 samples to /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_train_dnam_for_bimodal_evaluation.csv

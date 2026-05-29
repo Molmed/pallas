@@ -17,12 +17,20 @@ ALL_1057,misc,Krali-2023,TruSeq,EXCLUDED: low HeH,/home/mariya/Data/pallas/mlomi
 ALL_109r1,misc,Krali-2023,,"B-ALL, ETV6::RUNX1",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_109r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_109r1.pvals.txt,,,
 ALL_109r2,misc,Krali-2023,,"B-ALL, ETV6::RUNX1",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_109r2.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_109r2.pvals.txt,,,
 ALL_1159,misc,Krali-2023,TruSeq,EXCLUDED: low HeH,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/gex/ALL_1159.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1159.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1159.pvals.txt,,,
+ALL_1193,misc,Krali-2023,,EXCLUDED: Hypo,,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1193.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1193.pvals.txt,,,
+ALL_1194,misc,Krali-2023,,EXCLUDED: Hypo,,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1194.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1194.pvals.txt,,,
+ALL_1195,misc,Krali-2023,,EXCLUDED: Hypo,,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1195.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1195.pvals.txt,,,
+ALL_1196,misc,Krali-2023,,EXCLUDED: Hypo,,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1196.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1196.pvals.txt,,,
+ALL_1197,misc,Krali-2023,,EXCLUDED: Hypo,,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1197.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1197.pvals.txt,,,
+ALL_1198,misc,Krali-2023,,EXCLUDED: Hypo,,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1198.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1198.pvals.txt,,,
+ALL_1199,misc,Krali-2023,,EXCLUDED: Hypo,,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1199.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_1199.pvals.txt,,,
 ALL_119r1,misc,Krali-2023,,"B-ALL, high hyperdiploid",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_119r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_119r1.pvals.txt,,,
 ALL_124r1,misc,Krali-2023,,"B-ALL, ETV6::RUNX1",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_124r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_124r1.pvals.txt,,,
 ALL_198r1,misc,Krali-2023,,"B-ALL, ETV6::RUNX1",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_198r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_198r1.pvals.txt,,,
 ALL_205r1,misc,Krali-2023,,"B-ALL, DUX4-r",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_205r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_205r1.pvals.txt,,,
 ALL_210_r,misc,Krali-2023,ScriptSeq,"B-ALL, high hyperdiploid",/home/mariya/Data/pallas/mlomix_pre/Krali-2023/gex/ALL_210_r.txt,,,,,
 ALL_210r1,misc,Krali-2023,,"B-ALL, high hyperdiploid",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_210r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_210r1.pvals.txt,,,
+ALL_22,misc,Krali-2023,,EXCLUDED: Hypo,,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_22.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_22.pvals.txt,,,
 ALL_244r1,misc,Krali-2023,,"B-ALL, MEF2D-r",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_244r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_244r1.pvals.txt,,,
 ALL_244r2,misc,Krali-2023,,"B-ALL, MEF2D-r",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_244r2.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_244r2.pvals.txt,,,
 ALL_257_r,misc,Krali-2023,ScriptSeq,"B-ALL, ZNF384-r",/home/mariya/Data/pallas/mlomix_pre/Krali-2023/gex/ALL_257_r.txt,,,,,
@@ -41,7 +49,8 @@ ALL_368r1,misc,Krali-2023,,"B-ALL, PAX5alt",,/home/mariya/Data/pallas/mlomix_pre
 ALL_374r1,misc,Krali-2023,,T-ALL,,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_374r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_374r1.pvals.txt,,,
 ALL_380_r,misc,Krali-2023,ScriptSeq,"B-ALL, high hyperdiploid",/home/mariya/Data/pallas/mlomix_pre/Krali-2023/gex/ALL_380_r.txt,,,,,
 ALL_380r1,misc,Krali-2023,,"B-ALL, high hyperdiploid",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_380r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_380r1.pvals.txt,,,
-ALL_416r1,misc,Krali-2023,,"B-ALL, hypodiploid",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_416r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_416r1.pvals.txt,,,
+ALL_416,misc,Krali-2023,,EXCLUDED: Hypo,,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_416.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_416.pvals.txt,,,
+ALL_416r1,misc,Krali-2023,,EXCLUDED: Hypo,,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_416r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_416r1.pvals.txt,,,
 ALL_419r1,misc,Krali-2023,,"B-ALL, high hyperdiploid",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_419r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_419r1.pvals.txt,,,
 ALL_427r1,misc,Krali-2023,,"B-ALL, high hyperdiploid",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_427r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_427r1.pvals.txt,,,
 ALL_433,misc,Krali-2023,,EXCLUDED: low HeH,,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_433.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_433.pvals.txt,,,
@@ -56,6 +65,7 @@ ALL_5r1,misc,Krali-2023,,"B-ALL, KMT2A-r",,/home/mariya/Data/pallas/mlomix_pre/K
 ALL_5r2,misc,Krali-2023,,"B-ALL, KMT2A-r",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_5r2.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_5r2.pvals.txt,,,
 ALL_680_2,misc,Krali-2023,ScriptSeq,"B-ALL, PAX5alt",/home/mariya/Data/pallas/mlomix_pre/Krali-2023/gex/ALL_680_2.txt,,,,,
 ALL_680_r,misc,Krali-2023,ScriptSeq,"B-ALL, PAX5alt",/home/mariya/Data/pallas/mlomix_pre/Krali-2023/gex/ALL_680_r.txt,,,,,
+ALL_714,misc,Krali-2023,,EXCLUDED: Hypo,,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_714.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_714.pvals.txt,,,
 ALL_8r1,misc,Krali-2023,,"B-ALL, ZNF384-r",,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_8r1.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_8r1.pvals.txt,,,
 ALL_931,misc,Krali-2023,TruSeq,EXCLUDED: low HeH,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/gex/ALL_931.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_931.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2023/dnam/ALL_931.pvals.txt,,,
 AML001-R1,misc,Stratmann-2022,,"AML, NPM1alt",/home/mariya/Data/pallas/mlomix_pre/Stratmann-2022/AML001-R1.txt,,,202284800093.0,R07C01,/home/mariya/Data/pallas/raw/Stratmann-2022/RE-1840_180726_IDAT
@@ -115,8 +125,8 @@ AML081-R1,misc,Stratmann-2022,,"AML, NPM1alt",/home/mariya/Data/pallas/mlomix_pr
 AML082-R1,misc,Stratmann-2022,,"AML, RUNX1::RUNX1T1",/home/mariya/Data/pallas/mlomix_pre/Stratmann-2022/AML082-R1.txt,,,202277800008.0,R02C01,/home/mariya/Data/pallas/raw/Stratmann-2022/RE-1840_180726_IDAT
 AML083-R1,misc,Stratmann-2022,,"AML, NUP98-r",/home/mariya/Data/pallas/mlomix_pre/Stratmann-2022/AML083-R1.txt,,,202277800008.0,R04C01,/home/mariya/Data/pallas/raw/Stratmann-2022/RE-1840_180726_IDAT
 AML085-R1,misc,Stratmann-2022,,"AML, NUP98-r",/home/mariya/Data/pallas/mlomix_pre/Stratmann-2022/AML085-R1.txt,,,202277800008.0,R06C01,/home/mariya/Data/pallas/raw/Stratmann-2022/RE-1840_180726_IDAT
-AML087-R1,misc,Stratmann-2022,,"AML, ETV6-r;AML, MECOM-r",/home/mariya/Data/pallas/mlomix_pre/Stratmann-2022/AML087-R1.txt,,,202277800007.0,R01C01,/home/mariya/Data/pallas/raw/Stratmann-2022/RE-1840_180726_IDAT
-AML087-R1-P,misc,Stratmann-2022,,"AML, ETV6-r;AML, MECOM-r",/home/mariya/Data/pallas/mlomix_pre/Stratmann-2022/AML087-R1-P.txt,,,202277800007.0,R02C01,/home/mariya/Data/pallas/raw/Stratmann-2022/RE-1840_180726_IDAT
+AML087-R1,misc,Stratmann-2022,,"AML, ETV6-r;EXCLUDED: MECOM-r",/home/mariya/Data/pallas/mlomix_pre/Stratmann-2022/AML087-R1.txt,,,202277800007.0,R01C01,/home/mariya/Data/pallas/raw/Stratmann-2022/RE-1840_180726_IDAT
+AML087-R1-P,misc,Stratmann-2022,,"AML, ETV6-r;EXCLUDED: MECOM-r",/home/mariya/Data/pallas/mlomix_pre/Stratmann-2022/AML087-R1-P.txt,,,202277800007.0,R02C01,/home/mariya/Data/pallas/raw/Stratmann-2022/RE-1840_180726_IDAT
 AML091-D,misc,Stratmann-2022,,UNRECOGNIZED: Prior MDS and ALL,/home/mariya/Data/pallas/mlomix_pre/Stratmann-2022/AML091-D.txt,,,202277800007.0,R05C01,/home/mariya/Data/pallas/raw/Stratmann-2022/RE-1840_180726_IDAT
 AML091-R1-P,misc,Stratmann-2022,,UNRECOGNIZED: Prior MDS and ALL,/home/mariya/Data/pallas/mlomix_pre/Stratmann-2022/AML091-R1-P.txt,,,202277800007.0,R06C01,/home/mariya/Data/pallas/raw/Stratmann-2022/RE-1840_180726_IDAT
 AML092-R1,misc,Stratmann-2022,,"AML, CBFB::MYH11",/home/mariya/Data/pallas/mlomix_pre/Stratmann-2022/AML092-R1.txt,,,202277800007.0,R08C01,/home/mariya/Data/pallas/raw/Stratmann-2022/RE-1840_180726_IDAT
@@ -131,6 +141,7 @@ AML_005,misc,Krali-2021,,UNRECOGNIZED: mono 7,,/home/mariya/Data/pallas/mlomix_p
 AML_010,misc,Krali-2021,,UNRECOGNIZED: other clon abn,,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_010.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_010.pvals.txt,,,
 AML_011,misc,Krali-2021,,UNRECOGNIZED: other clon abn,,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_011.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_011.pvals.txt,,,
 AML_016,misc,Krali-2021,,UNRECOGNIZED: other clon abn,,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_016.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_016.pvals.txt,,,
+AML_023,misc,Krali-2021,,EXCLUDED: 3q21q26,,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_023.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_023.pvals.txt,,,
 AML_025,misc,Krali-2021,,UNRECOGNIZED: other clon abn,,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_025.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_025.pvals.txt,,,
 AML_026,misc,Krali-2021,,UNRECOGNIZED: other clon abn,,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_026.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_026.pvals.txt,,,
 AML_030,misc,Krali-2021,,UNRECOGNIZED: sole+8,,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_030.betas.txt,/home/mariya/Data/pallas/mlomix_pre/Krali-2021/AML_030.pvals.txt,,,
@@ -2064,6 +2075,7 @@ TARGET-20-PAVRJP-R,misc,TARGET-AML,,"AML, KMT2A-r",/home/mariya/Data/pallas/mlom
 TARGET-20-PAVSAN-R,misc,TARGET-AML,,"AML, CBFB::MYH11",,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735353.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735353.pvals.txt,,,
 TARGET-20-PAVSFB-R,misc,TARGET-AML,,"AML, KMT2A-r",/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/gex/TARGET-20-PAVSFB-04A.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735309.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735309.pvals.txt,,,
 TARGET-20-PAVSWX-D,misc,TARGET-AML,,UNRECOGNIZED: FOSB-KLF6,,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5734746.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5734746.pvals.txt,,,
+TARGET-20-PAVTBA-D,misc,TARGET-AML,,EXCLUDED: C3orf27-MECOM,,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5734748.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5734748.pvals.txt,,,
 TARGET-20-PAVTFI-R,misc,TARGET-AML,,"AML, CBFA2T3::GLIS2",,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735352.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735352.pvals.txt,,,
 TARGET-20-PAVTLN-R,misc,TARGET-AML,,"AML, NPM1alt",/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/gex/TARGET-20-PAVTLN-04A.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735389.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735389.pvals.txt,,,
 TARGET-20-PAVTRM-R,misc,TARGET-AML,,"AML, NPM1alt",/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/gex/TARGET-20-PAVTRM-04A.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735356.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735356.pvals.txt,,,
@@ -2093,6 +2105,7 @@ TARGET-20-PAWBSE-R,misc,TARGET-AML,,"AML, CBFB::MYH11",,,,202908420004.0,R02C01,
 TARGET-20-PAWBSJ-R,misc,TARGET-AML,,"AML, RUNX1::RUNX1T1",/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/gex/TARGET-20-PAWBSJ-04A.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735365.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735365.pvals.txt,,,
 TARGET-20-PAWCBZ-R,misc,TARGET-AML,,"AML, RUNX1::RUNX1T1",/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/gex/TARGET-20-PAWCBZ-04A.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735372.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735372.pvals.txt,,,
 TARGET-20-PAWCJK-R,misc,TARGET-AML,,"AML, NPM1alt",/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/gex/TARGET-20-PAWCJK-04A.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735355.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735355.pvals.txt,,,
+TARGET-20-PAWDBS-D,misc,TARGET-AML,,EXCLUDED: MECOM-TBL1XR1,,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5734860.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5734860.pvals.txt,,,
 TARGET-20-PAWDTX-D,misc,TARGET-AML,,UNRECOGNIZED: PSPC1-ZFP36L1,,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5734868.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5734868.pvals.txt,,,
 TARGET-20-PAWDTX-D2,misc,TARGET-AML,,UNRECOGNIZED: PSPC1-ZFP36L1,,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735439.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735439.pvals.txt,,,
 TARGET-20-PAWEBG-R,misc,TARGET-AML,,"AML, KMT2A-r",/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/gex/TARGET-20-PAWEBG-40A.txt,,,,,
@@ -2187,6 +2200,8 @@ TARGET-20-PAXGGM-R,misc,TARGET-AML,,"AML, KMT2A-r",/home/mariya/Data/pallas/mlom
 TARGET-20-PAXGHE-R,misc,TARGET-AML,,"AML, KMT2A-r",/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/gex/TARGET-20-PAXGHE-04A.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735453.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735453.pvals.txt,,,
 TARGET-20-PAXGIX-D2,misc,TARGET-AML,,UNRECOGNIZED: MLLT10-DDX10,,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735403.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735403.pvals.txt,,,
 TARGET-20-PAXGIX-R,misc,TARGET-AML,,"AML, KMT2A-r",/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/gex/TARGET-20-PAXGIX-04A.txt,,,,,
+TARGET-20-PAXGRE-D,misc,TARGET-AML,,EXCLUDED: RUNX1-MECOM,,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735239.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735239.pvals.txt,,,
+TARGET-20-PAXGTM-D,misc,TARGET-AML,,EXCLUDED: MECOM,,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735243.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735243.pvals.txt,,,
 TARGET-20-PAXHPH-R,misc,TARGET-AML,,"AML, RBM15::MKL1",,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735449.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735449.pvals.txt,,,
 TARGET-20-PAXICE-R,misc,TARGET-AML,,"AML, KMT2A-r",/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/gex/TARGET-20-PAXICE-40A.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735415.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735415.pvals.txt,,,
 TARGET-20-PAXIFA-R,misc,TARGET-AML,,"AML, KMT2A-r",,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735448.betas.txt,/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/dnam/GSE190931/GSM5735448.pvals.txt,,,
