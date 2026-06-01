@@ -350,6 +350,49 @@ gdc_samplesheet = gdc_samplesheet.set_index('target_case_timepoint')
 samplesheet_df = backfill_samplesheet_with_mlomix_dnam(samplesheet_df, dataset_name, data_path)
 gdc_samplesheet = backfill_samplesheet_with_mlomix_dnam(gdc_samplesheet, dataset_name, data_path)
 
+
+# There are some inconsistent subtypes.
+# These have been resolved manually as follows:
+
+# t(10;11) was incorrectly resolved as KMT2A-r.
+# If one df shows 'KMT2A-r' and the other shows PICALM::MLLT10,
+# resolve to PICALM::MLLT10.
+for sample in gdc_samplesheet.index:
+    if sample in samplesheet_df.index:
+        subtype1 = gdc_samplesheet.loc[sample, 'class']
+        subtype2 = samplesheet_df.loc[sample, 'class']
+        if subtype1 == 'AML, KMT2A-r' and subtype2 == 'AML, PICALM::MLLT10':
+            gdc_samplesheet.at[sample, 'class'] = 'AML, PICALM::MLLT10'
+            print(f"Resolved subtype inconsistency for {sample}: set to AML, PICALM::MLLT10")
+
+# The following have been manually resolved.
+corrected_classes = {
+    'TARGET-20-PAUZPD-D': 'AML, NPM1alt', # Followup.tsv: tested positive for NPM1 mutation.
+    'TARGET-20-PAVPWB-D': 'AML, RUNX1::RUNX1T1;AML, AML, KMT2A-r', # followup.tsv shows runx1 translocation while GSM5734725 shows KTM2A-r
+    'TARGET-20-PAVPXS-D': 'AML, RUNX1::RUNX1T1', # followup.tsv ambiguous; GSM5734723 specifies runx1 transl.
+    'TARGET-20-PAVWJV-D': 'AML, NPM1alt', # Followup.tsv: tested positive for NPM1 mutation. GSM5734779 unrecognized fusion.
+    'TARGET-20-PAWNHW-D': 'AML, CBFB::MYH11', # Per both GSM5735004 and GSM5735004
+    'TARGET-20-PAWWWM-D': 'AML, NUP98-r', # GSM5735111
+    'TARGET-20-PAXAKF-D': 'AML, NPM1alt', # Followup.tsv: tested positive for NPM1 mutation. GSM5735111 unrecognized fusion.
+    'TARGET-20-PAXBNE-D': 'AML, KMT2A-r;AML, NUP98-r', # Followup.tsv shows t(9;11)(p22;q23) while GSM5735174 shows NUP98-NSD1
+    'TARGET-20-PAXGIX-D': 'AML, KMT2A-r', # GSM5735403 and GSM5735234 show unknown fusion
+    'TARGET-20-PAXHYG-D': 'AML, KMT2A-r' # GSM5735255 shows unknown fusion
+}
+
+# Update those items manually
+for sample, corrected_class in corrected_classes.items():
+    if sample in gdc_samplesheet.index:
+        gdc_samplesheet.at[sample, 'class'] = corrected_class
+        print(f"Manually corrected class for {sample} to {corrected_class}")
+    if sample in samplesheet_df.index:
+        samplesheet_df.at[sample, 'class'] = corrected_class
+        print(f"Manually corrected class for {sample} to {corrected_class}")
+
+# Manually update data_silo to multiclass for samples with multiple subtypes after merging
+multi_subtype_mask = samplesheet_df['class'].str.contains(';', na=False)
+samplesheet_df.loc[multi_subtype_mask, 'data_silo'] = 'multiclass'
+gdc_samplesheet.loc[gdc_samplesheet['class'].str.contains(';', na=False), 'data_silo'] = 'multiclass'
+
 # Merge with gdc samplesheet and gdc details
 samplesheet_df = concatenate_samplesheets(
     gdc_samplesheet, samplesheet_df, f'{preprocessed_dir}/samplesheet.csv')

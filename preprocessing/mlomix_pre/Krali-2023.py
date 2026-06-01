@@ -363,6 +363,18 @@ samplesheet_df = silo_remaining(samplesheet_df)
 # Order columns
 samplesheet_df = format_mlomix_columns(samplesheet_df)
 
+# The dnam pheno file has updated subtypes for some samples.
+# If the 'class̈́ column in samplesheet_df is 'B-ALL, other'
+# and it is something else in samplesheet_dnam_df, update it to match samplesheet_dnam_df
+for sample in samplesheet_df.index:
+    if sample in samplesheet_dnam_df.index:
+        if (samplesheet_df.loc[sample, 'class'] == 'B-ALL, other') and (samplesheet_dnam_df.loc[sample, 'class'] != 'B-ALL, other'):
+            samplesheet_df.loc[sample, 'class'] = samplesheet_dnam_df.loc[sample, 'class']
+            # Update their silo to labeled_diagnostic if it was previously unlabeled
+            if samplesheet_df.loc[sample, 'data_silo'] == 'unlabeled':
+                samplesheet_df.loc[sample, 'data_silo'] = 'labeled_diagnostic'
+            print(f"Updated subtype for sample {sample} to {samplesheet_df.loc[sample, 'class']} based on dnam pheno file")
+
 # Concat the dnam and samplesheet dfs
 samplesheet_df = concatenate_samplesheets(
     samplesheet_df,

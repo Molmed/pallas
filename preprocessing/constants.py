@@ -12,6 +12,7 @@ GEX_EXCLUDE_SUBTYPES = [
     'low hyperdiploid',
     'RUNX1::RUNX1T1-like',
     'IGH::CEBPD',
+    'MECOM-r',
     'PICALM::MLLT10'
 ]
 DNAM_EXCLUDE_SUBTYPES = [

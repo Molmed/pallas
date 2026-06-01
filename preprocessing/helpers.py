@@ -450,6 +450,21 @@ def concatenate_detail_dfs(df1, df2, output_file=None, report=True):
 def concatenate_samplesheets(df1, df2, output_file=None, report=True):
     g = df1.replace('', pd.NA)
     d = df2.replace('', pd.NA)
+
+    # The 'class' column should be the same in the two dfs,
+    # if not, print a warning and the details of the differing rows
+    union_index = g.index.union(d.index)
+    g_class = g.reindex(union_index)['class']
+    d_class = d.reindex(union_index)['class']
+    class_mismatch_mask = (g_class != d_class) & g_class.notna() & d_class.notna()
+    if class_mismatch_mask.any():
+        print("Warning: The following samples have different 'class' values in the two dataframes:")
+        print(pd.concat(
+            [g_class[class_mismatch_mask], d_class[class_mismatch_mask]],
+            axis=1,
+            keys=['df1_class', 'df2_class'],
+        ))
+
     samplesheet_df = g.combine_first(d)
     # Rename index to sample
     samplesheet_df.index.name = 'sample'
