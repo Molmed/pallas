@@ -90,13 +90,13 @@ def parse_args():
         help=scoring_metric_help,
     )
     parser.add_argument(
-        "--min-features",
+        "--min_features",
         type=int,
         required=False,
         help=min_features_help,
     )
     parser.add_argument(
-        "--num-splits",
+        "--num_splits",
         type=int,
         required=False,
         help=num_splits_help,
@@ -280,7 +280,13 @@ def reduce(X_path,
     # Draw the plot
     plt.plot(n_features, train_f1_macros, label="Train F1-macro")
     plt.plot(n_features, val_f1_macros, label="Val F1-macro")
-    plt.xlabel("Number of remaining features")
+    plt.xlabel("Number of selected features")
+    for index in range(len(n_features)):
+        plt.text(
+            n_features[index],
+            val_f1_macros[index],
+            n_features[index],
+            size=8)
     plt.legend()
     plt.savefig(f"{output_dir}/feature_reduction.svg")
 
