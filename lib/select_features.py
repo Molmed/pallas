@@ -7,6 +7,8 @@ import dotenv
 from sklearn.model_selection import RepeatedStratifiedKFold, cross_validate
 from sklearn.ensemble import RandomForestClassifier
 from collections import Counter
+from gene_thesaurus import GeneThesaurus
+
 
 dotenv.load_dotenv()
 
@@ -33,6 +35,12 @@ Path to CSV file containing labels."""
 
 output_dir_help = """
 Directory to save the output."""
+
+translate_genes_help = """
+If true, will save a copy of the selected features
+translated from Ensembl id to gene symbol.
+Default: False
+"""
 
 scoring_metric_help = """
 The metric to be used when evaluating features during cross-validation.
@@ -68,6 +76,12 @@ def parse_args():
         type=str,
         required=True,
         help=output_dir_help,
+    )
+    parser.add_argument(
+        "--translate_genes_to_symbols",
+        type=bool,
+        required=False,
+        help=translate_genes_help,
     )
     parser.add_argument(
         "--scoring_metric",
@@ -130,6 +144,7 @@ def run_cv(X,
 def analyze_feature_importances(output_dir,
                                 cv_results,
                                 X,
+                                translate_genes_to_symbols=False,
                                 freq_threshold=1,
                                 frac=0.10):
     feature_names = X.columns
@@ -188,6 +203,17 @@ def analyze_feature_importances(output_dir,
         for feature in selected_features:
             f.write(f"{feature}\n")
 
+    # save translated if requested
+    if translate_genes_to_symbols:
+        gt = GeneThesaurus()
+        translated = gt.translate_genes(selected_features,
+                                        source="ensembl_id", target="symbol")
+        translated_path = os.path.join(
+            output_dir, f"selected_features.{suffix}.translated.txt")
+        with open(translated_path, 'w') as f:
+            for translated_feature in translated.values():
+                f.write(f"{translated_feature}\n")
+
     print(f"Selected {len(selected_features)} features with frequency >= {freq_threshold}. Saved to {selected_features_path}.")
 
     return selected_features
@@ -196,6 +222,7 @@ def analyze_feature_importances(output_dir,
 def reduce(X_path,
            y_path,
            output_dir,
+           translate_genes_to_symbols=False,
            scoring_metric=None,
            min_features=None,
            num_splits=None):
@@ -241,9 +268,12 @@ def reduce(X_path,
         print(f"Val   F1-macro: {val_mean:.3f} ± {val_std:.3f}")
         print(f"Gap:            {train_mean - val_mean:.3f}")
 
-        selected_features = analyze_feature_importances(output_dir,
-                                                        cv_results,
-                                                        X)
+        selected_features = analyze_feature_importances(
+            output_dir,
+            cv_results,
+            X,
+            translate_genes_to_symbols)
+
         X = X[selected_features]
         n_features_remaining = len(selected_features)
 
@@ -262,6 +292,7 @@ def main():
         X_path=args.X_path,
         y_path=args.y_path,
         output_dir=args.output_dir,
+        translate_genes_to_symbols=args.translate_genes_to_symbols,
         scoring_metric=args.scoring_metric,
         min_features=args.min_features,
         num_splits=args.num_splits
