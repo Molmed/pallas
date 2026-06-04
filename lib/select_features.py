@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 import argparse
 import dotenv
 from sklearn.model_selection import RepeatedStratifiedKFold, cross_validate
@@ -44,7 +45,7 @@ Default: 10."""
 
 num_splits_help = """
 Number of splits used for cross-validation.
-Default: max(5, min(min_class_count, 10)).
+Default: min(min_class_count, 5).
 """
 
 
@@ -122,19 +123,15 @@ def run_cv(X,
         return_estimator=True
     )
 
-    train_mean = cv_results['train_score'].mean()
-    train_std = cv_results['train_score'].std()
-    val_mean = cv_results['test_score'].mean()
-    val_std = cv_results['test_score'].std()
-
-    print(f"Train F1-macro: {train_mean:.3f} ± {train_std:.3f}")
-    print(f"Val   F1-macro: {val_mean:.3f} ± {val_std:.3f}")
-    print(f"Gap:            {train_mean - val_mean:.3f}")
-
     return cv_results
 
 
-def analyze_feature_importances(output_dir, cv_results, X, suffix, freq_threshold=1, frac=0.10):
+# TODO: make freq_threshold and frac input params
+def analyze_feature_importances(output_dir,
+                                cv_results,
+                                X,
+                                freq_threshold=1,
+                                frac=0.10):
     feature_names = X.columns
 
     importances = []
@@ -149,6 +146,7 @@ def analyze_feature_importances(output_dir, cv_results, X, suffix, freq_threshol
         columns=feature_names
     )
 
+    suffix = len(feature_names)
     output_path = os.path.join(output_dir, f"feature_importances.{suffix}.csv")
     importance_df.to_csv(output_path)
 
@@ -183,6 +181,7 @@ def analyze_feature_importances(output_dir, cv_results, X, suffix, freq_threshol
 
     # Save all features with freq >= freq_threshold
     selected_features = freq_df[freq_df["count"] >= freq_threshold]["feature"].tolist()
+    suffix = len(selected_features)
     selected_features_path = os.path.join(output_dir, f"selected_features.{suffix}.txt")
 
     with open(selected_features_path, 'w') as f:
@@ -191,16 +190,70 @@ def analyze_feature_importances(output_dir, cv_results, X, suffix, freq_threshol
 
     print(f"Selected {len(selected_features)} features with frequency >= {freq_threshold}. Saved to {selected_features_path}.")
 
-    return importance_df, freq_df, selected_features
+    return selected_features
 
 
 def reduce(X_path,
            y_path,
            output_dir,
            scoring_metric=None,
-           min_features=10,
+           min_features=None,
            num_splits=None):
-    return
+
+    X = pd.read_csv(X_path, index_col=0).astype(np.float32)
+    y = pd.read_csv(y_path, index_col=0)
+
+    print("y class distribution:")
+    print(y.value_counts())
+    min_class_count = y.value_counts().min()
+    y = y.iloc[:, 0].values
+
+    # Get initial number of features
+    n_features_remaining = len(X.columns)
+
+    # Default min features
+    if min_features is None:
+        min_features = 10
+
+    # min_class_count or 5, whichever is smaller
+    n_splits = min(min_class_count, 5)
+
+    # For the plots
+    n_features = []
+    train_f1_macros = []
+    val_f1_macros = []
+
+    while n_features_remaining > min_features:
+        print("\n\n")
+        print(f"Cross-validating with {n_features_remaining} features...")
+        cv_results = run_cv(X, y, n_splits, scoring_metric)
+
+        train_mean = cv_results['train_score'].mean()
+        train_std = cv_results['train_score'].std()
+        val_mean = cv_results['test_score'].mean()
+        val_std = cv_results['test_score'].std()
+
+        n_features.append(n_features_remaining)
+        train_f1_macros.append(train_mean)
+        val_f1_macros.append(val_mean)
+
+        print(f"Train F1-macro: {train_mean:.3f} ± {train_std:.3f}")
+        print(f"Val   F1-macro: {val_mean:.3f} ± {val_std:.3f}")
+        print(f"Gap:            {train_mean - val_mean:.3f}")
+
+        selected_features = analyze_feature_importances(output_dir,
+                                                        cv_results,
+                                                        X)
+        X = X[selected_features]
+        n_features_remaining = len(selected_features)
+
+    # Draw the plot
+    plt.plot(n_features, train_f1_macros, label="Train F1-macro")
+    plt.plot(n_features, val_f1_macros, label="Val F1-macro")
+    plt.xlabel("Number of remaining features")
+    plt.legend()
+    plt.savefig(f"{output_dir}/feature_reduction.svg")
+
 
 
 def main():
