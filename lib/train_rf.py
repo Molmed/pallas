@@ -237,6 +237,7 @@ def main():
     dir_name = f"rf_{modality}_{timestamp}"
     output_dir = f"{output_dir}/{dir_name}"
     Path(output_dir).mkdir(parents=True, exist_ok=True)
+    print(f"Training to output directory: {output_dir}")
 
     X_path = reduce_to_selected(
         X_path=args.X_path,
