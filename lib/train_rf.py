@@ -7,22 +7,9 @@ import joblib
 import json
 from pathlib import Path
 from datetime import datetime
-
-import os
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import argparse
 import dotenv
-from sklearn.model_selection import RepeatedStratifiedKFold, cross_validate
-from sklearn.ensemble import RandomForestClassifier
-from collections import Counter
-from gene_thesaurus import GeneThesaurus
-
-# MLflow
-import mlflow
 from mlflow.models import infer_signature
-from mlflow import MlflowClient
 
 dotenv.load_dotenv()
 
@@ -44,6 +31,9 @@ Path to CSV file containing labels."""
 
 output_dir_help = """
 Directory to save the output."""
+
+modality_help = """
+Modality of the data, 'GEX' or 'DNAm'"""
 
 selected_features_path_help = """
 Path to TXT file containing selected features,
@@ -80,6 +70,12 @@ def parse_args():
         type=str,
         required=True,
         help=output_dir_help,
+    )
+    parser.add_argument(
+        "--modality",
+        type=str,
+        required=True,
+        help=modality_help,
     )
     parser.add_argument(
         "--selected_features_path",
@@ -133,11 +129,11 @@ def reduce_to_selected(X_path,
 
 
 def train(X_path,
-           y_path,
-           output_dir,
-           n_splits=None,
-           scoring_metric="f1_macro",
-           n_jobs=N_JOBS):
+          y_path,
+          output_dir,
+          n_splits=None,
+          scoring_metric="f1_macro",
+          n_jobs=N_JOBS):
 
     # Read in X_train and y_train
     # Also reduce memory usage by converting to float32
@@ -166,7 +162,9 @@ def train(X_path,
     )
 
     # Read in param grid json
-    with open("rf_cv_params.json") as f:
+    here = Path(__file__).parent
+    params_file = here / "rf_cv_params.json"
+    with open(params_file) as f:
         param_grid = json.load(f)
 
     print(f"Running CV with params: {param_grid}")
@@ -215,8 +213,17 @@ def train(X_path,
     model_path = os.path.join(output_dir, "rf_model.joblib")
     joblib.dump(final_rf, model_path)
 
+    # Infer MLFlow signature from training data + predictions
+    predictions = final_rf.predict(X_train)
+    signature = infer_signature(X_train, predictions)
+
+    # Save mlflow signature
+    signature_path = os.path.join(output_dir, "mlflow_signature.joblib")
+    joblib.dump(signature, signature_path)
+
     print(f"Saved hyperparameters to {hyperparams_path}")
     print(f"Saved final RF model to {model_path}")
+    print(f"Saved MLFlow signature to {signature_path}")
 
 
 def main():
@@ -224,9 +231,10 @@ def main():
 
     # Create output dir with current timestamp
     output_dir = args.output_dir
+    modality = args.modality
     now = datetime.now()
     timestamp = now.strftime("%Y%m%d_%H%M%S")
-    dir_name = f"rf_{timestamp}"
+    dir_name = f"rf_{modality}_{timestamp}"
     output_dir = f"{output_dir}/{dir_name}"
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
@@ -245,30 +253,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# +    # Start an MLflow run
-# +    if enable_mlflow:
-# +        load_dotenv(dotenv_path=mlflow_env_path)
-# +
-# +        with mlflow.start_run():
-# +            # Log the hyperparameters
-# +            mlflow.log_params(model.get_params())
-# +
-# +            # Log the loss metric
-# +            mlflow.log_metric("precision", precision_score)
-# +            mlflow.log_metric("recall", recall_score)
-# +            mlflow.log_metric("f1", f1_score)
-# +
-# +            mlflow.set_tag("modality", modality)
-# +            mlflow.set_tag("hiclass_classifier", hiclass_classifier)
-# +            mlflow.set_tag("local_classifier", local_classifier)
-# +
-# +            # Infer the model signature
-# +            signature = infer_signature(X_train, classifier.predict(X_train))
-# +
-# +            # Log the model
-# +            mlflow.sklearn.log_model(
-# +                sk_model=classifier,
-# +                artifact_path="model",
-# +                signature=signature,
