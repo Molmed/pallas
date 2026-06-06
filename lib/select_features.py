@@ -291,7 +291,6 @@ def reduce(X_path,
     plt.savefig(f"{output_dir}/feature_reduction.svg")
 
 
-
 def main():
     args = parse_args()
     reduce(
