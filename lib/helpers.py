@@ -18,47 +18,7 @@ from sklearn.calibration import calibration_curve
 from sklearn.preprocessing import label_binarize, LabelEncoder
 
 dotenv.load_dotenv()
-
-DATASETS_PATH = os.getenv("DATASETS_PATH")
-MODELS_DIR = os.getenv("MODELS_DIR")
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 42))
-
-
-def load_dataset(modality, split):
-    dataset_path = os.path.join(DATASETS_PATH, f"{split}-{modality}")
-    X_path = os.path.join(dataset_path, f"features.{modality}.csv")
-    y_path = os.path.join(dataset_path, "labels.csv")
-    selected_features_path = os.path.join(MODELS_DIR, modality, f"selected_features.txt")
-
-    X = pd.read_csv(X_path, index_col=0)
-    y = pd.read_csv(y_path, index_col=0)
-
-    y = y.iloc[:, 0].values  # Convert to 1D numpy array
-
-    # If selected_features.txt exists, filter X to only those features
-    if os.path.exists(selected_features_path):
-        with open(selected_features_path, "r") as f:
-            selected_features = [line.strip() for line in f]
-        X = X[selected_features]
-
-    return X, y
-
-
-def load_merged_test_datasets(modality):
-    X_test, y_test = load_dataset(modality, "test")
-    X_cal, y_cal = load_dataset(modality, "calibrate")
-
-    # Append X_cal to X_test and y_cal to y_test
-    X_merged = pd.concat([X_cal, X_test], axis=0)
-    y_merged = np.concatenate([y_cal, y_test], axis=0)
-
-    return X_merged, y_merged
-
-
-def load_model(modality):
-    model_path = os.path.join(MODELS_DIR, modality, f"final_model.pkl")
-    return joblib.load(model_path)
-
 
 def classifier_level_metrics(y_true, y_pred, y_proba, class_names):
     present_classes = np.unique(y_true)

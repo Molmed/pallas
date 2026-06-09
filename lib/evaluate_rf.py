@@ -44,6 +44,8 @@ from datetime import datetime
 import argparse
 import dotenv
 from mlflow.models import infer_signature
+from sklearn.metrics import classification_report
+from helpers import classifier_level_metrics, class_level_metrics
 
 
 description = """
@@ -104,15 +106,12 @@ def parse_args():
 
 
 def predict(
-    pallas_model_dir: str,
+    model: RandomForestClassifier,
     X_path: str,
     y_path: str,
     dataset_name: str,
     output_dir: str,
 ):
-    # Load the model
-    model = joblib.load(Path(pallas_model_dir) / "rf_model.joblib")
-
     # Get the feature names from the model
     feature_names = model.feature_names_in_
 
@@ -144,6 +143,8 @@ def predict(
     output_path = Path(output_dir) / f"{dataset_name}_predictions.csv"
     proba_df.to_csv(output_path)
 
+    return y_test, y_pred, y_pred_proba
+
 
 def main():
     args = parse_args()
@@ -153,13 +154,22 @@ def main():
     output_dir = Path(args.output_dir) / dataset_name
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    predict(
-        pallas_model_dir=args.pallas_model_dir,
+    # Load the model
+    model = joblib.load(Path(args.pallas_model_dir) / "rf_model.joblib")
+
+    y_test, y_pred, y_pred_proba = predict(
+        model=model,
         X_path=args.X_path,
         y_path=args.y_path,
         dataset_name=args.dataset_name,
         output_dir=output_dir
     )
+
+    print(classification_report(y_test, y_pred, digits=3))
+    print("Classifier-level metrics:")
+    print(classifier_level_metrics(y_test, y_pred, y_pred_proba, model.classes_))
+    print("Class-level metrics:")
+    print(class_level_metrics(y_test, y_pred, y_pred_proba, model.classes_))
 
 if __name__ == "__main__":
     main()
