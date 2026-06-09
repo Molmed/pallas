@@ -54,6 +54,10 @@ class Taxonomy():
                remove_unrecognized_and_excluded=True):
         name = name.strip()
 
+        # If name is empty, return None
+        if not name:
+            return "NONE"
+
         def format_unrecognized_and_excluded(name, prefix, disease=None):
             if remove_unrecognized_and_excluded:
                 return None

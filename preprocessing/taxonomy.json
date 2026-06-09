@@ -9,6 +9,7 @@
         },
         {
             "name": "AML",
+            "display_name": "AML, other",
             "children": [
               {
                 "name": "AML-other",
@@ -32,12 +33,12 @@
               },
               {
                 "name": "CBFB::MYH11",
-                "aliases": ["AMLCBFBMYH11", "inv(16)", "CBFB-MYH11"],
+                "aliases": ["AMLCBFBMYH11", "inv(16)", "CBFB-MYH11", "AML (CBFB::MYH11)"],
                 "display_name": "AML, CBFB::MYH11"
               },
               {
                 "name": "KMT2A-r AML",
-                "aliases": ["AMLKMT2A", "AMKLKMT2A", "AMLKMT2APTD", "other 11q23/MLL", "t(9;11)", "t(10;11)","t(11;19)", "KMT2A-MLLT3", "KMT2A-MLLT10", "KMT2A-MLLT4", "KMT2A-ELL", "KMT2A-MLLT1", "KMT2A-SEPT6", "KMT2A-MLLT11", "KMT2A-MYO1F", "KMT2A-LASP1", "KMT2A-SEPT9", "KMT2A-ABI1", "KMT2A-USP2", "KMT2A-ARHGEF37", "KMT2A-MYOCD", "KMT2A-MLLT6", "KMT2A-DCP1A", "KMT2A-FNBP1", "KMT2A-AFF3", "KMT2A-CCNJL", "KMT2A-C9orf72", "KMT2A-SEPT2", "KMT2A-RARA", "KMT2A-PALM2.AKAP2", "KMT2A-AFF1", "KMT2A-PICALM", "KMT2A-EPS15", "KMT2A-LYN", "KMT2A-X", "AMMLKMT2A", "AMOLKMT2A"],
+                "aliases": ["AMLKMT2A", "AMKLKMT2A", "AMLKMT2APTD", "other 11q23/MLL", "t(9;11)", "t(10;11)","t(11;19)", "KMT2A-MLLT3", "KMT2A-MLLT10", "KMT2A-MLLT4", "KMT2A-ELL", "KMT2A-MLLT1", "KMT2A-SEPT6", "KMT2A-MLLT11", "KMT2A-MYO1F", "KMT2A-LASP1", "KMT2A-SEPT9", "KMT2A-ABI1", "KMT2A-USP2", "KMT2A-ARHGEF37", "KMT2A-MYOCD", "KMT2A-MLLT6", "KMT2A-DCP1A", "KMT2A-FNBP1", "KMT2A-AFF3", "KMT2A-CCNJL", "KMT2A-C9orf72", "KMT2A-SEPT2", "KMT2A-RARA", "KMT2A-PALM2.AKAP2", "KMT2A-AFF1", "KMT2A-PICALM", "KMT2A-EPS15", "KMT2A-LYN", "KMT2A-X", "AMMLKMT2A", "AMOLKMT2A", "AML KMT2A rearr"],
                 "display_name": "AML, KMT2A-r"
               },
               {
@@ -103,10 +104,11 @@
         },
         {
           "name": "B-ALL",
+          "display_name": "B-ALL, other",
           "children": [
             {
                 "name": "B-other",
-                "aliases": ["B-other, with fusion", "B-other, without fusion", "Others", "Other", "BALLNOS"],
+                "aliases": ["B-other, with fusion", "B-other, without fusion", "Others", "Other", "BALLNOS", "B-ALL NOS", "pre-B-ALL"],
                 "display_name": "B-ALL, other"
             },
             {
@@ -114,7 +116,7 @@
                 "children": [
                   {
                     "name": "high hyperdiploid",
-                    "aliases": ["HeH", "Hyperdiploid", "High hyperdiploidy", "hyperdiploid", "HHD", "High hyperdiploid", "BALLHYPER"],
+                    "aliases": ["HeH", "Hyperdiploid", "High hyperdiploidy", "hyperdiploid", "HHD", "High hyperdiploid", "BALLHYPER", "B-ALL höghyper"],
                     "display_name": "B-ALL, high hyperdiploid"
                   },
                   {
@@ -139,7 +141,7 @@
               "children": [
                 {
                   "name": "BCR::ABL1",
-                  "aliases": ["t(9;22)","Ph","BCR-ABL1","Ph-pos", "BALLBCRABL1"],
+                  "aliases": ["t(9;22)","Ph","BCR-ABL1","Ph-pos", "BALLBCRABL1", "B-ALL BCR::ABL1"],
                   "display_name": "B-ALL, BCR::ABL1"
                 },
                 {
@@ -154,7 +156,7 @@
               "children": [
                 {
                   "name": "ETV6::RUNX1",
-                  "aliases": ["t(12;21)", "ETV6-RUNX1", "BALLETV6RUNX1"],
+                  "aliases": ["t(12;21)", "ETV6-RUNX1", "BALLETV6RUNX1", "B-ALL ETV6::RUNX1"],
                   "display_name": "B-ALL, ETV6::RUNX1"
                 },
                 {
@@ -187,7 +189,7 @@
             },
             {
               "name": "TCF3::PBX1",
-              "aliases": ["t(1;19)", "TCF3-PBX1", "BALLTCF3PBX1"],
+              "aliases": ["t(1;19)", "TCF3-PBX1", "BALLTCF3PBX1", "B-ALL TCF3::PBX1"],
               "display_name": "B-ALL, TCF3::PBX1"
             },
             {
