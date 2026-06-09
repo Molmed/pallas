@@ -47,8 +47,8 @@ for subtype in unique_subtypes:
     report_rows.append({
         'Subtype': subtype,
         'Total samples': total_samples,
-        'DNAm samples': dnam_samples,
         'GEX samples': gex_samples,
+        'DNAm samples': dnam_samples,
         'Bimodal samples': bimodal_samples,
         'Mean age (sd)': f"{mean_age:.1f} ({sd_age:.1f})",
         'Male/Female': f"{male_female_ratio.get('Male', 0)}/{male_female_ratio.get('Female', 0)}"
