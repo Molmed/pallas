@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-06-09T16:27:09.981618</dc:date>
+    <dc:date>2026-06-17T10:26:34.892022</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -306,7 +306,7 @@ C 76.940978 101.034577 72.677163 111.328337 72.677163 122.060202
 C 72.677163 132.792066 76.940978 143.085826 84.529552 150.6744 
 C 92.118126 158.262975 102.411886 162.52679 113.143751 162.52679 
 z
-" clip-path="url(#p95b249e3c9)" style="fill: #ffffff; stroke: #ffffff; stroke-linejoin: miter"/>
+" clip-path="url(#p8b3a8c2a0c)" style="fill: #ffffff; stroke: #ffffff; stroke-linejoin: miter"/>
    </g>
    <g id="text_1">
     <!-- n=4,569 -->
@@ -782,7 +782,7 @@ C 289.340978 101.034577 285.077163 111.328337 285.077163 122.060202
 C 285.077163 132.792066 289.340978 143.085826 296.929552 150.6744 
 C 304.518127 158.262975 314.811887 162.52679 325.543751 162.52679 
 z
-" clip-path="url(#pdfb282ebd8)" style="fill: #ffffff; stroke: #ffffff; stroke-linejoin: miter"/>
+" clip-path="url(#p40d6189b05)" style="fill: #ffffff; stroke: #ffffff; stroke-linejoin: miter"/>
    </g>
    <g id="text_3">
     <!-- n=2,452 -->
@@ -1162,7 +1162,7 @@ C 501.740979 101.034577 497.477164 111.328337 497.477164 122.060202
 C 497.477164 132.792066 501.740979 143.085826 509.329553 150.6744 
 C 516.918127 158.262975 527.211887 162.52679 537.943752 162.52679 
 z
-" clip-path="url(#pc52e924eab)" style="fill: #ffffff; stroke: #ffffff; stroke-linejoin: miter"/>
+" clip-path="url(#p3d704418d2)" style="fill: #ffffff; stroke: #ffffff; stroke-linejoin: miter"/>
    </g>
    <g id="text_5">
     <!-- n=1,243 -->
@@ -3337,13 +3337,13 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="p95b249e3c9">
+  <clipPath id="p8b3a8c2a0c">
    <rect x="40.881987" y="49.798437" width="144.523528" height="144.523528"/>
   </clipPath>
-  <clipPath id="pdfb282ebd8">
+  <clipPath id="p40d6189b05">
    <rect x="253.281987" y="49.798437" width="144.523528" height="144.523528"/>
   </clipPath>
-  <clipPath id="pc52e924eab">
+  <clipPath id="p3d704418d2">
    <rect x="465.681988" y="49.798437" width="144.523528" height="144.523528"/>
   </clipPath>
  </defs>
