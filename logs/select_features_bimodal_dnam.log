@@ -1,0 +1,116 @@
+Arguments:
+X_path: /home/mariya/Data/pallas/mlomix_datasets/train-bimodal/features.dnam.csv
+y_path: /home/mariya/Data/pallas/mlomix_datasets/train-bimodal/labels.csv
+output_dir: /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/dnam
+translate_genes_to_symbols: None
+scoring_metric: None
+min_features: 5
+num_splits: None
+y class distribution:
+class                   
+AML, KMT2A-r                206
+AML, RUNX1::RUNX1T1         154
+AML, NPM1alt                115
+AML, CBFB::MYH11             58
+AML, CEBPAalt                50
+B-ALL, PAX5alt               32
+B-ALL, high hyperdiploid     31
+AML, NUP98-r                 22
+B-ALL, DUX4-r                22
+B-ALL, ETV6::RUNX1           22
+AML, DEK::NUP214             19
+B-ALL, ZNF384-r              15
+T-ALL                        13
+B-ALL, ETV6::RUNX1-like      12
+B-ALL, BCR::ABL1-like        11
+B-ALL, iAMP21                10
+B-ALL, KMT2A-r               10
+AML, APL-PML::RARA           10
+AML, CBFA2T3::GLIS2           9
+B-ALL, BCR::ABL1              7
+Non-leukemic                  7
+B-ALL, TCF3::PBX1             7
+B-ALL, MEF2D-r                6
+AML, ETV6-r                   6
+AML, KAT6A-r                  5
+AML, FUS::ERG                 3
+AML, PICALM::MLLT10           3
+B-ALL, PAX5 P80R              3
+Name: count, dtype: int64
+
+
+
+Cross-validating with 185135 features...
+Train F1-macro: 1.000 ± 0.000
+Val   F1-macro: 0.868 ± 0.025
+Gap:            0.132
+Selected 27629 features with frequency >= 1. Saved to /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/dnam/selected_features.27629.txt.
+
+
+
+Cross-validating with 27629 features...
+Train F1-macro: 1.000 ± 0.000
+Val   F1-macro: 0.870 ± 0.021
+Gap:            0.130
+Selected 6582 features with frequency >= 1. Saved to /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/dnam/selected_features.6582.txt.
+
+
+
+Cross-validating with 6582 features...
+Train F1-macro: 1.000 ± 0.000
+Val   F1-macro: 0.896 ± 0.016
+Gap:            0.104
+Selected 1430 features with frequency >= 1. Saved to /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/dnam/selected_features.1430.txt.
+
+
+
+Cross-validating with 1430 features...
+Train F1-macro: 1.000 ± 0.000
+Val   F1-macro: 0.893 ± 0.015
+Gap:            0.107
+Selected 357 features with frequency >= 1. Saved to /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/dnam/selected_features.357.txt.
+
+
+
+Cross-validating with 357 features...
+Train F1-macro: 1.000 ± 0.000
+Val   F1-macro: 0.887 ± 0.010
+Gap:            0.113
+Selected 100 features with frequency >= 1. Saved to /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/dnam/selected_features.100.txt.
+
+
+
+Cross-validating with 100 features...
+Train F1-macro: 1.000 ± 0.000
+Val   F1-macro: 0.857 ± 0.023
+Gap:            0.143
+Selected 23 features with frequency >= 1. Saved to /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/dnam/selected_features.23.txt.
+
+
+
+Cross-validating with 23 features...
+Train F1-macro: 1.000 ± 0.000
+Val   F1-macro: 0.759 ± 0.010
+Gap:            0.241
+Selected 3 features with frequency >= 1. Saved to /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/dnam/selected_features.3.txt.
+[CV] END .................................................... total time=  26.8s
+[CV] END .................................................... total time=   5.2s
+[CV] END .................................................... total time=   5.6s
+[CV] END .................................................... total time=   6.8s
+[CV] END .................................................... total time=56.4min
+[CV] END .................................................... total time= 8.5min
+[CV] END .................................................... total time= 1.7min
+[CV] END .................................................... total time=   1.5s
+[CV] END .................................................... total time=56.8min
+[CV] END .................................................... total time= 8.1min
+[CV] END .................................................... total time= 2.0min
+[CV] END .................................................... total time=   2.0s
+[CV] END .................................................... total time=   1.7s
+[CV] END .................................................... total time=  21.8s
+[CV] END .................................................... total time=   0.3s
+[CV] END .................................................... total time=55.6min
+[CV] END .................................................... total time= 8.8min
+[CV] END .................................................... total time= 2.0min
+[CV] END .................................................... total time=   0.3s
+[CV] END .................................................... total time=  22.3s
+[CV] END .................................................... total time=   0.4s

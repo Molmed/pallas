@@ -1,0 +1,105 @@
+Arguments:
+X_path: /home/mariya/Data/pallas/mlomix_datasets/train-bimodal/features.gex.csv
+y_path: /home/mariya/Data/pallas/mlomix_datasets/train-bimodal/labels.csv
+output_dir: /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/gex
+translate_genes_to_symbols: None
+scoring_metric: None
+min_features: 5
+num_splits: None
+y class distribution:
+class                   
+AML, KMT2A-r                206
+AML, RUNX1::RUNX1T1         154
+AML, NPM1alt                115
+AML, CBFB::MYH11             58
+AML, CEBPAalt                50
+B-ALL, PAX5alt               32
+B-ALL, high hyperdiploid     31
+AML, NUP98-r                 22
+B-ALL, DUX4-r                22
+B-ALL, ETV6::RUNX1           22
+AML, DEK::NUP214             19
+B-ALL, ZNF384-r              15
+T-ALL                        13
+B-ALL, ETV6::RUNX1-like      12
+B-ALL, BCR::ABL1-like        11
+B-ALL, iAMP21                10
+B-ALL, KMT2A-r               10
+AML, APL-PML::RARA           10
+AML, CBFA2T3::GLIS2           9
+B-ALL, BCR::ABL1              7
+Non-leukemic                  7
+B-ALL, TCF3::PBX1             7
+B-ALL, MEF2D-r                6
+AML, ETV6-r                   6
+AML, KAT6A-r                  5
+AML, FUS::ERG                 3
+AML, PICALM::MLLT10           3
+B-ALL, PAX5 P80R              3
+Name: count, dtype: int64
+
+
+
+Cross-validating with 19923 features...
+Train F1-macro: 1.000 ± 0.000
+Val   F1-macro: 0.897 ± 0.021
+Gap:            0.103
+Selected 4560 features with frequency >= 1. Saved to /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/gex/selected_features.4560.txt.
+
+
+
+Cross-validating with 4560 features...
+Train F1-macro: 1.000 ± 0.000
+Val   F1-macro: 0.910 ± 0.018
+Gap:            0.090
+Selected 936 features with frequency >= 1. Saved to /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/gex/selected_features.936.txt.
+
+
+
+Cross-validating with 936 features...
+Train F1-macro: 1.000 ± 0.000
+Val   F1-macro: 0.909 ± 0.016
+Gap:            0.091
+Selected 199 features with frequency >= 1. Saved to /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/gex/selected_features.199.txt.
+
+
+
+Cross-validating with 199 features...
+Train F1-macro: 1.000 ± 0.000
+Val   F1-macro: 0.914 ± 0.027
+Gap:            0.086
+Selected 40 features with frequency >= 1. Saved to /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/gex/selected_features.40.txt.
+
+
+
+Cross-validating with 40 features...
+Train F1-macro: 1.000 ± 0.000
+Val   F1-macro: 0.884 ± 0.023
+Gap:            0.116
+Selected 8 features with frequency >= 1. Saved to /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/gex/selected_features.8.txt.
+
+
+
+Cross-validating with 8 features...
+Train F1-macro: 1.000 ± 0.000
+Val   F1-macro: 0.702 ± 0.013
+Gap:            0.298
+Selected 0 features with frequency >= 1. Saved to /home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/gex/selected_features.0.txt.
+[CV] END .................................................... total time= 4.9min
+[CV] END .................................................... total time=  15.4s
+[CV] END .................................................... total time= 1.2min
+[CV] END .................................................... total time=   2.2s
+[CV] END .................................................... total time= 1.1min
+[CV] END .................................................... total time=   2.6s
+[CV] END .................................................... total time= 1.2min
+[CV] END .................................................... total time=   3.1s
+[CV] END .................................................... total time=   0.5s
+[CV] END .................................................... total time=   0.6s
+[CV] END .................................................... total time=   0.5s
+[CV] END .................................................... total time= 4.9min
+[CV] END .................................................... total time=  12.0s
+[CV] END .................................................... total time=   0.2s
+[CV] END .................................................... total time= 4.8min
+[CV] END .................................................... total time=  12.5s
+[CV] END .................................................... total time=   0.2s
+[CV] END .................................................... total time=   0.1s
