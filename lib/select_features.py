@@ -278,21 +278,33 @@ def reduce(X_path,
         n_features_remaining = len(selected_features)
 
     # Draw the plot
-    plt.plot(n_features, train_f1_macros, label="Train F1-macro")
-    plt.plot(n_features, val_f1_macros, label="Val F1-macro")
+    plt.plot(n_features, val_f1_macros)
     plt.xlabel("Number of selected features")
+    plt.ylabel("Validation F1-macro")
+
+    # Make the plot go down to 0 on the y axis
+    plt.ylim(0, 1)
+
     for index in range(len(n_features)):
         plt.text(
             n_features[index],
             val_f1_macros[index],
             n_features[index],
             size=8)
-    plt.legend()
     plt.savefig(f"{output_dir}/feature_reduction.svg")
 
 
 def main():
     args = parse_args()
+
+    # Print all args
+    print("Arguments:")
+    for arg in vars(args):
+        print(f"{arg}: {getattr(args, arg)}")
+
+    # Create output dir if it doesn't exist
+    os.makedirs(args.output_dir, exist_ok=True)
+
     reduce(
         X_path=args.X_path,
         y_path=args.y_path,
