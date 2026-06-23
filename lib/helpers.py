@@ -338,7 +338,6 @@ def plot_precision_recall(metrics_df,
 
 def cross_val_metrics(clf, X, y, class_names, random_state=RANDOM_SEED):
     # How many splits?
-    from sklearn.preprocessing import LabelEncoder
     le = LabelEncoder()
     y_train_encoded = le.fit_transform(y)
     n_splits = np.bincount(y_train_encoded).min()
