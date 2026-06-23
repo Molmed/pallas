@@ -122,10 +122,13 @@ def predict(
 def main():
     args = parse_args()
 
+    # Extract model name from model path (one dir above the model file)
+    model_name = Path(args.pallas_model_path).parent.name
     dataset_name = args.dataset_name
 
     # Create subdir in output dir for this dataset
-    output_dir = Path(args.output_dir) / dataset_name
+    # It should be output_dir/model_name/dataset_name
+    output_dir = Path(args.output_dir) / model_name / dataset_name
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Load the model
