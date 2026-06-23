@@ -152,7 +152,7 @@ def main():
     metrics_df.to_csv(Path(output_dir) / "class_level_metrics.csv",
                       header=True,
                       index=True)
-    fig, ax = plt.subplots(figsize=(10, 8))
+    fig, ax = plt.subplots(figsize=(12, 10))
     display = ConfusionMatrixDisplay.from_predictions(
         y_test,
         y_pred,
@@ -175,7 +175,7 @@ def main():
 
     fig.tight_layout(pad=0.6)
     fig.savefig(
-        Path(output_dir) / "confusion_matrix.png",
+        Path(output_dir) / "confusion_matrix.svg",
         bbox_inches="tight",
         pad_inches=0.15,
         dpi=300,
