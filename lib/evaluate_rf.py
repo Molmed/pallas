@@ -133,37 +133,31 @@ def main():
     y_pred_proba = joblib.load(y_pred_proba_path)
 
     # Load model
-    model_path = Path(args.pallas_model_base_dir) / model_name / "rf_model.joblib"
+    model_path = Path(
+        args.pallas_model_base_dir) / model_name / "rf_model.joblib"
     model = joblib.load(model_path)
 
-    # Calculate classifier-level metrisc
     print("Classifier-level metrics:")
-    metrics_df = classifier_level_metrics(y_test, y_pred, y_pred_proba, model.classes_)
+    metrics_df = classifier_level_metrics(y_test,
+                                          y_pred, y_pred_proba, model.classes_)
     print(metrics_df)
-    # Save them to 'classifier_level_metrics.csv' in the output dir
     metrics_df.to_csv(Path(output_dir) / "classifier_level_metrics.csv",
                       header=False,
                       index=True)
 
-
-
-    exit()
-
-
+    print("\n\nClass-level metrics:")
+    metrics_df = class_level_metrics(y_test,
+                                     y_pred, y_pred_proba, model.classes_)
+    print(metrics_df)
+    metrics_df.to_csv(Path(output_dir) / "class_level_metrics.csv",
+                      header=True,
+                      index=True)
 
 
     # fig, ax = plt.subplots(figsize=(8, 6))
     # ConfusionMatrixDisplay.from_predictions(y_test, y_pred, ax=ax)
     # fig.savefig(Path(output_dir) / "confusion_matrix.png")
     # # mlflow.log_artifact("confusion_matrix.png")
-
-    # print(classification_report(y_test, y_pred, digits=3))
-
-    # print(metrics_df)
-    print("Class-level metrics:")
-    metrics_df = class_level_metrics(y_test, y_pred, y_pred_proba, model.classes_)
-    print(metrics_df)
-    exit()
 
     # # Usage
     # plot_precision_recall_clinical(
