@@ -3,7 +3,6 @@ from pathlib import Path
 import argparse
 import mlflow
 import dotenv
-import os
 from helpers import (classifier_level_metrics,
                      class_level_metrics,
                      plot_precision_recall,
