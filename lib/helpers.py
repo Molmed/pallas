@@ -12,8 +12,9 @@ from sklearn.metrics import (
     roc_auc_score, average_precision_score,
     roc_curve, precision_recall_curve,
     log_loss, brier_score_loss, matthews_corrcoef,
-    cohen_kappa_score
+    cohen_kappa_score, ConfusionMatrixDisplay
 )
+
 from sklearn.calibration import calibration_curve
 from sklearn.preprocessing import label_binarize, LabelEncoder
 
@@ -106,6 +107,37 @@ def class_level_metrics(y_true, y_pred, y_prob, class_names):
         df = pd.concat([df, non_leukemic_row])
 
     return df.round(ROUND_PLACES)
+
+
+def plot_confusion_matrix(y_test, y_pred, output_path):
+    fig, ax = plt.subplots(figsize=(12, 10))
+    display = ConfusionMatrixDisplay.from_predictions(
+        y_test,
+        y_pred,
+        ax=ax,
+        cmap="YlGnBu",
+        values_format="d",
+    )
+
+    plt.setp(ax.get_xticklabels(), rotation=90, ha="center", va="top")
+    plt.setp(ax.get_yticklabels(), fontsize=10)
+    ax.tick_params(axis="x", labelsize=10, pad=2)
+    ax.tick_params(axis="y", labelsize=10, pad=2)
+    ax.set_xlabel(ax.get_xlabel(), fontsize=11)
+    ax.set_ylabel(ax.get_ylabel(), fontsize=11)
+
+    texts = getattr(display, "text_", None)
+    if texts is not None:
+        for text in np.ravel(texts):
+            text.set_fontsize(8)
+
+    fig.tight_layout(pad=0.6)
+    fig.savefig(
+        output_path,
+        bbox_inches="tight",
+        pad_inches=0.15,
+        dpi=300,
+    )
 
 
 def cross_val_metrics(clf, X, y, class_names, random_state=RANDOM_SEED):

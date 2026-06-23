@@ -45,9 +45,9 @@ import argparse
 import dotenv
 from mlflow.models import infer_signature
 from sklearn.metrics import classification_report
-from helpers import cross_val_metrics, classifier_level_metrics, class_level_metrics, plot_precision_recall_clinical
+from helpers import cross_val_metrics, classifier_level_metrics, class_level_metrics, plot_precision_recall_clinical, plot_confusion_matrix
 import matplotlib.pyplot as plt
-from sklearn.metrics import ConfusionMatrixDisplay
+
 
 
 description = """
@@ -152,34 +152,9 @@ def main():
     metrics_df.to_csv(Path(output_dir) / "class_level_metrics.csv",
                       header=True,
                       index=True)
-    fig, ax = plt.subplots(figsize=(12, 10))
-    display = ConfusionMatrixDisplay.from_predictions(
-        y_test,
-        y_pred,
-        ax=ax,
-        cmap="YlGnBu",
-        values_format="d",
-    )
 
-    plt.setp(ax.get_xticklabels(), rotation=90, ha="center", va="top")
-    plt.setp(ax.get_yticklabels(), fontsize=10)
-    ax.tick_params(axis="x", labelsize=10, pad=2)
-    ax.tick_params(axis="y", labelsize=10, pad=2)
-    ax.set_xlabel(ax.get_xlabel(), fontsize=11)
-    ax.set_ylabel(ax.get_ylabel(), fontsize=11)
+    plot_confusion_matrix(y_test, y_pred, Path(output_dir) / "confusion_matrix.svg")
 
-    texts = getattr(display, "text_", None)
-    if texts is not None:
-        for text in np.ravel(texts):
-            text.set_fontsize(8)
-
-    fig.tight_layout(pad=0.6)
-    fig.savefig(
-        Path(output_dir) / "confusion_matrix.svg",
-        bbox_inches="tight",
-        pad_inches=0.15,
-        dpi=300,
-    )
     # # mlflow.log_artifact("confusion_matrix.png")
 
     # # Usage
