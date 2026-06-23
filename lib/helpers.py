@@ -20,14 +20,20 @@ from sklearn.preprocessing import label_binarize, LabelEncoder
 dotenv.load_dotenv()
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 42))
 
+
 def classifier_level_metrics(y_true, y_pred, y_proba, class_names):
     present_classes = np.unique(y_true)
 
     metrics = {
-        # threshold-based (need hard labels)
-        "f1_macro":     f1_score(y_true, y_pred, average="macro", zero_division=0),
-        "f1_weighted":  f1_score(y_true, y_pred, average="weighted", zero_division=0),
-        "mcc":          matthews_corrcoef(y_true, y_pred),
+        "f1_macro":     f1_score(y_true,
+                                 y_pred,
+                                 average="macro",
+                                 zero_division=0),
+        "f1_weighted":  f1_score(y_true,
+                                 y_pred,
+                                 average="weighted",
+                                 zero_division=0),
+        "cohen_kappa":   cohen_kappa_score(y_true, y_pred),
 
         # For multi-class ROC AUC, we need to account for classes not in y_true
         # This is a common approach for calculating macro AUC in imbalanced datasets
@@ -46,7 +52,7 @@ def classifier_level_metrics(y_true, y_pred, y_proba, class_names):
     return metrics
 
 
-def class_level_metrics(y_true, y_pred, y_proba, class_names):
+def class_level_metrics(y_true, y_pred, y_prob, class_names):
     # Encode y_true/y_pred into 0..n-1 integers
     le = LabelEncoder().fit(class_names)
     y_true_enc = le.transform(y_true)
@@ -57,58 +63,47 @@ def class_level_metrics(y_true, y_pred, y_proba, class_names):
     present_classes = [class_names[i] for i in present_class_indices]
 
     # Use only classes present in data for the classification report
-    report = classification_report(y_true_enc, y_pred_enc,
-                                  labels=present_class_indices,
-                                  target_names=present_classes,
-                                  zero_division=0,  # Handle division by zero gracefully
-                                  output_dict=True)
+    report = classification_report(y_true_enc,
+                                   y_pred_enc,
+                                   labels=present_class_indices,
+                                   target_names=present_classes,
+                                   zero_division=0,  # Handle division by zero gracefully
+                                   output_dict=True)
     df = pd.DataFrame(report).T
 
-    # Calculate metrics for ALL classes in class_names
-    auroc_list = []
-    auprc_list = []
-
+    # Now calculate AUROC and AUPRC for each class present in the data
+    # and append it to the classification report df
     for i, cls in enumerate(class_names):
-        y_bin = (y_true_enc == i).astype(int)
+        if cls in present_classes:
+            cls_idx = present_classes.index(cls)
+            y_bin_true = (y_true == cls).astype(int)
+            y_bin_pred_proba = y_prob[:, i]
 
-        # Skip metrics for classes with no positive examples
-        if y_bin.sum() == 0 or y_bin.sum() == len(y_bin):
-            auroc_list.append(np.nan)
-            auprc_list.append(np.nan)
+            # Calculate AUROC and AUPRC only if the class is present in y_true
+            if np.any(y_bin_true):
+                auroc = roc_auc_score(y_bin_true, y_bin_pred_proba)
+                auprc = average_precision_score(y_bin_true, y_bin_pred_proba)
+            else:
+                auroc = np.nan
+                auprc = np.nan
 
+            df.loc[cls, 'auroc'] = auroc
+            df.loc[cls, 'auprc'] = auprc
         else:
-            auroc_list.append(roc_auc_score(y_bin, y_proba[:, i]))
-            auprc_list.append(average_precision_score(y_bin, y_proba[:, i]))
+            # If the class is not present in the data, set metrics to NaN
+            df.loc[cls] = [np.nan] * len(df.columns)
 
-    # Create a complete DataFrame with all classes and initialize with NaN values
-    full_df = pd.DataFrame(index=class_names, columns=df.columns.tolist() + ["auroc", "auprc"])
+    # Order cols as follows: support, precision, recall, f1-score, auroc, auprc
+    # And only include rows whose name matches the class names
+    df = df.loc[class_names, ['support', 'precision', 'recall', 'f1-score', 'auroc', 'auprc']]
 
-    # Copy over values from the classification report for classes that are present
-    for cls in present_classes:
-        if cls in df.index:
-            # Copy columns one by one to avoid issues with column mismatch
-            for col in df.columns:
-                if col in full_df.columns:
-                    full_df.loc[cls, col] = df.loc[cls, col]
+    # Put Non-leukemic class last
+    if 'Non-leukemic' in df.index:
+        non_leukemic_row = df.loc[['Non-leukemic']]
+        df = df.drop(index='Non-leukemic')
+        df = pd.concat([df, non_leukemic_row])
 
-    # Add the AUC metrics for all classes
-    full_df["auroc"] = auroc_list
-    full_df["auprc"] = auprc_list
-
-    # coerce all to float
-    full_df = full_df.apply(pd.to_numeric, errors='coerce')
-
-    class_metrics_order = [
-        'support',
-        'auroc',
-        'auprc',
-        'recall',
-        'precision',
-        'f1-score'
-    ]
-    full_df = full_df.reindex(columns=class_metrics_order)
-
-    return full_df
+    return df.round(3)
 
 
 def cross_val_metrics(clf, X, y, class_names, random_state=RANDOM_SEED):
@@ -180,3 +175,218 @@ def cross_val_metrics(clf, X, y, class_names, random_state=RANDOM_SEED):
         overall_metrics,           # dict of overall classifier-level metrics
         per_class_summary          # averaged per-class DataFrame
     )
+
+import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
+import numpy as np
+import pandas as pd
+
+
+def plot_precision_recall_clinical(metrics_df,
+                                    title="Per-subtype precision and recall",
+                                    figsize=(16, 6),
+                                    save_path=None):
+    """
+    Plot precision and recall per subtype in the style of a connected
+    dot plot, with squares for precision and circles for recall.
+    Subtypes sorted by disease group then alphabetically.
+
+    Parameters
+    ----------
+    metrics_df : pd.DataFrame
+        Output of per_class_clinical_metrics(), indexed by subtype name.
+        Must contain columns: precision, recall (or sensitivity), support.
+    title : str
+    figsize : tuple
+    save_path : str or None
+    """
+
+    df = metrics_df.copy().reset_index()
+
+    # Normalise column names
+    df.columns = [c.lower().strip() for c in df.columns]
+    if 'subtype' not in df.columns:
+        df = df.rename(columns={df.columns[0]: 'subtype'})
+
+    # Use sensitivity as recall if recall column absent
+    if 'recall' not in df.columns and 'sensitivity' in df.columns:
+        df['recall'] = df['sensitivity']
+
+    # ----------------------
+    # Disease group assignment and sort order
+    # ----------------------
+    def assign_group(name):
+        if name.startswith('AML'):
+            return '1_AML'
+        elif name.startswith('B-ALL'):
+            return '2_BALL'
+        elif name.startswith('T-ALL'):
+            return '3_TALL'
+        else:
+            return '4_Other'
+
+    df['group'] = df['subtype'].apply(assign_group)
+    df = df.sort_values(['group', 'subtype']).reset_index(drop=True)
+
+    # Short labels — strip disease prefix for readability
+    def shorten(name):
+        parts = name.split(',')
+        if len(parts) > 1:
+            return parts[-1].strip()
+        return name
+
+    df['label'] = df['subtype'].apply(shorten)
+
+    # ----------------------
+    # Color per disease group — matching the reference figure aesthetic
+    # ----------------------
+    group_colors = {
+        '1_AML':   '#185fa5',
+        '2_BALL':  '#993c1d',
+        '3_TALL':  '#0f6e56',
+        '4_Other': '#5f5e5a',
+    }
+    df['color'] = df['group'].map(group_colors)
+
+    n = len(df)
+    x = np.arange(n)
+
+    # ----------------------
+    # Figure — single panel
+    # ----------------------
+    fig, ax = plt.subplots(figsize=figsize)
+
+    markersize = 9
+
+    for i, row in df.iterrows():
+        c = row['color']
+        prec = row['precision']
+        rec  = row['recall']
+
+        # Connecting line between recall and precision
+        ax.plot(
+            [i, i], [rec, prec],
+            color=c, linewidth=1.2, alpha=0.6,
+            linestyle='--' if abs(prec - rec) > 0.15 else '-',
+            zorder=1
+        )
+
+        # Recall — circle
+        ax.plot(
+            i, rec,
+            marker='o', markersize=markersize,
+            color=c, markeredgecolor='white',
+            markeredgewidth=0.8, zorder=3,
+            linestyle='none'
+        )
+
+        # Precision — square
+        ax.plot(
+            i, prec,
+            marker='s', markersize=markersize,
+            color=c, markeredgecolor='white',
+            markeredgewidth=0.8, zorder=3,
+            linestyle='none'
+        )
+
+    # ----------------------
+    # Group boundary lines
+    # ----------------------
+    group_vals = df['group'].values
+    for i in range(1, n):
+        if group_vals[i] != group_vals[i - 1]:
+            ax.axvline(i - 0.5, color='#d3d1c7', linewidth=0.8,
+                      linestyle=':', zorder=0)
+
+    # ----------------------
+    # Axes
+    # ----------------------
+    ax.set_xticks(x)
+    ax.set_xticklabels(
+        df['label'],
+        rotation=45, ha='right',
+        fontsize=8.5, color='#444441'
+    )
+
+    ax.set_ylabel('Score', fontsize=11)
+    ax.set_title(title, fontsize=12, fontweight='normal', pad=12)
+
+    # Y axis — zoom to data range with small padding
+    all_vals = pd.concat([df['precision'], df['recall']]).dropna()
+    ymin = max(0.0, all_vals.min() - 0.05)
+    ax.set_ylim(ymin, 1.02)
+    ax.yaxis.set_major_formatter(
+        plt.FuncFormatter(lambda y, _: f'{y:.2f}')
+    )
+
+    ax.set_xlim(-0.6, n - 0.4)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_color('#d3d1c7')
+    ax.spines['bottom'].set_color('#d3d1c7')
+    ax.tick_params(axis='y', colors='#888780', labelsize=9)
+    ax.grid(axis='y', linestyle=':', linewidth=0.5,
+            color='#d3d1c7', zorder=0)
+
+    # ----------------------
+    # Support annotation below x-axis labels
+    # ----------------------
+    for i, row in df.iterrows():
+        ax.annotate(
+            f"n={int(row['support'])}",
+            xy=(i, ymin),
+            xytext=(0, -32),
+            textcoords='offset points',
+            ha='center', fontsize=6.5,
+            color='#888780'
+        )
+
+    # ----------------------
+    # Legend
+    # ----------------------
+    legend_handles = [
+        mlines.Line2D([], [], marker='o', color='#888780',
+                      markeredgecolor='white', markersize=9,
+                      linestyle='none', label='Recall'),
+        mlines.Line2D([], [], marker='s', color='#888780',
+                      markeredgecolor='white', markersize=9,
+                      linestyle='none', label='Precision'),
+    ]
+    for group_key, color in group_colors.items():
+        group_label = group_key.split('_')[1]
+        if (df['group'] == group_key).any():
+            legend_handles.append(
+                mlines.Line2D([], [], marker='o', color=color,
+                              markersize=8, linestyle='none',
+                              label=group_label)
+            )
+
+    ax.legend(
+        handles=legend_handles,
+        frameon=True,
+        framealpha=0.9,
+        edgecolor='#d3d1c7',
+        fontsize=9,
+        loc='lower right',
+        ncol=2
+    )
+
+    # Sample size in title area
+    ax.annotate(
+        f"n = {int(df['support'].sum())}",
+        xy=(0.5, 1.01),
+        xycoords='axes fraction',
+        ha='center', fontsize=10,
+        color='#444441'
+    )
+
+    plt.tight_layout()
+
+    if save_path:
+        fig.savefig(save_path, dpi=150, bbox_inches='tight')
+        print(f"Saved to {save_path}")
+
+    plt.show()
+    return fig
+
+
