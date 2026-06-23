@@ -152,11 +152,34 @@ def main():
     metrics_df.to_csv(Path(output_dir) / "class_level_metrics.csv",
                       header=True,
                       index=True)
+    fig, ax = plt.subplots(figsize=(10, 8))
+    display = ConfusionMatrixDisplay.from_predictions(
+        y_test,
+        y_pred,
+        ax=ax,
+        cmap="YlGnBu",
+        values_format="d",
+    )
 
+    plt.setp(ax.get_xticklabels(), rotation=90, ha="center", va="top")
+    plt.setp(ax.get_yticklabels(), fontsize=10)
+    ax.tick_params(axis="x", labelsize=10, pad=2)
+    ax.tick_params(axis="y", labelsize=10, pad=2)
+    ax.set_xlabel(ax.get_xlabel(), fontsize=11)
+    ax.set_ylabel(ax.get_ylabel(), fontsize=11)
 
-    # fig, ax = plt.subplots(figsize=(8, 6))
-    # ConfusionMatrixDisplay.from_predictions(y_test, y_pred, ax=ax)
-    # fig.savefig(Path(output_dir) / "confusion_matrix.png")
+    texts = getattr(display, "text_", None)
+    if texts is not None:
+        for text in np.ravel(texts):
+            text.set_fontsize(8)
+
+    fig.tight_layout(pad=0.6)
+    fig.savefig(
+        Path(output_dir) / "confusion_matrix.png",
+        bbox_inches="tight",
+        pad_inches=0.15,
+        dpi=300,
+    )
     # # mlflow.log_artifact("confusion_matrix.png")
 
     # # Usage
