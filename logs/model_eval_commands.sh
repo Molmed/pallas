@@ -39,3 +39,8 @@ python lib/evaluate_rf.py \
     --output_dir=/home/mariya/Development/pallas/reports/output/evaluation \
     --human_readable_title="DNAm model, calibration+test dataset"
 
+python lib/cross_val_rf.py \
+    --pallas_model_base_dir=/home/mariya/Data/pallas/models \
+    --pallas_model_name=rf_DNAm_20260606_193214 \
+    --output_dir=/home/mariya/Development/pallas/reports/output/evaluation \
+    --human_readable_title="DNAm model, train dataset (5-fold CV)"

@@ -340,7 +340,7 @@ def cross_val_metrics(clf, X, y, class_names, random_state=RANDOM_SEED):
     # How many splits?
     le = LabelEncoder()
     y_train_encoded = le.fit_transform(y)
-    n_splits = np.bincount(y_train_encoded).min()
+    n_splits = min(5, np.bincount(y_train_encoded).min())
 
     skf = StratifiedKFold(n_splits=n_splits,
                           shuffle=True,
