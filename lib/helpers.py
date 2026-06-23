@@ -189,10 +189,10 @@ def plot_precision_recall(metrics_df,
     # Color per disease group — matching the reference figure aesthetic
     # ----------------------
     group_colors = {
-        '1_AML':   '#185fa5',
-        '2_B-ALL':  '#993c1d',
-        '3_T-ALL':  '#0f6e56',
-        '4_Non-leukemic': '#5f5e5a',
+        '1_AML':   '#667ec8',
+        '2_B-ALL':  '#d64a51',
+        '3_T-ALL':  '#90c23a',
+        '4_Non-leukemic': '#7a8288',
     }
     df['color'] = df['group'].map(group_colors)
 
@@ -412,13 +412,16 @@ def plot_per_class_calibration_curves(
         y_pred_proba,
         classes,
         save_path=None,
-        n_bins=10,
-        title=None):
+        title=None,
+        line_color='#667ec8',
+        n_bins=10):
+
+    figsize = (8, 12)
     n_classes = len(classes)
     ncols = 3
     nrows = int(np.ceil(n_classes / ncols))
 
-    fig, axes = plt.subplots(nrows, ncols, figsize=(ncols * 4, nrows * 4))
+    fig, axes = plt.subplots(nrows, ncols, figsize=figsize)
     axes = axes.flatten()
 
     for i, class_label in enumerate(classes):
@@ -432,10 +435,12 @@ def plot_per_class_calibration_curves(
 
         ax = axes[i]
         ax.plot([0, 1], [0, 1], "k--", label="Perfectly calibrated")
-        ax.plot(mean_predicted_prob, fraction_of_positives, "s-", label="Actual calibration for subtype")
-        ax.set_xlabel("Mean predicted probability")
-        ax.set_ylabel("Fraction of positives")
-        ax.set_title(class_label)
+        ax.plot(mean_predicted_prob,
+                fraction_of_positives,
+                "s-",
+                label="Actual calibration for subtype",
+                color=line_color)
+        ax.set_title(class_label, fontsize=8)
         ax.set_xlim([0, 1])
         ax.set_ylim([0, 1])
 
@@ -445,15 +450,18 @@ def plot_per_class_calibration_curves(
 
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(handles[:2], labels[:2], loc="lower right", fontsize=10)
+    fig.supylabel("Fraction of positives")
+    fig.supxlabel("Mean predicted probability")
 
-    fig.suptitle(title, fontsize=14)
+    fig.suptitle(title, fontsize=10)
     # Add a smaller subtitle if provided
     subtitle = "Per-class calibration plots (one-vs-rest)"
-    fig.text(0.5, 0.985, subtitle, ha='center', fontsize=10, color='#444441')
-    plt.tight_layout(rect=[0, 0, 1, 0.96], h_pad=10)
+    fig.text(0.5, 0.985, subtitle, ha='center', fontsize=8, color='#444441')
+    plt.tight_layout(h_pad=1)
 
     if save_path:
         plt.savefig(save_path, bbox_inches="tight")
         plt.close()
+        print(f"Saved to {save_path}")
     else:
         plt.show()

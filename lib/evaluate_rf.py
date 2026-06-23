@@ -6,7 +6,8 @@ import dotenv
 from helpers import (classifier_level_metrics,
                      class_level_metrics,
                      plot_precision_recall,
-                     plot_confusion_matrix)
+                     plot_confusion_matrix,
+                     plot_per_class_calibration_curves)
 
 
 description = """
@@ -157,6 +158,14 @@ def main():
         class_metrics_df,
         title=title,
         save_path=precision_recall_path
+    )
+
+    plot_per_class_calibration_curves(
+        y_test,
+        y_pred_proba,
+        model.classes_,
+        save_path=output_dir / "calibration_curves.svg",
+        title=args.human_readable_title
     )
 
     if not args.enable_mlflow:
