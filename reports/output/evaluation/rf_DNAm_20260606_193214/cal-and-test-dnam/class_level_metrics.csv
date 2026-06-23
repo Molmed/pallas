@@ -1,4 +1,4 @@
-,support,precision,recall,f1-score,auroc,auprc
+subtype,support,precision,recall,f1-score,auroc,auprc
 "AML, APL-PML::RARA",7.0,1.0,0.857,0.923,0.962,0.862
 "AML, CBFA2T3::GLIS2",10.0,1.0,0.8,0.889,1.0,1.0
 "AML, CBFB::MYH11",54.0,0.963,0.963,0.963,0.997,0.986

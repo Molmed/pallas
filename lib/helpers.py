@@ -49,8 +49,12 @@ def classifier_level_metrics(y_true, y_pred, y_proba, class_names):
         ]))
     }
 
-    # Return as df
-    return pd.DataFrame([metrics]).round(ROUND_PLACES).T
+    # Return as df, index name should be "metric"
+    df = pd.DataFrame([metrics]).round(ROUND_PLACES).T
+    df.index.name = "metric"
+    # Value should be in a column named "value"
+    df.columns = ["value"]
+    return df
 
 
 def class_level_metrics(y_true, y_pred, y_prob, class_names):
@@ -104,6 +108,8 @@ def class_level_metrics(y_true, y_pred, y_prob, class_names):
         df = df.drop(index='Non-leukemic')
         df = pd.concat([df, non_leukemic_row])
 
+    # Name the index "subtype"
+    df.index.name = "subtype"
     return df.round(ROUND_PLACES)
 
 
@@ -136,6 +142,7 @@ def plot_confusion_matrix(y_test, y_pred, output_path):
         pad_inches=0.15,
         dpi=300,
     )
+    print(f"Saved to {output_path}")
 
 
 def plot_precision_recall(metrics_df,

@@ -1,40 +1,9 @@
-# This script should:
-# - load model
-# - load and format training data
-# - generate predictions
-# - save predictions to output dir
-# - once script is perfected, upload metrics to mlflow
-
-
-# +    # Start an MLflow run
-# +    if enable_mlflow:
-# +        load_dotenv(dotenv_path=mlflow_env_path)
-# +
-# +        with mlflow.start_run():
-# +            # Log the hyperparameters
-# +            mlflow.log_params(model.get_params())
-# +
-# +            # Log the loss metric
-# +            mlflow.log_metric("precision", precision_score)
-# +            mlflow.log_metric("recall", recall_score)
-# +            mlflow.log_metric("f1", f1_score)
-# +
-# +            mlflow.set_tag("modality", modality)
-# +            mlflow.set_tag("hiclass_classifier", hiclass_classifier)
-# +            mlflow.set_tag("local_classifier", local_classifier)
-# +
-# +            # Infer the model signature
-# +            signature = infer_signature(X_train, classifier.predict(X_train))
-# +
-# +            # Log the model
-# +            mlflow.sklearn.log_model(
-# +                sk_model=classifier,
-# +                artifact_path="model",
-# +                signature=signature,
-
 import joblib
 from pathlib import Path
 import argparse
+import mlflow
+import dotenv
+import os
 from helpers import (classifier_level_metrics,
                      class_level_metrics,
                      plot_precision_recall,
@@ -70,6 +39,13 @@ Directory to save the output."""
 human_readable_title_help = """
 A human-readable title for the evaluation,
 e.g. "GEX model evaluated on the test set"
+"""
+
+enable_mlflow_help = """
+Whether to enable MLFlow logging.
+If enabled, the script will log the model and
+evaluation metrics to MLFlow. Default is False.
+MLFlow environment variables must be set for this to work.
 """
 
 
@@ -111,6 +87,13 @@ def parse_args():
         required=False,
         help=human_readable_title_help,
     )
+    parser.add_argument(
+        "--enable_mlflow",
+        type=bool,
+        required=False,
+        default=False,
+        help=enable_mlflow_help,
+    )
     return parser.parse_args()
 
 
@@ -140,35 +123,79 @@ def main():
     model = joblib.load(model_path)
 
     print("Classifier-level metrics:")
-    metrics_df = classifier_level_metrics(y_test,
-                                          y_pred, y_pred_proba, model.classes_)
-    print(metrics_df)
-    metrics_df.to_csv(Path(output_dir) / "classifier_level_metrics.csv",
-                      header=False,
-                      index=True)
+    classifier_metrics_df = classifier_level_metrics(
+        y_test,
+        y_pred,
+        y_pred_proba,
+        model.classes_)
+    print(classifier_metrics_df)
+    classifier_metrics_path = Path(output_dir) / "classifier_level_metrics.csv"
+    classifier_metrics_df.to_csv(classifier_metrics_path)
 
     print("\n\nClass-level metrics:")
-    metrics_df = class_level_metrics(y_test,
-                                     y_pred, y_pred_proba, model.classes_)
-    print(metrics_df)
-    metrics_df.to_csv(Path(output_dir) / "class_level_metrics.csv",
-                      header=True,
-                      index=True)
+    class_metrics_df = class_level_metrics(
+        y_test,
+        y_pred,
+        y_pred_proba,
+        model.classes_)
+    print(class_metrics_df)
+    class_metrics_path = Path(output_dir) / "class_level_metrics.csv"
+    class_metrics_df.to_csv(class_metrics_path,
+                            header=True,
+                            index=True)
 
+    confusion_matrix_path = Path(output_dir) / "confusion_matrix.svg"
     plot_confusion_matrix(y_test,
-                          y_pred, Path(output_dir) / "confusion_matrix.svg")
+                          y_pred,
+                          confusion_matrix_path)
 
+    precision_recall_path = Path(output_dir) / "precision_recall.svg"
     if args.human_readable_title:
         title = args.human_readable_title
     else:
         title = f"Model {model_name} evaluated on dataset {dataset_name}"
     plot_precision_recall(
-        metrics_df,
+        class_metrics_df,
         title=title,
-        save_path=Path(output_dir) / "precision_recall.svg"
+        save_path=precision_recall_path
     )
 
-    # # mlflow.log_artifact("confusion_matrix.png")
+    if not args.enable_mlflow:
+        return
+
+    print("\n\nLogging to MLFlow...")
+    dotenv.load_dotenv()
+    with mlflow.start_run(run_name=args.human_readable_title):
+        # Log each scalar as a metric
+        classifier_metrics_dict = classifier_metrics_df["value"].to_dict()
+
+        metrics_to_log = {}
+        for metric_name, value in classifier_metrics_dict.items():
+            metrics_to_log[metric_name] = float(value)
+
+        mlflow.log_metrics(metrics_to_log)
+        mlflow.log_artifact(str(classifier_metrics_path))
+        mlflow.log_artifact(str(class_metrics_path))
+
+        # --- Plots ---
+        mlflow.log_artifact(str(confusion_matrix_path))
+        mlflow.log_artifact(str(precision_recall_path))
+
+        # Unpack signature from mlflow_signature.joblib
+        signature = joblib.load(
+            Path(args.pallas_model_base_dir) /
+            model_name / "mlflow_signature.joblib")
+
+        # --- Model ---
+        mlflow.sklearn.log_model(sk_model=model,
+                                 name=model_name,
+                                 signature=signature)
+        mlflow.log_params(model.get_params())
+
+        # Optional: tag run with model/dataset names for easy filtering
+        mlflow.set_tags({
+            "dataset_name": dataset_name,
+        })
 
 
 if __name__ == "__main__":
