@@ -17,6 +17,11 @@ from sklearn.metrics import (
 
 from sklearn.calibration import calibration_curve
 from sklearn.preprocessing import label_binarize, LabelEncoder
+import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
+import numpy as np
+import pandas as pd
+
 
 dotenv.load_dotenv()
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 42))
@@ -147,7 +152,9 @@ def cross_val_metrics(clf, X, y, class_names, random_state=RANDOM_SEED):
     y_train_encoded = le.fit_transform(y)
     n_splits = np.bincount(y_train_encoded).min()
 
-    skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=random_state)
+    skf = StratifiedKFold(n_splits=n_splits,
+                          shuffle=True,
+                          random_state=random_state)
 
     fold_metrics = defaultdict(list)
     per_class_dfs = []  # collect per-class results across folds
@@ -202,7 +209,6 @@ def cross_val_metrics(clf, X, y, class_names, random_state=RANDOM_SEED):
         per_class_all.groupby(per_class_all.index)
         .mean(numeric_only=True)  # average metrics per class
         .drop(columns=["fold"], errors="ignore")  # fold isn’t meaningful averaged.
-        # TODO: maybe drop support as well?
     )
 
     return (
@@ -210,31 +216,11 @@ def cross_val_metrics(clf, X, y, class_names, random_state=RANDOM_SEED):
         per_class_summary          # averaged per-class DataFrame
     )
 
-import matplotlib.pyplot as plt
-import matplotlib.lines as mlines
-import numpy as np
-import pandas as pd
-
 
 def plot_precision_recall_clinical(metrics_df,
-                                    title="Per-subtype precision and recall",
-                                    figsize=(16, 6),
-                                    save_path=None):
-    """
-    Plot precision and recall per subtype in the style of a connected
-    dot plot, with squares for precision and circles for recall.
-    Subtypes sorted by disease group then alphabetically.
-
-    Parameters
-    ----------
-    metrics_df : pd.DataFrame
-        Output of per_class_clinical_metrics(), indexed by subtype name.
-        Must contain columns: precision, recall (or sensitivity), support.
-    title : str
-    figsize : tuple
-    save_path : str or None
-    """
-
+                                   title="Per-subtype precision and recall",
+                                   figsize=(8, 6),
+                                   save_path=None):
     df = metrics_df.copy().reset_index()
 
     # Normalise column names
@@ -338,7 +324,7 @@ def plot_precision_recall_clinical(metrics_df,
     ax.set_xticks(x)
     ax.set_xticklabels(
         df['label'],
-        rotation=45, ha='right',
+        rotation=90, ha='right',
         fontsize=8.5, color='#444441'
     )
 
@@ -401,26 +387,15 @@ def plot_precision_recall_clinical(metrics_df,
         framealpha=0.9,
         edgecolor='#d3d1c7',
         fontsize=9,
-        loc='lower right',
+        loc='lower left',
         ncol=2
-    )
-
-    # Sample size in title area
-    ax.annotate(
-        f"n = {int(df['support'].sum())}",
-        xy=(0.5, 1.01),
-        xycoords='axes fraction',
-        ha='center', fontsize=10,
-        color='#444441'
     )
 
     plt.tight_layout()
 
     if save_path:
-        fig.savefig(save_path, dpi=150, bbox_inches='tight')
+        fig.savefig(save_path, dpi=300, bbox_inches='tight')
         print(f"Saved to {save_path}")
 
     plt.show()
     return fig
-
-
