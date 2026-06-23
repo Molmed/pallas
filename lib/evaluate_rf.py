@@ -32,22 +32,13 @@
 # +                artifact_path="model",
 # +                signature=signature,
 
-import numpy as np
-import pandas as pd
-import os
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import RandomizedSearchCV, RepeatedStratifiedKFold
 import joblib
-import json
 from pathlib import Path
-from datetime import datetime
 import argparse
-import dotenv
-from mlflow.models import infer_signature
-from sklearn.metrics import classification_report
-from helpers import cross_val_metrics, classifier_level_metrics, class_level_metrics, plot_precision_recall_clinical, plot_confusion_matrix
-import matplotlib.pyplot as plt
-
+from helpers import (classifier_level_metrics,
+                     class_level_metrics,
+                     plot_precision_recall,
+                     plot_confusion_matrix)
 
 
 description = """
@@ -75,6 +66,11 @@ The name of the dataset being used to evaluate the model."""
 
 output_dir_help = """
 Directory to save the output."""
+
+human_readable_title_help = """
+A human-readable title for the evaluation,
+e.g. "GEX model evaluated on the test set"
+"""
 
 
 def parse_args():
@@ -108,6 +104,12 @@ def parse_args():
         type=str,
         required=True,
         help=output_dir_help,
+    )
+    parser.add_argument(
+        "--human_readable_title",
+        type=str,
+        required=False,
+        help=human_readable_title_help,
     )
     return parser.parse_args()
 
@@ -153,16 +155,20 @@ def main():
                       header=True,
                       index=True)
 
-    plot_confusion_matrix(y_test, y_pred, Path(output_dir) / "confusion_matrix.svg")
+    plot_confusion_matrix(y_test,
+                          y_pred, Path(output_dir) / "confusion_matrix.svg")
+
+    if args.human_readable_title:
+        title = args.human_readable_title
+    else:
+        title = f"Model {model_name} evaluated on dataset {dataset_name}"
+    plot_precision_recall(
+        metrics_df,
+        title=title,
+        save_path=Path(output_dir) / "precision_recall.svg"
+    )
 
     # # mlflow.log_artifact("confusion_matrix.png")
-
-    # # Usage
-    # plot_precision_recall_clinical(
-    #     metrics_df,
-    #     title="Per-subtype precision and recall",
-    #     save_path=Path(output_dir) / "precision_recall_per_subtype.svg"
-    # )
 
 
 if __name__ == "__main__":

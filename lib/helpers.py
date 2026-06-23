@@ -1,26 +1,19 @@
 import os
 import pandas as pd
 import numpy as np
-import joblib
 import dotenv
-from sklearn.metrics import f1_score
 from sklearn.model_selection import StratifiedKFold
 from collections import defaultdict
 from sklearn.metrics import (
-    accuracy_score, f1_score, precision_score, recall_score,
-    confusion_matrix, classification_report,
+    f1_score,
+    classification_report,
     roc_auc_score, average_precision_score,
-    roc_curve, precision_recall_curve,
-    log_loss, brier_score_loss, matthews_corrcoef,
     cohen_kappa_score, ConfusionMatrixDisplay
 )
-
-from sklearn.calibration import calibration_curve
-from sklearn.preprocessing import label_binarize, LabelEncoder
+from matplotlib.transforms import ScaledTranslation
+from sklearn.preprocessing import LabelEncoder
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
-import numpy as np
-import pandas as pd
 
 
 dotenv.load_dotenv()
@@ -145,6 +138,197 @@ def plot_confusion_matrix(y_test, y_pred, output_path):
     )
 
 
+def plot_precision_recall(metrics_df,
+                          title="Per-subtype precision and recall",
+                          figsize=(8, 6),
+                          save_path=None):
+    df = metrics_df.copy().reset_index()
+
+    # Normalise column names
+    df.columns = [c.lower().strip() for c in df.columns]
+    if 'subtype' not in df.columns:
+        df = df.rename(columns={df.columns[0]: 'subtype'})
+
+    # Use sensitivity as recall if recall column absent
+    if 'recall' not in df.columns and 'sensitivity' in df.columns:
+        df['recall'] = df['sensitivity']
+
+    # ----------------------
+    # Disease group assignment and sort order
+    # ----------------------
+    def assign_group(name):
+        if name.startswith('AML'):
+            return '1_AML'
+        elif name.startswith('B-ALL'):
+            return '2_B-ALL'
+        elif name.startswith('T-ALL'):
+            return '3_T-ALL'
+        else:
+            return '4_Non-leukemic'
+
+    df['group'] = df['subtype'].apply(assign_group)
+    df = df.sort_values(['group', 'subtype']).reset_index(drop=True)
+
+    # Short labels — strip disease prefix for readability
+    def shorten(name):
+        parts = name.split(',')
+        if len(parts) > 1:
+            return parts[-1].strip()
+        return name
+
+    df['label'] = df['subtype'].apply(shorten)
+
+    # ----------------------
+    # Color per disease group — matching the reference figure aesthetic
+    # ----------------------
+    group_colors = {
+        '1_AML':   '#185fa5',
+        '2_B-ALL':  '#993c1d',
+        '3_T-ALL':  '#0f6e56',
+        '4_Non-leukemic': '#5f5e5a',
+    }
+    df['color'] = df['group'].map(group_colors)
+
+    n = len(df)
+    x = np.arange(n)
+
+    # ----------------------
+    # Figure — single panel
+    # ----------------------
+    fig, ax = plt.subplots(figsize=figsize)
+
+    markersize = 9
+
+    for i, row in df.iterrows():
+        c = row['color']
+        prec = row['precision']
+        rec  = row['recall']
+
+        # Connecting line between recall and precision
+        ax.plot(
+            [i, i], [rec, prec],
+            color=c, linewidth=1.2, alpha=0.6,
+            linestyle='--' if abs(prec - rec) > 0.15 else '-',
+            zorder=1
+        )
+
+        # Recall — circle
+        ax.plot(
+            i, rec,
+            marker='o', markersize=markersize,
+            color=c, markeredgecolor='white',
+            markeredgewidth=0.8, zorder=3,
+            linestyle='none'
+        )
+
+        # Precision — square
+        ax.plot(
+            i, prec,
+            marker='s', markersize=markersize,
+            color=c, markeredgecolor='white',
+            markeredgewidth=0.8, zorder=3,
+            linestyle='none'
+        )
+
+    # ----------------------
+    # Group boundary lines
+    # ----------------------
+    group_vals = df['group'].values
+    for i in range(1, n):
+        if group_vals[i] != group_vals[i - 1]:
+            ax.axvline(i - 0.5, color='#d3d1c7', linewidth=0.8,
+                      linestyle=':', zorder=0)
+
+    # ----------------------
+    # Axes
+    # ----------------------
+    ax.set_xticks(x)
+    ax.set_xticklabels(
+        df['label'],
+        rotation=90, ha='center',
+        fontsize=10, color='#444441'
+    )
+
+    for tick, color in zip(ax.get_xticklabels(), df['color']):
+        tick.set_color(color)
+
+    ax.set_ylabel('Score', fontsize=11)
+    ax.set_title(title, fontsize=12, fontweight='normal', pad=12)
+
+    # Y axis — zoom to data range with small padding
+    all_vals = pd.concat([df['precision'], df['recall']]).dropna()
+    ymin = max(0.0, all_vals.min() - 0.05)
+    ax.set_ylim(0.0, 1.02)
+    ax.yaxis.set_major_formatter(
+        plt.FuncFormatter(lambda y, _: f'{y:.2f}')
+    )
+
+    ax.set_xlim(-0.6, n - 0.4)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_color('#d3d1c7')
+    ax.spines['bottom'].set_color('#d3d1c7')
+    ax.tick_params(axis='y', colors='#888780', labelsize=9)
+    ax.grid(axis='y', linestyle=':', linewidth=0.5,
+            color='#d3d1c7', zorder=0)
+
+    # ----------------------
+    # Support annotation below x-axis labels
+    # ----------------------
+    for i, row in df.iterrows():
+        ax.annotate(
+            f"n={int(row['support'])}",
+            xy=(i, 0),
+            xytext=(0, 8),
+            textcoords='offset points',
+            ha='center', fontsize=8,
+            color='#888780',
+            rotation=90,
+        )
+
+    # ----------------------
+    # Legend
+    # ----------------------
+    legend_handles = [
+        mlines.Line2D([], [], marker='o', color='#888780',
+                      markeredgecolor='white', markersize=9,
+                      linestyle='none', label='Recall'),
+        mlines.Line2D([], [], marker='s', color='#888780',
+                      markeredgecolor='white', markersize=9,
+                      linestyle='none', label='Precision'),
+    ]
+    for group_key, color in group_colors.items():
+        group_label = group_key.split('_')[1]
+        if (df['group'] == group_key).any():
+            legend_handles.append(
+                mlines.Line2D([], [], marker='o', color=color,
+                              markersize=8, linestyle='none',
+                              label=group_label)
+            )
+
+    offset = ScaledTranslation(0, 40 / 72, fig.dpi_scale_trans)
+
+    ax.legend(
+        handles=legend_handles,
+        frameon=True,
+        framealpha=0.9,
+        edgecolor='#d3d1c7',
+        fontsize=9,
+        loc='lower left',
+        bbox_to_anchor=(0, 0),
+        bbox_transform=ax.transAxes + offset,
+        ncol=2,
+    )
+
+    plt.tight_layout()
+
+    if save_path:
+        fig.savefig(save_path, dpi=300, bbox_inches='tight')
+        print(f"Saved to {save_path}")
+
+    return fig
+
+
 def cross_val_metrics(clf, X, y, class_names, random_state=RANDOM_SEED):
     # How many splits?
     from sklearn.preprocessing import LabelEncoder
@@ -215,187 +399,3 @@ def cross_val_metrics(clf, X, y, class_names, random_state=RANDOM_SEED):
         overall_metrics,           # dict of overall classifier-level metrics
         per_class_summary          # averaged per-class DataFrame
     )
-
-
-def plot_precision_recall_clinical(metrics_df,
-                                   title="Per-subtype precision and recall",
-                                   figsize=(8, 6),
-                                   save_path=None):
-    df = metrics_df.copy().reset_index()
-
-    # Normalise column names
-    df.columns = [c.lower().strip() for c in df.columns]
-    if 'subtype' not in df.columns:
-        df = df.rename(columns={df.columns[0]: 'subtype'})
-
-    # Use sensitivity as recall if recall column absent
-    if 'recall' not in df.columns and 'sensitivity' in df.columns:
-        df['recall'] = df['sensitivity']
-
-    # ----------------------
-    # Disease group assignment and sort order
-    # ----------------------
-    def assign_group(name):
-        if name.startswith('AML'):
-            return '1_AML'
-        elif name.startswith('B-ALL'):
-            return '2_BALL'
-        elif name.startswith('T-ALL'):
-            return '3_TALL'
-        else:
-            return '4_Other'
-
-    df['group'] = df['subtype'].apply(assign_group)
-    df = df.sort_values(['group', 'subtype']).reset_index(drop=True)
-
-    # Short labels — strip disease prefix for readability
-    def shorten(name):
-        parts = name.split(',')
-        if len(parts) > 1:
-            return parts[-1].strip()
-        return name
-
-    df['label'] = df['subtype'].apply(shorten)
-
-    # ----------------------
-    # Color per disease group — matching the reference figure aesthetic
-    # ----------------------
-    group_colors = {
-        '1_AML':   '#185fa5',
-        '2_BALL':  '#993c1d',
-        '3_TALL':  '#0f6e56',
-        '4_Other': '#5f5e5a',
-    }
-    df['color'] = df['group'].map(group_colors)
-
-    n = len(df)
-    x = np.arange(n)
-
-    # ----------------------
-    # Figure — single panel
-    # ----------------------
-    fig, ax = plt.subplots(figsize=figsize)
-
-    markersize = 9
-
-    for i, row in df.iterrows():
-        c = row['color']
-        prec = row['precision']
-        rec  = row['recall']
-
-        # Connecting line between recall and precision
-        ax.plot(
-            [i, i], [rec, prec],
-            color=c, linewidth=1.2, alpha=0.6,
-            linestyle='--' if abs(prec - rec) > 0.15 else '-',
-            zorder=1
-        )
-
-        # Recall — circle
-        ax.plot(
-            i, rec,
-            marker='o', markersize=markersize,
-            color=c, markeredgecolor='white',
-            markeredgewidth=0.8, zorder=3,
-            linestyle='none'
-        )
-
-        # Precision — square
-        ax.plot(
-            i, prec,
-            marker='s', markersize=markersize,
-            color=c, markeredgecolor='white',
-            markeredgewidth=0.8, zorder=3,
-            linestyle='none'
-        )
-
-    # ----------------------
-    # Group boundary lines
-    # ----------------------
-    group_vals = df['group'].values
-    for i in range(1, n):
-        if group_vals[i] != group_vals[i - 1]:
-            ax.axvline(i - 0.5, color='#d3d1c7', linewidth=0.8,
-                      linestyle=':', zorder=0)
-
-    # ----------------------
-    # Axes
-    # ----------------------
-    ax.set_xticks(x)
-    ax.set_xticklabels(
-        df['label'],
-        rotation=90, ha='right',
-        fontsize=8.5, color='#444441'
-    )
-
-    ax.set_ylabel('Score', fontsize=11)
-    ax.set_title(title, fontsize=12, fontweight='normal', pad=12)
-
-    # Y axis — zoom to data range with small padding
-    all_vals = pd.concat([df['precision'], df['recall']]).dropna()
-    ymin = max(0.0, all_vals.min() - 0.05)
-    ax.set_ylim(ymin, 1.02)
-    ax.yaxis.set_major_formatter(
-        plt.FuncFormatter(lambda y, _: f'{y:.2f}')
-    )
-
-    ax.set_xlim(-0.6, n - 0.4)
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.spines['left'].set_color('#d3d1c7')
-    ax.spines['bottom'].set_color('#d3d1c7')
-    ax.tick_params(axis='y', colors='#888780', labelsize=9)
-    ax.grid(axis='y', linestyle=':', linewidth=0.5,
-            color='#d3d1c7', zorder=0)
-
-    # ----------------------
-    # Support annotation below x-axis labels
-    # ----------------------
-    for i, row in df.iterrows():
-        ax.annotate(
-            f"n={int(row['support'])}",
-            xy=(i, ymin),
-            xytext=(0, -32),
-            textcoords='offset points',
-            ha='center', fontsize=6.5,
-            color='#888780'
-        )
-
-    # ----------------------
-    # Legend
-    # ----------------------
-    legend_handles = [
-        mlines.Line2D([], [], marker='o', color='#888780',
-                      markeredgecolor='white', markersize=9,
-                      linestyle='none', label='Recall'),
-        mlines.Line2D([], [], marker='s', color='#888780',
-                      markeredgecolor='white', markersize=9,
-                      linestyle='none', label='Precision'),
-    ]
-    for group_key, color in group_colors.items():
-        group_label = group_key.split('_')[1]
-        if (df['group'] == group_key).any():
-            legend_handles.append(
-                mlines.Line2D([], [], marker='o', color=color,
-                              markersize=8, linestyle='none',
-                              label=group_label)
-            )
-
-    ax.legend(
-        handles=legend_handles,
-        frameon=True,
-        framealpha=0.9,
-        edgecolor='#d3d1c7',
-        fontsize=9,
-        loc='lower left',
-        ncol=2
-    )
-
-    plt.tight_layout()
-
-    if save_path:
-        fig.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"Saved to {save_path}")
-
-    plt.show()
-    return fig
