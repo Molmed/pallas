@@ -239,6 +239,10 @@ def main():
     Path(output_dir).mkdir(parents=True, exist_ok=True)
     print(f"Training to output directory: {output_dir}")
 
+    # Save a copy of y_path, for convenience
+    y_train = pd.read_csv(args.y_path, index_col=0)
+    y_train.to_csv(f"{output_dir}/y.csv", index=True)
+
     X_path = reduce_to_selected(
         X_path=args.X_path,
         selected_features_path=args.selected_features_path,
@@ -246,7 +250,7 @@ def main():
 
     train(
         X_path=X_path,
-        y_path=args.y_path,
+        y_path=f"{output_dir}/y.csv",
         output_dir=output_dir,
         scoring_metric=args.scoring_metric
     )
