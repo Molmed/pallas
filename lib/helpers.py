@@ -14,7 +14,7 @@ from matplotlib.transforms import ScaledTranslation
 from sklearn.preprocessing import LabelEncoder
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
-
+from sklearn.calibration import calibration_curve
 
 dotenv.load_dotenv()
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 42))
@@ -405,3 +405,55 @@ def cross_val_metrics(clf, X, y, class_names, random_state=RANDOM_SEED):
         overall_metrics,           # dict of overall classifier-level metrics
         per_class_summary          # averaged per-class DataFrame
     )
+
+
+def plot_per_class_calibration_curves(
+        y_test,
+        y_pred_proba,
+        classes,
+        save_path=None,
+        n_bins=10,
+        title=None):
+    n_classes = len(classes)
+    ncols = 3
+    nrows = int(np.ceil(n_classes / ncols))
+
+    fig, axes = plt.subplots(nrows, ncols, figsize=(ncols * 4, nrows * 4))
+    axes = axes.flatten()
+
+    for i, class_label in enumerate(classes):
+        # Binarize: current class vs rest
+        y_binary = (y_test == class_label).astype(int)
+        prob_pos = y_pred_proba[:, i]
+
+        fraction_of_positives, mean_predicted_prob = calibration_curve(
+            y_binary, prob_pos, n_bins=n_bins, strategy="uniform"
+        )
+
+        ax = axes[i]
+        ax.plot([0, 1], [0, 1], "k--", label="Perfectly calibrated")
+        ax.plot(mean_predicted_prob, fraction_of_positives, "s-", label="Actual calibration for subtype")
+        ax.set_xlabel("Mean predicted probability")
+        ax.set_ylabel("Fraction of positives")
+        ax.set_title(class_label)
+        ax.set_xlim([0, 1])
+        ax.set_ylim([0, 1])
+
+    # Hide unused subplots
+    for j in range(i + 1, len(axes)):
+        axes[j].set_visible(False)
+
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles[:2], labels[:2], loc="lower right", fontsize=10)
+
+    fig.suptitle(title, fontsize=14)
+    # Add a smaller subtitle if provided
+    subtitle = "Per-class calibration plots (one-vs-rest)"
+    fig.text(0.5, 0.985, subtitle, ha='center', fontsize=10, color='#444441')
+    plt.tight_layout(rect=[0, 0, 1, 0.96], h_pad=10)
+
+    if save_path:
+        plt.savefig(save_path, bbox_inches="tight")
+        plt.close()
+    else:
+        plt.show()
