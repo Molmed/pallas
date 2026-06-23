@@ -21,8 +21,15 @@ Generates predictions from a trained model
 and saves them to the output directory.
 """
 
-pallas_model_path_help = """
-The path to a pallas model (.joblib file output by train_rf.py).
+pallas_model_base_dir_help = """
+The path to a pallas model base directory
+where all trained models are stored. The script will look in
+this directory for a subdirectory corresponding to the model being evaluated, and
+then a model file named "rf_model.joblib".
+"""
+
+pallas_model_name_help = """
+The name of the model being used for inference, e.g. rf_DNAm_20260606_193214.
 """
 
 X_path_help = """
@@ -41,10 +48,16 @@ Directory to save the output."""
 def parse_args():
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument(
-        "--pallas_model_path",
+        "--pallas_model_base_dir",
         type=str,
         required=True,
-        help=pallas_model_path_help,
+        help=pallas_model_base_dir_help,
+    )
+    parser.add_argument(
+        "--pallas_model_name",
+        type=str,
+        required=True,
+        help=pallas_model_name_help,
     )
     parser.add_argument(
         "--X_path",
@@ -101,11 +114,11 @@ def predict(
     y_test = y_test.iloc[:, 0].values
 
     # Save preds as joblib files
-    joblib.dump(y_pred, Path(output_dir) / f"{dataset_name}_y_pred.joblib")
-    joblib.dump(y_pred_proba, Path(output_dir) / f"{dataset_name}_y_pred_proba.joblib")
+    joblib.dump(y_pred, Path(output_dir) / "y_pred.joblib")
+    joblib.dump(y_pred_proba, Path(output_dir) / "y_pred_proba.joblib")
 
     # Save labels in the output dir for convenience
-    joblib.dump(y_test, Path(output_dir) / f"{dataset_name}_y_test.joblib")
+    joblib.dump(y_test, Path(output_dir) / "y_test.joblib")
 
     # Save predictions to output dir
     proba_df = pd.DataFrame(y_pred_proba, columns=model.classes_, index=X_test.index)
@@ -123,7 +136,7 @@ def main():
     args = parse_args()
 
     # Extract model name from model path (one dir above the model file)
-    model_name = Path(args.pallas_model_path).parent.name
+    model_name = args.pallas_model_name
     dataset_name = args.dataset_name
 
     # Create subdir in output dir for this dataset
@@ -132,7 +145,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Load the model
-    model = joblib.load(Path(args.pallas_model_path))
+    model = joblib.load(Path(args.pallas_model_base_dir) / model_name / "rf_model.joblib")
 
     predict(
         model=model,
