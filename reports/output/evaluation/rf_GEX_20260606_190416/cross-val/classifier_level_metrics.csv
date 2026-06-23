@@ -1,0 +1,6 @@
+metric,value
+f1_macro,0.921
+f1_weighted,0.937
+cohen_kappa,0.934
+auroc_macro,0.995
+auprc_macro,0.956

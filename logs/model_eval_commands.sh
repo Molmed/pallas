@@ -15,6 +15,13 @@ python lib/evaluate_rf.py \
     --output_dir=/home/mariya/Development/pallas/reports/output/evaluation \
     --human_readable_title="GEX model, calibration+test dataset"
 
+python lib/cross_val_rf.py \
+    --pallas_model_base_dir=/home/mariya/Data/pallas/models \
+    --pallas_model_name=rf_GEX_20260606_190416 \
+    --output_dir=/home/mariya/Development/pallas/reports/output/evaluation \
+    --human_readable_title="GEX model, train dataset (5-fold CV)"
+
+
 # DNAm cal and test
 python lib/predict.py \
     --pallas_model_base_dir=/home/mariya/Data/pallas/models \
