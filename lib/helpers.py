@@ -19,6 +19,7 @@ from sklearn.preprocessing import label_binarize, LabelEncoder
 
 dotenv.load_dotenv()
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 42))
+ROUND_PLACES = int(os.getenv("ROUND_PLACES", 3))
 
 
 def classifier_level_metrics(y_true, y_pred, y_proba, class_names):
@@ -37,19 +38,20 @@ def classifier_level_metrics(y_true, y_pred, y_proba, class_names):
 
         # For multi-class ROC AUC, we need to account for classes not in y_true
         # This is a common approach for calculating macro AUC in imbalanced datasets
-        "auroc_macro": np.mean([
+        "auroc_macro": float(np.mean([
             roc_auc_score((y_true == cls).astype(int), y_proba[:, i])
             for i, cls in enumerate(class_names) if cls in present_classes
-        ]),
+        ])),
 
         # For AUPRC, only calculate for classes present in the data
-        "auprc_macro": np.mean([
+        "auprc_macro": float(np.mean([
             average_precision_score((y_true == cls).astype(int), y_proba[:, i])
             for i, cls in enumerate(class_names) if cls in present_classes
-        ])
+        ]))
     }
 
-    return metrics
+    # Return as df
+    return pd.DataFrame([metrics]).round(ROUND_PLACES).T
 
 
 def class_level_metrics(y_true, y_pred, y_prob, class_names):
@@ -103,7 +105,7 @@ def class_level_metrics(y_true, y_pred, y_prob, class_names):
         df = df.drop(index='Non-leukemic')
         df = pd.concat([df, non_leukemic_row])
 
-    return df.round(3)
+    return df.round(ROUND_PLACES)
 
 
 def cross_val_metrics(clf, X, y, class_names, random_state=RANDOM_SEED):
