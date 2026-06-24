@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-06-24T19:12:13.528892</dc:date>
+    <dc:date>2026-06-24T19:50:19.020840</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -43,7 +43,7 @@ L 72.774011 196
 L 72.774011 196 
 L 63.514091 196 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_4">
     <path d="M 75.088991 196 
@@ -51,7 +51,7 @@ L 84.348911 196
 L 84.348911 196 
 L 75.088991 196 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_5">
     <path d="M 86.663891 196 
@@ -59,7 +59,7 @@ L 95.923811 196
 L 95.923811 196 
 L 86.663891 196 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_6">
     <path d="M 98.238791 196 
@@ -67,7 +67,7 @@ L 107.498711 196
 L 107.498711 196 
 L 98.238791 196 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_7">
     <path d="M 109.813691 196 
@@ -75,7 +75,7 @@ L 119.073611 196
 L 119.073611 196 
 L 109.813691 196 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_8">
     <path d="M 121.388591 196 
@@ -83,7 +83,7 @@ L 130.648511 196
 L 130.648511 196 
 L 121.388591 196 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_9">
     <path d="M 132.963491 196 
@@ -91,7 +91,7 @@ L 142.223411 196
 L 142.223411 196 
 L 132.963491 196 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_10">
     <path d="M 144.538391 196 
@@ -99,7 +99,7 @@ L 153.79831 196
 L 153.79831 196 
 L 144.538391 196 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_11">
     <path d="M 156.11329 196 
@@ -107,7 +107,7 @@ L 165.37321 196
 L 165.37321 196 
 L 156.11329 196 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_12">
     <path d="M 167.68819 196 
@@ -115,7 +115,7 @@ L 176.94811 196
 L 176.94811 196 
 L 167.68819 196 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_13">
     <path d="M 179.26309 196 
@@ -123,167 +123,167 @@ L 188.52301 196
 L 188.52301 196 
 L 179.26309 196 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_14">
     <path d="M 190.83799 196 
 L 200.09791 196 
-L 200.09791 195.279965 
-L 190.83799 195.279965 
+L 200.09791 195.392747 
+L 190.83799 195.392747 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_15">
     <path d="M 202.41289 196 
 L 211.67281 196 
-L 211.67281 193.347519 
-L 202.41289 193.347519 
+L 211.67281 194.187461 
+L 202.41289 194.187461 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_16">
     <path d="M 213.98779 196 
 L 223.24771 196 
-L 223.24771 190.737646 
-L 213.98779 190.737646 
+L 223.24771 189.313254 
+L 213.98779 189.313254 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_17">
     <path d="M 225.56269 196 
 L 234.82261 196 
-L 234.82261 188.461852 
-L 225.56269 188.461852 
+L 234.82261 188.503974 
+L 225.56269 188.503974 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_18">
     <path d="M 237.13759 196 
 L 246.39751 196 
-L 246.39751 186.605128 
-L 237.13759 186.605128 
+L 246.39751 186.601592 
+L 237.13759 186.601592 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_19">
     <path d="M 248.71249 196 
 L 257.97241 196 
-L 257.97241 185.678476 
-L 248.71249 185.678476 
+L 257.97241 186.228229 
+L 248.71249 186.228229 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_20">
     <path d="M 260.28739 196 
 L 269.54731 196 
-L 269.54731 180.645484 
-L 260.28739 180.645484 
+L 269.54731 179.640374 
+L 260.28739 179.640374 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_21">
     <path d="M 271.86229 196 
 L 281.12221 196 
-L 281.12221 178.663061 
-L 271.86229 178.663061 
+L 281.12221 179.15349 
+L 271.86229 179.15349 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_22">
     <path d="M 283.43719 196 
 L 292.69711 196 
-L 292.69711 178.62823 
-L 283.43719 178.62823 
+L 292.69711 178.373508 
+L 283.43719 178.373508 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_23">
     <path d="M 295.01209 196 
 L 304.27201 196 
-L 304.27201 159.541907 
-L 295.01209 159.541907 
+L 304.27201 161.793914 
+L 295.01209 161.793914 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_24">
     <path d="M 306.58699 196 
 L 315.84691 196 
-L 315.84691 147.757837 
-L 306.58699 147.757837 
+L 315.84691 153.275196 
+L 306.58699 153.275196 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_25">
     <path d="M 318.16189 196 
 L 327.42181 196 
-L 327.42181 143.572541 
-L 318.16189 143.572541 
+L 327.42181 145.4818 
+L 318.16189 145.4818 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_26">
     <path d="M 329.73679 196 
 L 338.99671 196 
-L 338.99671 132.06331 
-L 329.73679 132.06331 
+L 338.99671 143.058695 
+L 329.73679 143.058695 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_27">
     <path d="M 341.31169 196 
 L 350.571609 196 
-L 350.571609 129.580938 
-L 341.31169 129.580938 
+L 350.571609 136.000005 
+L 341.31169 136.000005 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_28">
     <path d="M 352.886589 196 
 L 362.146509 196 
-L 362.146509 113.301998 
-L 352.886589 113.301998 
+L 362.146509 129.117145 
+L 352.886589 129.117145 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_29">
     <path d="M 364.461489 196 
 L 373.721409 196 
-L 373.721409 108.431619 
-L 364.461489 108.431619 
+L 373.721409 107.823244 
+L 364.461489 107.823244 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_30">
     <path d="M 376.036389 196 
 L 385.296309 196 
-L 385.296309 92.229026 
-L 376.036389 92.229026 
+L 385.296309 97.179644 
+L 376.036389 97.179644 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_31">
     <path d="M 387.611289 196 
 L 396.871209 196 
-L 396.871209 78.459659 
-L 387.611289 78.459659 
+L 396.871209 79.947663 
+L 387.611289 79.947663 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_32">
     <path d="M 399.186189 196 
 L 408.446109 196 
-L 408.446109 75.762126 
-L 399.186189 75.762126 
+L 408.446109 77.194529 
+L 399.186189 77.194529 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_33">
     <path d="M 410.761089 196 
 L 420.021009 196 
-L 420.021009 64.203859 
-L 410.761089 64.203859 
+L 420.021009 56.154466 
+L 410.761089 56.154466 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="patch_34">
     <path d="M 422.335989 196 
@@ -291,18 +291,18 @@ L 431.595909 196
 L 431.595909 34.956522 
 L 422.335989 34.956522 
 z
-" clip-path="url(#p16d2985746)" style="fill: #4c72b0"/>
+" clip-path="url(#p114ff918f5)" style="fill: #4c72b0"/>
    </g>
    <g id="matplotlib.axis_1">
     <g id="xtick_1">
      <g id="line2d_1">
       <defs>
-       <path id="m81b284696f" d="M 0 0 
+       <path id="m38bb28623d" d="M 0 0 
 L 0 3.5 
 " style="stroke: #000000; stroke-width: 0.8"/>
       </defs>
       <g>
-       <use xlink:href="#m81b284696f" x="68.144051" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="68.144051" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_1">
@@ -500,7 +500,7 @@ z
     <g id="xtick_2">
      <g id="line2d_2">
       <g>
-       <use xlink:href="#m81b284696f" x="79.718951" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="79.718951" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_2">
@@ -680,7 +680,7 @@ z
     <g id="xtick_3">
      <g id="line2d_3">
       <g>
-       <use xlink:href="#m81b284696f" x="91.293851" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="91.293851" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_3">
@@ -776,7 +776,7 @@ z
     <g id="xtick_4">
      <g id="line2d_4">
       <g>
-       <use xlink:href="#m81b284696f" x="102.868751" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="102.868751" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_4">
@@ -902,7 +902,7 @@ z
     <g id="xtick_5">
      <g id="line2d_5">
       <g>
-       <use xlink:href="#m81b284696f" x="114.443651" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="114.443651" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_5">
@@ -941,7 +941,7 @@ z
     <g id="xtick_6">
      <g id="line2d_6">
       <g>
-       <use xlink:href="#m81b284696f" x="126.018551" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="126.018551" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_6">
@@ -967,7 +967,7 @@ z
     <g id="xtick_7">
      <g id="line2d_7">
       <g>
-       <use xlink:href="#m81b284696f" x="137.593451" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="137.593451" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_7">
@@ -991,7 +991,7 @@ z
     <g id="xtick_8">
      <g id="line2d_8">
       <g>
-       <use xlink:href="#m81b284696f" x="149.16835" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="149.16835" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_8">
@@ -1017,7 +1017,7 @@ z
     <g id="xtick_9">
      <g id="line2d_9">
       <g>
-       <use xlink:href="#m81b284696f" x="160.74325" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="160.74325" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_9">
@@ -1139,7 +1139,7 @@ z
     <g id="xtick_10">
      <g id="line2d_10">
       <g>
-       <use xlink:href="#m81b284696f" x="172.31815" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="172.31815" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_10">
@@ -1214,7 +1214,7 @@ z
     <g id="xtick_11">
      <g id="line2d_11">
       <g>
-       <use xlink:href="#m81b284696f" x="183.89305" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="183.89305" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_11">
@@ -1231,37 +1231,12 @@ z
     <g id="xtick_12">
      <g id="line2d_12">
       <g>
-       <use xlink:href="#m81b284696f" x="195.46795" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="195.46795" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_12">
-      <!-- AML, CEBPAalt -->
-      <g transform="translate(198.110138 275.225) rotate(-90) scale(0.1 -0.1)">
-       <use xlink:href="#Univers-41"/>
-       <use xlink:href="#Univers-4d" transform="translate(72.216797 0)"/>
-       <use xlink:href="#Univers-4c" transform="translate(166.601562 0)"/>
-       <use xlink:href="#Univers-2c" transform="translate(222.216797 0)"/>
-       <use xlink:href="#Univers-20" transform="translate(250 0)"/>
-       <use xlink:href="#Univers-43" transform="translate(277.783203 0)"/>
-       <use xlink:href="#Univers-45" transform="translate(344.482422 0)"/>
-       <use xlink:href="#Univers-42" transform="translate(405.566406 0)"/>
-       <use xlink:href="#Univers-50" transform="translate(472.265625 0)"/>
-       <use xlink:href="#Univers-41" transform="translate(533.349609 0)"/>
-       <use xlink:href="#Univers-61" transform="translate(605.566406 0)"/>
-       <use xlink:href="#Univers-6c" transform="translate(661.181641 0)"/>
-       <use xlink:href="#Univers-74" transform="translate(688.964844 0)"/>
-      </g>
-     </g>
-    </g>
-    <g id="xtick_13">
-     <g id="line2d_13">
-      <g>
-       <use xlink:href="#m81b284696f" x="207.04285" y="196" style="stroke: #000000; stroke-width: 0.8"/>
-      </g>
-     </g>
-     <g id="text_13">
       <!-- B-ALL, DUX4-r -->
-      <g transform="translate(209.685038 271.904688) rotate(-90) scale(0.1 -0.1)">
+      <g transform="translate(198.110138 271.904688) rotate(-90) scale(0.1 -0.1)">
        <use xlink:href="#Univers-42"/>
        <use xlink:href="#Univers-2d" transform="translate(66.699219 0)"/>
        <use xlink:href="#Univers-41" transform="translate(100 0)"/>
@@ -1278,10 +1253,35 @@ z
       </g>
      </g>
     </g>
+    <g id="xtick_13">
+     <g id="line2d_13">
+      <g>
+       <use xlink:href="#m38bb28623d" x="207.04285" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_13">
+      <!-- AML, CEBPAalt -->
+      <g transform="translate(209.685038 275.225) rotate(-90) scale(0.1 -0.1)">
+       <use xlink:href="#Univers-41"/>
+       <use xlink:href="#Univers-4d" transform="translate(72.216797 0)"/>
+       <use xlink:href="#Univers-4c" transform="translate(166.601562 0)"/>
+       <use xlink:href="#Univers-2c" transform="translate(222.216797 0)"/>
+       <use xlink:href="#Univers-20" transform="translate(250 0)"/>
+       <use xlink:href="#Univers-43" transform="translate(277.783203 0)"/>
+       <use xlink:href="#Univers-45" transform="translate(344.482422 0)"/>
+       <use xlink:href="#Univers-42" transform="translate(405.566406 0)"/>
+       <use xlink:href="#Univers-50" transform="translate(472.265625 0)"/>
+       <use xlink:href="#Univers-41" transform="translate(533.349609 0)"/>
+       <use xlink:href="#Univers-61" transform="translate(605.566406 0)"/>
+       <use xlink:href="#Univers-6c" transform="translate(661.181641 0)"/>
+       <use xlink:href="#Univers-74" transform="translate(688.964844 0)"/>
+      </g>
+     </g>
+    </g>
     <g id="xtick_14">
      <g id="line2d_14">
       <g>
-       <use xlink:href="#m81b284696f" x="218.61775" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="218.61775" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_14">
@@ -1312,7 +1312,7 @@ z
     <g id="xtick_15">
      <g id="line2d_15">
       <g>
-       <use xlink:href="#m81b284696f" x="230.19265" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="230.19265" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_15">
@@ -1539,38 +1539,12 @@ z
     <g id="xtick_16">
      <g id="line2d_16">
       <g>
-       <use xlink:href="#m81b284696f" x="241.76755" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="241.76755" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_16">
-      <!-- B-ALL, PAX5alt -->
-      <g transform="translate(244.409738 274.68125) rotate(-90) scale(0.1 -0.1)">
-       <use xlink:href="#Univers-42"/>
-       <use xlink:href="#Univers-2d" transform="translate(66.699219 0)"/>
-       <use xlink:href="#Univers-41" transform="translate(100 0)"/>
-       <use xlink:href="#Univers-4c" transform="translate(172.216797 0)"/>
-       <use xlink:href="#Univers-4c" transform="translate(227.832031 0)"/>
-       <use xlink:href="#Univers-2c" transform="translate(283.447266 0)"/>
-       <use xlink:href="#Univers-20" transform="translate(311.230469 0)"/>
-       <use xlink:href="#Univers-50" transform="translate(339.013672 0)"/>
-       <use xlink:href="#Univers-41" transform="translate(400.097656 0)"/>
-       <use xlink:href="#Univers-58" transform="translate(472.314453 0)"/>
-       <use xlink:href="#Univers-35" transform="translate(544.53125 0)"/>
-       <use xlink:href="#Univers-61" transform="translate(600.146484 0)"/>
-       <use xlink:href="#Univers-6c" transform="translate(655.761719 0)"/>
-       <use xlink:href="#Univers-74" transform="translate(683.544922 0)"/>
-      </g>
-     </g>
-    </g>
-    <g id="xtick_17">
-     <g id="line2d_17">
-      <g>
-       <use xlink:href="#m81b284696f" x="253.34245" y="196" style="stroke: #000000; stroke-width: 0.8"/>
-      </g>
-     </g>
-     <g id="text_17">
       <!-- B-ALL, ETV6::RUNX1 -->
-      <g transform="translate(255.984637 301.9125) rotate(-90) scale(0.1 -0.1)">
+      <g transform="translate(244.409738 301.9125) rotate(-90) scale(0.1 -0.1)">
        <defs>
         <path id="Univers-56" d="M 800 4622 
 L 2113 672 
@@ -1635,15 +1609,15 @@ z
       </g>
      </g>
     </g>
-    <g id="xtick_18">
-     <g id="line2d_18">
+    <g id="xtick_17">
+     <g id="line2d_17">
       <g>
-       <use xlink:href="#m81b284696f" x="264.91735" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="253.34245" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
-     <g id="text_18">
-      <!-- B-ALL, TCF3::PBX1 -->
-      <g transform="translate(267.559537 291.917188) rotate(-90) scale(0.1 -0.1)">
+     <g id="text_17">
+      <!-- B-ALL, PAX5alt -->
+      <g transform="translate(255.984637 274.68125) rotate(-90) scale(0.1 -0.1)">
        <use xlink:href="#Univers-42"/>
        <use xlink:href="#Univers-2d" transform="translate(66.699219 0)"/>
        <use xlink:href="#Univers-41" transform="translate(100 0)"/>
@@ -1651,28 +1625,25 @@ z
        <use xlink:href="#Univers-4c" transform="translate(227.832031 0)"/>
        <use xlink:href="#Univers-2c" transform="translate(283.447266 0)"/>
        <use xlink:href="#Univers-20" transform="translate(311.230469 0)"/>
-       <use xlink:href="#Univers-54" transform="translate(339.013672 0)"/>
-       <use xlink:href="#Univers-43" transform="translate(400.097656 0)"/>
-       <use xlink:href="#Univers-46" transform="translate(466.796875 0)"/>
-       <use xlink:href="#Univers-33" transform="translate(522.412109 0)"/>
-       <use xlink:href="#Univers-3a" transform="translate(578.027344 0)"/>
-       <use xlink:href="#Univers-3a" transform="translate(605.810547 0)"/>
-       <use xlink:href="#Univers-50" transform="translate(633.59375 0)"/>
-       <use xlink:href="#Univers-42" transform="translate(694.677734 0)"/>
-       <use xlink:href="#Univers-58" transform="translate(761.376953 0)"/>
-       <use xlink:href="#Univers-31" transform="translate(833.59375 0)"/>
+       <use xlink:href="#Univers-50" transform="translate(339.013672 0)"/>
+       <use xlink:href="#Univers-41" transform="translate(400.097656 0)"/>
+       <use xlink:href="#Univers-58" transform="translate(472.314453 0)"/>
+       <use xlink:href="#Univers-35" transform="translate(544.53125 0)"/>
+       <use xlink:href="#Univers-61" transform="translate(600.146484 0)"/>
+       <use xlink:href="#Univers-6c" transform="translate(655.761719 0)"/>
+       <use xlink:href="#Univers-74" transform="translate(683.544922 0)"/>
       </g>
      </g>
     </g>
-    <g id="xtick_19">
-     <g id="line2d_19">
+    <g id="xtick_18">
+     <g id="line2d_18">
       <g>
-       <use xlink:href="#m81b284696f" x="276.49225" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="264.91735" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
-     <g id="text_19">
+     <g id="text_18">
       <!-- B-ALL, BCR::ABL1-like -->
-      <g transform="translate(279.134437 306.928125) rotate(-90) scale(0.1 -0.1)">
+      <g transform="translate(267.559537 306.928125) rotate(-90) scale(0.1 -0.1)">
        <defs>
         <path id="Univers-6b" d="M 1113 4653 
 L 1113 1900 
@@ -1713,10 +1684,39 @@ z
       </g>
      </g>
     </g>
+    <g id="xtick_19">
+     <g id="line2d_19">
+      <g>
+       <use xlink:href="#m38bb28623d" x="276.49225" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_19">
+      <!-- B-ALL, TCF3::PBX1 -->
+      <g transform="translate(279.134437 291.917188) rotate(-90) scale(0.1 -0.1)">
+       <use xlink:href="#Univers-42"/>
+       <use xlink:href="#Univers-2d" transform="translate(66.699219 0)"/>
+       <use xlink:href="#Univers-41" transform="translate(100 0)"/>
+       <use xlink:href="#Univers-4c" transform="translate(172.216797 0)"/>
+       <use xlink:href="#Univers-4c" transform="translate(227.832031 0)"/>
+       <use xlink:href="#Univers-2c" transform="translate(283.447266 0)"/>
+       <use xlink:href="#Univers-20" transform="translate(311.230469 0)"/>
+       <use xlink:href="#Univers-54" transform="translate(339.013672 0)"/>
+       <use xlink:href="#Univers-43" transform="translate(400.097656 0)"/>
+       <use xlink:href="#Univers-46" transform="translate(466.796875 0)"/>
+       <use xlink:href="#Univers-33" transform="translate(522.412109 0)"/>
+       <use xlink:href="#Univers-3a" transform="translate(578.027344 0)"/>
+       <use xlink:href="#Univers-3a" transform="translate(605.810547 0)"/>
+       <use xlink:href="#Univers-50" transform="translate(633.59375 0)"/>
+       <use xlink:href="#Univers-42" transform="translate(694.677734 0)"/>
+       <use xlink:href="#Univers-58" transform="translate(761.376953 0)"/>
+       <use xlink:href="#Univers-31" transform="translate(833.59375 0)"/>
+      </g>
+     </g>
+    </g>
     <g id="xtick_20">
      <g id="line2d_20">
       <g>
-       <use xlink:href="#m81b284696f" x="288.06715" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="288.06715" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_20">
@@ -1740,7 +1740,7 @@ z
     <g id="xtick_21">
      <g id="line2d_21">
       <g>
-       <use xlink:href="#m81b284696f" x="299.64205" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="299.64205" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_21">
@@ -1775,7 +1775,7 @@ z
     <g id="xtick_22">
      <g id="line2d_22">
       <g>
-       <use xlink:href="#m81b284696f" x="311.21695" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="311.21695" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_22">
@@ -1803,72 +1803,12 @@ z
     <g id="xtick_23">
      <g id="line2d_23">
       <g>
-       <use xlink:href="#m81b284696f" x="322.79185" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="322.79185" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_23">
-      <!-- AML, APL-PML::RARA -->
-      <g transform="translate(325.434037 307.446875) rotate(-90) scale(0.1 -0.1)">
-       <use xlink:href="#Univers-41"/>
-       <use xlink:href="#Univers-4d" transform="translate(72.216797 0)"/>
-       <use xlink:href="#Univers-4c" transform="translate(166.601562 0)"/>
-       <use xlink:href="#Univers-2c" transform="translate(222.216797 0)"/>
-       <use xlink:href="#Univers-20" transform="translate(250 0)"/>
-       <use xlink:href="#Univers-41" transform="translate(277.783203 0)"/>
-       <use xlink:href="#Univers-50" transform="translate(350 0)"/>
-       <use xlink:href="#Univers-4c" transform="translate(411.083984 0)"/>
-       <use xlink:href="#Univers-2d" transform="translate(466.699219 0)"/>
-       <use xlink:href="#Univers-50" transform="translate(500 0)"/>
-       <use xlink:href="#Univers-4d" transform="translate(561.083984 0)"/>
-       <use xlink:href="#Univers-4c" transform="translate(655.46875 0)"/>
-       <use xlink:href="#Univers-3a" transform="translate(711.083984 0)"/>
-       <use xlink:href="#Univers-3a" transform="translate(738.867188 0)"/>
-       <use xlink:href="#Univers-52" transform="translate(766.650391 0)"/>
-       <use xlink:href="#Univers-41" transform="translate(833.349609 0)"/>
-       <use xlink:href="#Univers-52" transform="translate(905.566406 0)"/>
-       <use xlink:href="#Univers-41" transform="translate(972.265625 0)"/>
-      </g>
-     </g>
-    </g>
-    <g id="xtick_24">
-     <g id="line2d_24">
-      <g>
-       <use xlink:href="#m81b284696f" x="334.36675" y="196" style="stroke: #000000; stroke-width: 0.8"/>
-      </g>
-     </g>
-     <g id="text_24">
-      <!-- B-ALL, hypodiploid -->
-      <g transform="translate(337.013625 293.55) rotate(-90) scale(0.1 -0.1)">
-       <use xlink:href="#Univers-42"/>
-       <use xlink:href="#Univers-2d" transform="translate(66.699219 0)"/>
-       <use xlink:href="#Univers-41" transform="translate(100 0)"/>
-       <use xlink:href="#Univers-4c" transform="translate(172.216797 0)"/>
-       <use xlink:href="#Univers-4c" transform="translate(227.832031 0)"/>
-       <use xlink:href="#Univers-2c" transform="translate(283.447266 0)"/>
-       <use xlink:href="#Univers-20" transform="translate(311.230469 0)"/>
-       <use xlink:href="#Univers-68" transform="translate(339.013672 0)"/>
-       <use xlink:href="#Univers-79" transform="translate(400.097656 0)"/>
-       <use xlink:href="#Univers-70" transform="translate(455.712891 0)"/>
-       <use xlink:href="#Univers-6f" transform="translate(516.796875 0)"/>
-       <use xlink:href="#Univers-64" transform="translate(577.880859 0)"/>
-       <use xlink:href="#Univers-69" transform="translate(638.964844 0)"/>
-       <use xlink:href="#Univers-70" transform="translate(666.748047 0)"/>
-       <use xlink:href="#Univers-6c" transform="translate(727.832031 0)"/>
-       <use xlink:href="#Univers-6f" transform="translate(755.615234 0)"/>
-       <use xlink:href="#Univers-69" transform="translate(816.699219 0)"/>
-       <use xlink:href="#Univers-64" transform="translate(844.482422 0)"/>
-      </g>
-     </g>
-    </g>
-    <g id="xtick_25">
-     <g id="line2d_25">
-      <g>
-       <use xlink:href="#m81b284696f" x="345.94165" y="196" style="stroke: #000000; stroke-width: 0.8"/>
-      </g>
-     </g>
-     <g id="text_25">
       <!-- AML, CBFA2T3::GLIS2 -->
-      <g transform="translate(348.583837 308.035938) rotate(-90) scale(0.1 -0.1)">
+      <g transform="translate(325.434037 308.035938) rotate(-90) scale(0.1 -0.1)">
        <defs>
         <path id="Univers-47" d="M 3694 3469 
 Q 3634 3822 3356 4006 
@@ -1957,10 +1897,70 @@ z
       </g>
      </g>
     </g>
+    <g id="xtick_24">
+     <g id="line2d_24">
+      <g>
+       <use xlink:href="#m38bb28623d" x="334.36675" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_24">
+      <!-- AML, APL-PML::RARA -->
+      <g transform="translate(337.008937 307.446875) rotate(-90) scale(0.1 -0.1)">
+       <use xlink:href="#Univers-41"/>
+       <use xlink:href="#Univers-4d" transform="translate(72.216797 0)"/>
+       <use xlink:href="#Univers-4c" transform="translate(166.601562 0)"/>
+       <use xlink:href="#Univers-2c" transform="translate(222.216797 0)"/>
+       <use xlink:href="#Univers-20" transform="translate(250 0)"/>
+       <use xlink:href="#Univers-41" transform="translate(277.783203 0)"/>
+       <use xlink:href="#Univers-50" transform="translate(350 0)"/>
+       <use xlink:href="#Univers-4c" transform="translate(411.083984 0)"/>
+       <use xlink:href="#Univers-2d" transform="translate(466.699219 0)"/>
+       <use xlink:href="#Univers-50" transform="translate(500 0)"/>
+       <use xlink:href="#Univers-4d" transform="translate(561.083984 0)"/>
+       <use xlink:href="#Univers-4c" transform="translate(655.46875 0)"/>
+       <use xlink:href="#Univers-3a" transform="translate(711.083984 0)"/>
+       <use xlink:href="#Univers-3a" transform="translate(738.867188 0)"/>
+       <use xlink:href="#Univers-52" transform="translate(766.650391 0)"/>
+       <use xlink:href="#Univers-41" transform="translate(833.349609 0)"/>
+       <use xlink:href="#Univers-52" transform="translate(905.566406 0)"/>
+       <use xlink:href="#Univers-41" transform="translate(972.265625 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_25">
+     <g id="line2d_25">
+      <g>
+       <use xlink:href="#m38bb28623d" x="345.94165" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_25">
+      <!-- B-ALL, hypodiploid -->
+      <g transform="translate(348.588525 293.55) rotate(-90) scale(0.1 -0.1)">
+       <use xlink:href="#Univers-42"/>
+       <use xlink:href="#Univers-2d" transform="translate(66.699219 0)"/>
+       <use xlink:href="#Univers-41" transform="translate(100 0)"/>
+       <use xlink:href="#Univers-4c" transform="translate(172.216797 0)"/>
+       <use xlink:href="#Univers-4c" transform="translate(227.832031 0)"/>
+       <use xlink:href="#Univers-2c" transform="translate(283.447266 0)"/>
+       <use xlink:href="#Univers-20" transform="translate(311.230469 0)"/>
+       <use xlink:href="#Univers-68" transform="translate(339.013672 0)"/>
+       <use xlink:href="#Univers-79" transform="translate(400.097656 0)"/>
+       <use xlink:href="#Univers-70" transform="translate(455.712891 0)"/>
+       <use xlink:href="#Univers-6f" transform="translate(516.796875 0)"/>
+       <use xlink:href="#Univers-64" transform="translate(577.880859 0)"/>
+       <use xlink:href="#Univers-69" transform="translate(638.964844 0)"/>
+       <use xlink:href="#Univers-70" transform="translate(666.748047 0)"/>
+       <use xlink:href="#Univers-6c" transform="translate(727.832031 0)"/>
+       <use xlink:href="#Univers-6f" transform="translate(755.615234 0)"/>
+       <use xlink:href="#Univers-69" transform="translate(816.699219 0)"/>
+       <use xlink:href="#Univers-64" transform="translate(844.482422 0)"/>
+      </g>
+     </g>
+    </g>
     <g id="xtick_26">
      <g id="line2d_26">
       <g>
-       <use xlink:href="#m81b284696f" x="357.516549" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="357.516549" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_26">
@@ -1985,7 +1985,7 @@ z
     <g id="xtick_27">
      <g id="line2d_27">
       <g>
-       <use xlink:href="#m81b284696f" x="369.091449" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="369.091449" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_27">
@@ -2009,7 +2009,7 @@ z
     <g id="xtick_28">
      <g id="line2d_28">
       <g>
-       <use xlink:href="#m81b284696f" x="380.666349" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="380.666349" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_28">
@@ -2032,12 +2032,36 @@ z
     <g id="xtick_29">
      <g id="line2d_29">
       <g>
-       <use xlink:href="#m81b284696f" x="392.241249" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="392.241249" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_29">
+      <!-- B-ALL, HLF-r -->
+      <g transform="translate(394.883437 262.465625) rotate(-90) scale(0.1 -0.1)">
+       <use xlink:href="#Univers-42"/>
+       <use xlink:href="#Univers-2d" transform="translate(66.699219 0)"/>
+       <use xlink:href="#Univers-41" transform="translate(100 0)"/>
+       <use xlink:href="#Univers-4c" transform="translate(172.216797 0)"/>
+       <use xlink:href="#Univers-4c" transform="translate(227.832031 0)"/>
+       <use xlink:href="#Univers-2c" transform="translate(283.447266 0)"/>
+       <use xlink:href="#Univers-20" transform="translate(311.230469 0)"/>
+       <use xlink:href="#Univers-48" transform="translate(339.013672 0)"/>
+       <use xlink:href="#Univers-4c" transform="translate(411.230469 0)"/>
+       <use xlink:href="#Univers-46" transform="translate(466.845703 0)"/>
+       <use xlink:href="#Univers-2d" transform="translate(522.460938 0)"/>
+       <use xlink:href="#Univers-72" transform="translate(555.761719 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_30">
+     <g id="line2d_30">
+      <g>
+       <use xlink:href="#m38bb28623d" x="403.816149" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_30">
       <!-- B-ALL, iAMP21 -->
-      <g transform="translate(394.883437 273.56875) rotate(-90) scale(0.1 -0.1)">
+      <g transform="translate(406.458337 273.56875) rotate(-90) scale(0.1 -0.1)">
        <use xlink:href="#Univers-42"/>
        <use xlink:href="#Univers-2d" transform="translate(66.699219 0)"/>
        <use xlink:href="#Univers-41" transform="translate(100 0)"/>
@@ -2054,34 +2078,10 @@ z
       </g>
      </g>
     </g>
-    <g id="xtick_30">
-     <g id="line2d_30">
-      <g>
-       <use xlink:href="#m81b284696f" x="403.816149" y="196" style="stroke: #000000; stroke-width: 0.8"/>
-      </g>
-     </g>
-     <g id="text_30">
-      <!-- B-ALL, HLF-r -->
-      <g transform="translate(406.458337 262.465625) rotate(-90) scale(0.1 -0.1)">
-       <use xlink:href="#Univers-42"/>
-       <use xlink:href="#Univers-2d" transform="translate(66.699219 0)"/>
-       <use xlink:href="#Univers-41" transform="translate(100 0)"/>
-       <use xlink:href="#Univers-4c" transform="translate(172.216797 0)"/>
-       <use xlink:href="#Univers-4c" transform="translate(227.832031 0)"/>
-       <use xlink:href="#Univers-2c" transform="translate(283.447266 0)"/>
-       <use xlink:href="#Univers-20" transform="translate(311.230469 0)"/>
-       <use xlink:href="#Univers-48" transform="translate(339.013672 0)"/>
-       <use xlink:href="#Univers-4c" transform="translate(411.230469 0)"/>
-       <use xlink:href="#Univers-46" transform="translate(466.845703 0)"/>
-       <use xlink:href="#Univers-2d" transform="translate(522.460938 0)"/>
-       <use xlink:href="#Univers-72" transform="translate(555.761719 0)"/>
-      </g>
-     </g>
-    </g>
     <g id="xtick_31">
      <g id="line2d_31">
       <g>
-       <use xlink:href="#m81b284696f" x="415.391049" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="415.391049" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_31">
@@ -2202,7 +2202,7 @@ z
     <g id="xtick_32">
      <g id="line2d_32">
       <g>
-       <use xlink:href="#m81b284696f" x="426.965949" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m38bb28623d" x="426.965949" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_32">
@@ -2283,12 +2283,12 @@ z
     <g id="ytick_1">
      <g id="line2d_33">
       <defs>
-       <path id="mb82811d042" d="M 0 0 
+       <path id="mf4b8cfa0bc" d="M 0 0 
 L -3.5 0 
 " style="stroke: #000000; stroke-width: 0.8"/>
       </defs>
       <g>
-       <use xlink:href="#mb82811d042" x="45.11" y="196" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#mf4b8cfa0bc" x="45.11" y="196" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_34">
@@ -2312,12 +2312,12 @@ z
     <g id="ytick_2">
      <g id="line2d_34">
       <g>
-       <use xlink:href="#mb82811d042" x="45.11" y="163.791304" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#mf4b8cfa0bc" x="45.11" y="164.959495" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_35">
       <!-- 0.1 -->
-      <g transform="translate(24.21 167.397554) scale(0.1 -0.1)">
+      <g transform="translate(24.21 168.565745) scale(0.1 -0.1)">
        <use xlink:href="#Univers-30"/>
        <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
        <use xlink:href="#Univers-31" transform="translate(83.398438 0)"/>
@@ -2327,12 +2327,12 @@ z
     <g id="ytick_3">
      <g id="line2d_35">
       <g>
-       <use xlink:href="#mb82811d042" x="45.11" y="131.582609" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#mf4b8cfa0bc" x="45.11" y="133.918991" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_36">
       <!-- 0.2 -->
-      <g transform="translate(24.21 135.188859) scale(0.1 -0.1)">
+      <g transform="translate(24.21 137.525241) scale(0.1 -0.1)">
        <use xlink:href="#Univers-30"/>
        <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
        <use xlink:href="#Univers-32" transform="translate(83.398438 0)"/>
@@ -2342,12 +2342,12 @@ z
     <g id="ytick_4">
      <g id="line2d_36">
       <g>
-       <use xlink:href="#mb82811d042" x="45.11" y="99.373913" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#mf4b8cfa0bc" x="45.11" y="102.878486" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_37">
       <!-- 0.3 -->
-      <g transform="translate(24.21 102.980163) scale(0.1 -0.1)">
+      <g transform="translate(24.21 106.484736) scale(0.1 -0.1)">
        <use xlink:href="#Univers-30"/>
        <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
        <use xlink:href="#Univers-33" transform="translate(83.398438 0)"/>
@@ -2357,12 +2357,12 @@ z
     <g id="ytick_5">
      <g id="line2d_37">
       <g>
-       <use xlink:href="#mb82811d042" x="45.11" y="67.165217" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#mf4b8cfa0bc" x="45.11" y="71.837982" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_38">
       <!-- 0.4 -->
-      <g transform="translate(24.21 70.771467) scale(0.1 -0.1)">
+      <g transform="translate(24.21 75.444232) scale(0.1 -0.1)">
        <use xlink:href="#Univers-30"/>
        <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
        <use xlink:href="#Univers-34" transform="translate(83.398438 0)"/>
@@ -2372,12 +2372,12 @@ z
     <g id="ytick_6">
      <g id="line2d_38">
       <g>
-       <use xlink:href="#mb82811d042" x="45.11" y="34.956522" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#mf4b8cfa0bc" x="45.11" y="40.797477" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_39">
       <!-- 0.5 -->
-      <g transform="translate(24.21 38.562772) scale(0.1 -0.1)">
+      <g transform="translate(24.21 44.403727) scale(0.1 -0.1)">
        <use xlink:href="#Univers-30"/>
        <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
        <use xlink:href="#Univers-35" transform="translate(83.398438 0)"/>
@@ -2519,7 +2519,7 @@ L 450 10.8
    </g>
    <g id="text_52">
     <!-- 0.00 -->
-    <g transform="translate(197.5817 189.279965) rotate(-90) scale(0.08 -0.08)">
+    <g transform="translate(197.5817 189.392747) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-30" transform="translate(83.398438 0)"/>
@@ -2528,7 +2528,7 @@ L 450 10.8
    </g>
    <g id="text_53">
     <!-- 0.01 -->
-    <g transform="translate(209.1566 187.347519) rotate(-90) scale(0.08 -0.08)">
+    <g transform="translate(209.1566 188.187461) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-30" transform="translate(83.398438 0)"/>
@@ -2537,7 +2537,7 @@ L 450 10.8
    </g>
    <g id="text_54">
     <!-- 0.02 -->
-    <g transform="translate(220.7315 184.737646) rotate(-90) scale(0.08 -0.08)">
+    <g transform="translate(220.7315 183.313254) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-30" transform="translate(83.398438 0)"/>
@@ -2546,7 +2546,7 @@ L 450 10.8
    </g>
    <g id="text_55">
     <!-- 0.02 -->
-    <g transform="translate(232.3064 182.461852) rotate(-90) scale(0.08 -0.08)">
+    <g transform="translate(232.3064 182.503974) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-30" transform="translate(83.398438 0)"/>
@@ -2555,7 +2555,7 @@ L 450 10.8
    </g>
    <g id="text_56">
     <!-- 0.03 -->
-    <g transform="translate(243.8813 180.605128) rotate(-90) scale(0.08 -0.08)">
+    <g transform="translate(243.8813 180.601592) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-30" transform="translate(83.398438 0)"/>
@@ -2564,7 +2564,7 @@ L 450 10.8
    </g>
    <g id="text_57">
     <!-- 0.03 -->
-    <g transform="translate(255.4562 179.678476) rotate(-90) scale(0.08 -0.08)">
+    <g transform="translate(255.4562 180.228229) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-30" transform="translate(83.398438 0)"/>
@@ -2573,7 +2573,7 @@ L 450 10.8
    </g>
    <g id="text_58">
     <!-- 0.05 -->
-    <g transform="translate(267.0311 174.645484) rotate(-90) scale(0.08 -0.08)">
+    <g transform="translate(267.0311 173.640374) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-30" transform="translate(83.398438 0)"/>
@@ -2582,7 +2582,7 @@ L 450 10.8
    </g>
    <g id="text_59">
     <!-- 0.05 -->
-    <g transform="translate(278.606 172.663061) rotate(-90) scale(0.08 -0.08)">
+    <g transform="translate(278.606 173.15349) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-30" transform="translate(83.398438 0)"/>
@@ -2590,17 +2590,17 @@ L 450 10.8
     </g>
    </g>
    <g id="text_60">
-    <!-- 0.05 -->
-    <g transform="translate(290.1809 172.62823) rotate(-90) scale(0.08 -0.08)">
+    <!-- 0.06 -->
+    <g transform="translate(290.1809 172.373508) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-30" transform="translate(83.398438 0)"/>
-     <use xlink:href="#Univers-35" transform="translate(139.013672 0)"/>
+     <use xlink:href="#Univers-36" transform="translate(139.013672 0)"/>
     </g>
    </g>
    <g id="text_61">
     <!-- 0.11 -->
-    <g transform="translate(301.7558 153.541907) rotate(-90) scale(0.08 -0.08)">
+    <g transform="translate(301.7558 155.793914) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-31" transform="translate(83.398438 0)"/>
@@ -2608,17 +2608,17 @@ L 450 10.8
     </g>
    </g>
    <g id="text_62">
-    <!-- 0.15 -->
-    <g transform="translate(313.3307 141.757837) rotate(-90) scale(0.08 -0.08)">
+    <!-- 0.14 -->
+    <g transform="translate(313.3307 147.275196) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-31" transform="translate(83.398438 0)"/>
-     <use xlink:href="#Univers-35" transform="translate(139.013672 0)"/>
+     <use xlink:href="#Univers-34" transform="translate(139.013672 0)"/>
     </g>
    </g>
    <g id="text_63">
     <!-- 0.16 -->
-    <g transform="translate(324.9056 137.572541) rotate(-90) scale(0.08 -0.08)">
+    <g transform="translate(324.9056 139.4818) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-31" transform="translate(83.398438 0)"/>
@@ -2626,35 +2626,8 @@ L 450 10.8
     </g>
    </g>
    <g id="text_64">
-    <!-- 0.20 -->
-    <g transform="translate(336.4805 126.06331) rotate(-90) scale(0.08 -0.08)">
-     <use xlink:href="#Univers-30"/>
-     <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
-     <use xlink:href="#Univers-32" transform="translate(83.398438 0)"/>
-     <use xlink:href="#Univers-30" transform="translate(139.013672 0)"/>
-    </g>
-   </g>
-   <g id="text_65">
-    <!-- 0.21 -->
-    <g transform="translate(348.0554 123.580938) rotate(-90) scale(0.08 -0.08)">
-     <use xlink:href="#Univers-30"/>
-     <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
-     <use xlink:href="#Univers-32" transform="translate(83.398438 0)"/>
-     <use xlink:href="#Univers-31" transform="translate(139.013672 0)"/>
-    </g>
-   </g>
-   <g id="text_66">
-    <!-- 0.26 -->
-    <g transform="translate(359.630299 107.301998) rotate(-90) scale(0.08 -0.08)">
-     <use xlink:href="#Univers-30"/>
-     <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
-     <use xlink:href="#Univers-32" transform="translate(83.398438 0)"/>
-     <use xlink:href="#Univers-36" transform="translate(139.013672 0)"/>
-    </g>
-   </g>
-   <g id="text_67">
-    <!-- 0.27 -->
-    <g transform="translate(371.205199 102.431619) rotate(-90) scale(0.08 -0.08)">
+    <!-- 0.17 -->
+    <g transform="translate(336.4805 137.058695) rotate(-90) scale(0.08 -0.08)">
      <defs>
       <path id="Univers-37" d="M 3150 4428 
 L 3150 3891 
@@ -2669,13 +2642,40 @@ z
      </defs>
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
-     <use xlink:href="#Univers-32" transform="translate(83.398438 0)"/>
+     <use xlink:href="#Univers-31" transform="translate(83.398438 0)"/>
      <use xlink:href="#Univers-37" transform="translate(139.013672 0)"/>
+    </g>
+   </g>
+   <g id="text_65">
+    <!-- 0.19 -->
+    <g transform="translate(348.0554 130.000005) rotate(-90) scale(0.08 -0.08)">
+     <use xlink:href="#Univers-30"/>
+     <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
+     <use xlink:href="#Univers-31" transform="translate(83.398438 0)"/>
+     <use xlink:href="#Univers-39" transform="translate(139.013672 0)"/>
+    </g>
+   </g>
+   <g id="text_66">
+    <!-- 0.22 -->
+    <g transform="translate(359.630299 123.117145) rotate(-90) scale(0.08 -0.08)">
+     <use xlink:href="#Univers-30"/>
+     <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
+     <use xlink:href="#Univers-32" transform="translate(83.398438 0)"/>
+     <use xlink:href="#Univers-32" transform="translate(139.013672 0)"/>
+    </g>
+   </g>
+   <g id="text_67">
+    <!-- 0.28 -->
+    <g transform="translate(371.205199 101.823244) rotate(-90) scale(0.08 -0.08)">
+     <use xlink:href="#Univers-30"/>
+     <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
+     <use xlink:href="#Univers-32" transform="translate(83.398438 0)"/>
+     <use xlink:href="#Univers-38" transform="translate(139.013672 0)"/>
     </g>
    </g>
    <g id="text_68">
     <!-- 0.32 -->
-    <g transform="translate(382.780099 86.229026) rotate(-90) scale(0.08 -0.08)">
+    <g transform="translate(382.780099 91.179644) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-33" transform="translate(83.398438 0)"/>
@@ -2683,45 +2683,45 @@ z
     </g>
    </g>
    <g id="text_69">
-    <!-- 0.36 -->
-    <g transform="translate(394.354999 72.459659) rotate(-90) scale(0.08 -0.08)">
-     <use xlink:href="#Univers-30"/>
-     <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
-     <use xlink:href="#Univers-33" transform="translate(83.398438 0)"/>
-     <use xlink:href="#Univers-36" transform="translate(139.013672 0)"/>
-    </g>
-   </g>
-   <g id="text_70">
     <!-- 0.37 -->
-    <g transform="translate(405.929899 69.762126) rotate(-90) scale(0.08 -0.08)">
+    <g transform="translate(394.354999 73.947663) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-33" transform="translate(83.398438 0)"/>
      <use xlink:href="#Univers-37" transform="translate(139.013672 0)"/>
     </g>
    </g>
+   <g id="text_70">
+    <!-- 0.38 -->
+    <g transform="translate(405.929899 71.194529) rotate(-90) scale(0.08 -0.08)">
+     <use xlink:href="#Univers-30"/>
+     <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
+     <use xlink:href="#Univers-33" transform="translate(83.398438 0)"/>
+     <use xlink:href="#Univers-38" transform="translate(139.013672 0)"/>
+    </g>
+   </g>
    <g id="text_71">
-    <!-- 0.41 -->
-    <g transform="translate(417.504799 58.203859) rotate(-90) scale(0.08 -0.08)">
+    <!-- 0.45 -->
+    <g transform="translate(417.504799 50.154466) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-34" transform="translate(83.398438 0)"/>
-     <use xlink:href="#Univers-31" transform="translate(139.013672 0)"/>
+     <use xlink:href="#Univers-35" transform="translate(139.013672 0)"/>
     </g>
    </g>
    <g id="text_72">
-    <!-- 0.50 -->
+    <!-- 0.52 -->
     <g transform="translate(429.079699 28.956522) rotate(-90) scale(0.08 -0.08)">
      <use xlink:href="#Univers-30"/>
      <use xlink:href="#Univers-2e" transform="translate(55.615234 0)"/>
      <use xlink:href="#Univers-35" transform="translate(83.398438 0)"/>
-     <use xlink:href="#Univers-30" transform="translate(139.013672 0)"/>
+     <use xlink:href="#Univers-32" transform="translate(139.013672 0)"/>
     </g>
    </g>
   </g>
  </g>
  <defs>
-  <clipPath id="p16d2985746">
+  <clipPath id="p114ff918f5">
    <rect x="45.11" y="10.8" width="404.89" height="185.2"/>
   </clipPath>
  </defs>
