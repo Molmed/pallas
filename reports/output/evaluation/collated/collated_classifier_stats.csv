@@ -1,0 +1,6 @@
+metric,GEX_train (5-fold cv),GEX_calibration + test,DNAm_train (5-fold cv),DNAm_calibration + test
+f1_macro,0.921,0.923,0.893,0.855
+f1_weighted,0.937,0.932,0.932,0.92
+cohen_kappa,0.934,0.928,0.928,0.916
+auroc_macro,0.995,0.998,0.995,0.989
+auprc_macro,0.956,0.957,0.936,0.929
