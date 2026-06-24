@@ -1,20 +1,8 @@
-import numpy as np
 import pandas as pd
-import os
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import RandomizedSearchCV, RepeatedStratifiedKFold
 import joblib
-import json
 from pathlib import Path
-from datetime import datetime
 import argparse
-import dotenv
-from mlflow.models import infer_signature
-from sklearn.metrics import classification_report
-from helpers import classifier_level_metrics, class_level_metrics, plot_precision_recall_clinical
-import matplotlib.pyplot as plt
-from sklearn.metrics import ConfusionMatrixDisplay
-
 
 description = """
 Generates predictions from a trained model
