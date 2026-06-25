@@ -98,3 +98,12 @@ nextflow run . -c conf/dev.config -profile dev,conda -resume --annotation_versio
     --tsne \
     --class_colors_file=/home/mariya/Development/pallas/configs/class_colors.tsv \
     --gex_norm_factors_file=/home/mariya/Data/pallas/mlomix_datasets/train-gex/gex_norm_factors.rds
+
+# Bimodal unlabeled
+nextflow run . -c conf/dev.config -profile dev,conda -resume --annotation_version 115 \
+    --outdir /home/mariya/Data/pallas/nf-core-mlomix-unlabeled-bimodal-reduced \
+    --input /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_unlabeled_bimodal.csv \
+    --dnam_probes_file=/home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/dnam/selected_features.6582.txt \
+    --gex_genes_file=/home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/gex/selected_features.199.txt \
+    --tsne \
+    --gex_norm_factors_file=/home/mariya/Data/pallas/mlomix_datasets/train-bimodal/gex_norm_factors.rds

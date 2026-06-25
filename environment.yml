@@ -9,6 +9,7 @@ dependencies:
   - r-rlang>=1.1.6
   - r-biocmanager
   - r-caret
+  - r-svglite
   - pip
   - pip:
     - pandas
