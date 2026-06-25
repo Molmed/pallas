@@ -29,3 +29,24 @@ data <- function(gex_file, dnam_file, labels_file) {
     cat("Subtypes:", levels(Y), "\n")
     return(list(X_gex = X_gex, X_dnam = X_dnam, Y = Y))
 }
+
+unlabeled_data <- function(gex_file, dnam_file) {
+    # --- Read in data ---
+    X_gex  <- read.csv(gex_file,    row.names = 1, check.names = FALSE)
+    X_dnam <- read.csv(dnam_file,   row.names = 1, check.names = FALSE)
+
+    # --- Align sample order across all three ---
+    # (critical — mixOmics assumes rows are in the same order)
+    common_samples <- Reduce(intersect, list(rownames(X_gex),
+                                            rownames(X_dnam)))
+
+    X_gex  <- as.matrix(X_gex[common_samples, ])
+    X_dnam <- as.matrix(X_dnam[common_samples, ])
+
+    # --- Sanity checks ---
+    stopifnot(all(rownames(X_gex) == rownames(X_dnam)))
+
+    cat("GEX features:", ncol(X_gex), "\n")
+    cat("DNAm features:", ncol(X_dnam), "\n")
+    return(list(X_gex = X_gex, X_dnam = X_dnam))
+}
