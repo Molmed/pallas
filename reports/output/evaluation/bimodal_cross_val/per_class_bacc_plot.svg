@@ -277,6 +277,6 @@
 <text x='547.59' y='228.92' style='font-size: 8.80px; font-family: "Arimo";' textLength='17.45px' lengthAdjust='spacingAndGlyphs'>0.50</text>
 <text x='547.59' y='207.40' style='font-size: 8.80px; font-family: "Arimo";' textLength='17.45px' lengthAdjust='spacingAndGlyphs'>0.75</text>
 <text x='547.59' y='185.87' style='font-size: 8.80px; font-family: "Arimo";' textLength='17.45px' lengthAdjust='spacingAndGlyphs'>1.00</text>
-<text x='113.95' y='14.90' style='font-size: 13.20px; font-family: "Arimo";' textLength='233.12px' lengthAdjust='spacingAndGlyphs'>Per-class balanced accuracy by model</text>
+<text x='113.95' y='14.90' style='font-size: 13.20px; font-family: "Arimo";' textLength='271.87px' lengthAdjust='spacingAndGlyphs'>Per-class mean balanced accuracy by model</text>
 </g>
 </svg>
