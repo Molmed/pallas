@@ -91,6 +91,9 @@ def predict(
     # Get just the features that were used to train the model
     X_test = X_test[feature_names]
 
+    # Drop any rows in y_test that are not in X_test (in case there are any)
+    y_test = y_test.loc[y_test.index.intersection(X_test.index)]
+
     # align the indices
     X_test = X_test.loc[y_test.index]
 
