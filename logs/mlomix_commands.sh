@@ -65,29 +65,6 @@ nextflow run . -c conf/dev.config -profile dev,conda -resume --annotation_versio
     --dnam_probes_file=/home/mariya/Development/pallas/reports/output/feature_selection/dnam_feature_selection/selected_features.1186.txt \
     --skip_umaps true
 
-
-# Bimodal train
-nextflow run . -c conf/dev.config -profile dev,conda -resume --annotation_version 115 \
-    --outdir /home/mariya/Data/pallas/nf-core-mlomix-train-bimodal-reduced \
-    --input /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_train_bimodal.csv \
-    --dnam_probes_file=/home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/dnam/selected_features.282.txt \
-    --gex_genes_file=/home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/gex/selected_features.389.txt \
-    --tsne \
-    --gex_min_samples_per_class=3 \
-    --dnam_min_samples_per_class=3 \
-    --class_colors_file=/home/mariya/Development/pallas/configs/class_colors.tsv
-
-# Bimodal test
-nextflow run . -c conf/dev.config -profile dev,conda -resume --annotation_version 115 \
-    --outdir /home/mariya/Data/pallas/nf-core-mlomix-test-bimodal-reduced \
-    --input /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_test_bimodal.csv \
-    --dnam_classes_file=/home/mariya/Data/pallas/mlomix_datasets/train-bimodal/class_names.dnam.txt \
-    --dnam_probes_file=/home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/dnam/selected_features.6582.txt \
-    --gex_classes_file=/home/mariya/Data/pallas/mlomix_datasets/train-bimodal/class_names.gex.txt \
-    --gex_genes_file=/home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/gex/selected_features.199.txt \
-    --tsne \
-    --gex_norm_factors_file=/home/mariya/Data/pallas/mlomix_datasets/train-bimodal/gex_norm_factors.rds
-
 # Validation
 nextflow run . -c conf/dev.config -profile dev,conda -resume --annotation_version 115 \
     --outdir /home/mariya/Data/pallas/clinical-genomics-uppsala-gex \
@@ -103,7 +80,17 @@ nextflow run . -c conf/dev.config -profile dev,conda -resume --annotation_versio
 nextflow run . -c conf/dev.config -profile dev,conda -resume --annotation_version 115 \
     --outdir /home/mariya/Data/pallas/nf-core-mlomix-unlabeled-bimodal-reduced \
     --input /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_unlabeled_bimodal.csv \
-    --dnam_probes_file=/home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/dnam/selected_features.6582.txt \
-    --gex_genes_file=/home/mariya/Development/pallas/reports/output/feature_selection/bimodal_feature_selection/gex/selected_features.199.txt \
+    --dnam_probes_file=/home/mariya/Development/pallas/reports/output/feature_selection/dnam_feature_selection/selected_features.1186.txt \
+    --gex_genes_file=/home/mariya/Development/pallas/reports/output/feature_selection/gex_feature_selection/selected_features.1121.txt \
     --tsne \
-    --gex_norm_factors_file=/home/mariya/Data/pallas/mlomix_datasets/train-bimodal/gex_norm_factors.rds
+    --gex_norm_factors_file=/home/mariya/Data/pallas/mlomix_datasets/labeled-diagnostic-bimodal-reduced/gex_norm_factors.rds
+
+# Bimodal cross-val
+nextflow run . -c conf/dev.config -profile dev,conda -resume --annotation_version 115 \
+    --outdir /home/mariya/Data/pallas/labeled-diagnostic-bimodal-reduced \
+    --input /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_labeled_diagnostic_bimodal.csv \
+    --dnam_probes_file=/home/mariya/Development/pallas/reports/output/feature_selection/dnam_feature_selection/selected_features.1186.txt \
+    --gex_genes_file=/home/mariya/Development/pallas/reports/output/feature_selection/gex_feature_selection/selected_features.1121.txt \
+    --tsne \
+    --dnam_min_samples_per_class=7 \
+    --gex_min_samples_per_class=7
