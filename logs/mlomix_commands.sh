@@ -94,3 +94,21 @@ nextflow run . -c conf/dev.config -profile dev,conda -resume --annotation_versio
     --tsne \
     --dnam_min_samples_per_class=7 \
     --gex_min_samples_per_class=7
+
+# TSNE GENERATION ####
+# GEX labeled diagnostic (for TSNE)
+nextflow run . -c conf/dev.config -resume -profile dev,conda --annotation_version 115 \
+    --outdir /home/mariya/Data/pallas/nf-core-mlomix-labeled-diagnostic-gex-all-features \
+    --input /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_labeled_diagnostic_gex.csv \
+    --gex_intermediate_umaps true \
+    --tsne \
+    --gex_classes_file=/home/mariya/Data/pallas/mlomix_datasets/train-gex/class_names.gex.txt \
+    --class_colors_file=/home/mariya/Development/pallas/configs/class_colors.tsv
+
+# DNAm labeled diagnostic (for TSNE)
+nextflow run . -c conf/dev.config -resume -profile dev,conda \
+    --outdir /home/mariya/Data/pallas/nf-core-mlomix-labeled-diagnostic-dnam-all-features \
+    --input /home/mariya/Development/pallas/preprocessing/mlomix_samplesheets/samplesheet_labeled_diagnostic_dnam.csv \
+    --tsne \
+    --dnam_classes_file=/home/mariya/Data/pallas/mlomix_datasets/train-dnam/class_names.dnam.txt \
+    --class_colors_file=/home/mariya/Development/pallas/configs/class_colors.tsv
