@@ -4365,7 +4365,7 @@ ALL_1402,Enblad-2025,"B-ALL, high hyperdiploid",labeled_diagnostic,,calibrate,,
 ALL_1408,Enblad-2025,"B-ALL, high hyperdiploid",labeled_diagnostic,,train,,
 ALL_2,Enblad-2025,"B-ALL, high hyperdiploid",labeled_diagnostic,,calibrate,,
 ALL_64,Enblad-2025,"B-ALL, high hyperdiploid",labeled_diagnostic,,train,,
-ALL_784,Enblad-2025,"B-ALL, high hyperdiploid",labeled_diagnostic,train,train,,
+ALL_784,Enblad-2025,"B-ALL, high hyperdiploid",labeled_diagnostic,,train,,
 ALL_125,Krali-2023,"B-ALL, high hyperdiploid",labeled_diagnostic,train,train,test,ScriptSeq
 ALL_166,Krali-2023,"B-ALL, high hyperdiploid",labeled_diagnostic,train,train,train,ScriptSeq
 ALL_170,Krali-2023,"B-ALL, high hyperdiploid",labeled_diagnostic,train,train,train,ScriptSeq
@@ -4406,7 +4406,7 @@ ALL_682,Krali-2023,"B-ALL, high hyperdiploid",labeled_diagnostic,test,train,trai
 ALL_688,Krali-2023,"B-ALL, high hyperdiploid",labeled_diagnostic,train,calibrate,train,ScriptSeq
 ALL_689,Krali-2023,"B-ALL, high hyperdiploid",labeled_diagnostic,train,train,train,ScriptSeq
 ALL_704,Krali-2023,"B-ALL, high hyperdiploid",labeled_diagnostic,train,train,test,ScriptSeq
-ALL_784,Krali-2023,"B-ALL, high hyperdiploid",labeled_diagnostic,train,train,,ScriptSeq
+ALL_784,Krali-2023,"B-ALL, high hyperdiploid",labeled_diagnostic,train,,,ScriptSeq
 ALL_291,Krali-2023,"B-ALL, high hyperdiploid",labeled_diagnostic,train,train,train,TruSeq
 ALL_555,Krali-2023,"B-ALL, high hyperdiploid",labeled_diagnostic,train,train,train,TruSeq
 ALL_920,Krali-2023,"B-ALL, high hyperdiploid",labeled_diagnostic,calibrate,test,train,TruSeq
