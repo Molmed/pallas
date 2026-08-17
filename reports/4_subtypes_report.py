@@ -21,8 +21,22 @@ all_samples_df.index = all_samples_df.index.str.replace(r'-D$', '', regex=True)
 # Read in patient details report
 patient_details_df = pd.read_csv(patient_details_report_path, index_col=0)
 
-# Join them on index
-all_samples_df = all_samples_df.join(patient_details_df, how='left', rsuffix='_patient')
+# Rename "dataset" to "Dataset name" in patient_details_df
+patient_details_df = patient_details_df.rename(columns={'dataset': 'Dataset name'})
+
+# Join on both index and "Dataset name"
+all_samples_df = all_samples_df.merge(
+    patient_details_df,
+    left_on=[all_samples_df.index, 'Dataset name'],
+    right_on=[patient_details_df.index, 'Dataset name'],
+    how='left',
+    suffixes=('', '_patient')
+)
+
+# merge() with a list of keys drops the original index into a plain column named 'key_0';
+# restore it as the index
+all_samples_df = all_samples_df.set_index('key_0')
+all_samples_df.index.name = "Sample name"
 
 # Get all items in labeled_diagnostic
 labeled_diagnostic_df = all_samples_df[
@@ -33,6 +47,7 @@ unique_subtypes = labeled_diagnostic_df['Subtype'].unique()
 
 # Create a new df with columns: DNAm samples, GEX samples, Total samples, Mean age (sd), Male/Female
 report_rows = []
+
 for subtype in unique_subtypes:
     subtype_df = labeled_diagnostic_df[labeled_diagnostic_df['Subtype'] == subtype]
     # All samples where 'DNAm data split' is not empty
