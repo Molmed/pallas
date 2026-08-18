@@ -13,6 +13,7 @@ RANDOM_SEED = 42
 SPLIT_TRAIN_FRAC = 0.7
 SPLIT_CALIB_FRAC = 0.15
 SPLIT_TEST_FRAC = 0.15
+MIN_SAMPLES_PER_CLASS = 7
 MIN_SAMPLES_PER_CLASS_FOR_CALIBRATION_SPLIT = 10
 
 modules = [
@@ -42,16 +43,13 @@ for mod in modules:
 # - labeled_diagnostic_gex
 # - labeled_diagnostic_dnam
 # - labeled_diagnostic_bimodal
+# - unlabeled_bimodal
 # - train_gex
 # - calibrate_gex
 # - test_gex
 # - train_dnam
 # - calibrate_dnam
 # - test_dnam
-# - train_bimodal
-# - test_bimodal
-# - train_gex_for_bimodal_evaluation - all samples in labeled_diagnostic_gex that are not in test_bimodal
-# - train_dnam_for_bimodal_evaluation - all samples in labeled_diagnostic_dnam that are not in test_bimodal
 samplesheets_to_save = {}
 
 # Find all samplesheet.csv files and combine them
@@ -100,6 +98,7 @@ samplesheets_to_save['misc'] = combined_samplesheet_df[
 
 # Save labeled_diagnostic separately for now since we will split it into train/calib/test and bimodal later
 labeled_diagnostic_df = samplesheets_to_save['labeled_diagnostic'].copy()
+
 labeled_diagnostic_bimodal_df = labeled_diagnostic_df[
     labeled_diagnostic_df['has_gex'] & labeled_diagnostic_df['has_dnam']
 ].copy()
@@ -109,6 +108,25 @@ labeled_diagnostic_gex_df = labeled_diagnostic_df[
 labeled_diagnostic_dnam_df = labeled_diagnostic_df[
     labeled_diagnostic_df['has_dnam']
 ].copy()
+
+
+def classes_to_remove(modality, df):
+    class_counts = df["class"].value_counts()
+    under_threshold = class_counts[class_counts < MIN_SAMPLES_PER_CLASS].index.tolist()
+    return under_threshold
+
+
+# Save classes to remove for each modality
+classes_under_threshold = {
+    "gex": classes_to_remove("gex", labeled_diagnostic_gex_df),
+    "dnam": classes_to_remove("dnam", labeled_diagnostic_dnam_df),
+    "bimodal": classes_to_remove("bimodal", labeled_diagnostic_bimodal_df),
+}
+
+print(f"Classes under threshold {MIN_SAMPLES_PER_CLASS} for each modality:")
+for modality, classes in classes_under_threshold.items():
+    print(f"  {modality.capitalize()}: {classes}")
+
 
 # Create unlabeled_bimodal_df for potential future use - all samples in unlabeled that have both gex and dnam
 unlabeled_bimodal_df = samplesheets_to_save['unlabeled'][
@@ -151,10 +169,8 @@ sample_splits = {}
 # - train_dnam
 # - calibrate_dnam
 # - test_dnam
-# - train_bimodal
-# - test_bimodal
 
-for modality in ["gex", "dnam", "bimodal"]:
+for modality in ["gex", "dnam"]:
     # Get the samplesheet for this modality
     modality_samplesheet = samplesheets_to_save[f'labeled_diagnostic_{modality}']
 
@@ -170,12 +186,6 @@ for modality in ["gex", "dnam", "bimodal"]:
         random_state=RANDOM_SEED,
         stratify=y,
     )
-
-    # If modality is bimodal, we only do train/test split, no calibration set, since we expect fewer samples and want to maximize training data
-    if modality == "bimodal":
-        sample_splits['train_bimodal'] = y_train.index
-        sample_splits['test_bimodal'] = y_temp.index
-        continue
 
     # For gex and dnam, we do train/calib/test split
     # But first see what samples should be excluded from split
@@ -238,16 +248,9 @@ samplesheets_to_save['calibrate_and_test_dnam'] = pd.concat([
     samplesheets_to_save['test_dnam'],
 ])
 
-# Bimodal evaluation sets
-# - train_gex_for_bimodal_evaluation - all samples in labeled_diagnostic_gex that are not in test_bimodal
-# - train_dnam_for_bimodal_evaluation - all samples in labeled_diagnostic_dnam that are not in test_bimodal
-test_bimodal_indices = sample_splits['test_bimodal']
-samplesheets_to_save['train_gex_for_bimodal_evaluation'] = samplesheets_to_save['labeled_diagnostic_gex'].drop(index=test_bimodal_indices, errors='ignore')
-samplesheets_to_save['train_dnam_for_bimodal_evaluation'] = samplesheets_to_save['labeled_diagnostic_dnam'].drop(index=test_bimodal_indices, errors='ignore')
-
 
 # SAVE SAMPLESHEETS
-def save_samplesheet(df, filename):
+def save_samplesheet(df, filename, classes_under_threshold):
     # For unimodal samplesheets, remove the modality-specific columns that
     # won't be used and just take the relevant ones
 
@@ -258,6 +261,9 @@ def save_samplesheet(df, filename):
     elif 'dnam' in filename:
         df = df.drop(columns=[gex_col])
 
+    # Drop classes that are under the threshold for this modality
+    df = df[~df['class'].isin(classes_under_threshold)]
+
     os.makedirs(MLOMIX_SAMPLESHEETS_DIR, exist_ok=True)
     output_path = os.path.join(MLOMIX_SAMPLESHEETS_DIR, filename)
     format_mlomix_columns(df).to_csv(output_path)
@@ -266,4 +272,11 @@ def save_samplesheet(df, filename):
 
 # Save each samplesheet and report on its contents
 for name, df in samplesheets_to_save.items():
-    save_samplesheet(df, f'samplesheet_{name}.csv')
+    modality = name.split('_')[-1] if '_' in name else ''
+    if modality in ['gex', 'dnam', 'bimodal']:
+        classes_under_threshold_for_modality = classes_under_threshold[
+            modality]
+    else:
+        classes_under_threshold_for_modality = []
+    save_samplesheet(
+        df, f'samplesheet_{name}.csv', classes_under_threshold_for_modality)

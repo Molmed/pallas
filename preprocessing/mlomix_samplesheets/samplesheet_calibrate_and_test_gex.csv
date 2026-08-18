@@ -670,7 +670,6 @@ TCGA-AB-2840,labeled_diagnostic,TCGA-LAML,,"AML, APL-PML::RARA",/home/mariya/Dat
 SJBALL021188,labeled_diagnostic,SJC-panALL,total_RNA,"B-ALL, HLF-r",/home/mariya/Data/pallas/raw/SJC-panALL/BALL-1988S-HTSeq/SJBALL021188_D2.HTSeq,,,,,
 SJHM032850_D1,labeled_diagnostic,SJC-DS-1009,Total,"AML, APL-PML::RARA",/home/mariya/Data/pallas/raw/SJC-DS-1009/feature_counts/SJHM032850_D1.RNA-Seq.feature-counts.txt,,,,,
 TCGA-AB-2823,labeled_diagnostic,TCGA-LAML,,"AML, APL-PML::RARA",/home/mariya/Data/pallas/mlomix_pre/TCGA-LAML/gex/TCGA-AB-2823-03A.txt,,,,,
-TARGET-20-PAWHIZ-D,labeled_diagnostic,TARGET-AML,,"AML, PICALM::MLLT10",/home/mariya/Data/pallas/mlomix_pre/TARGET-AML/gex/TARGET-20-PAWHIZ-09A.txt,,,,,
 SJBALL021170,labeled_diagnostic,SJC-panALL,total_RNA,"B-ALL, HLF-r",/home/mariya/Data/pallas/raw/SJC-panALL/BALL-1988S-HTSeq/SJBALL021170_D2.HTSeq,,,,,
 TCGA-AB-2872,labeled_diagnostic,TCGA-LAML,,"AML, APL-PML::RARA",/home/mariya/Data/pallas/mlomix_pre/TCGA-LAML/gex/TCGA-AB-2872-03A.txt,,,,,
 SJBALL048062,labeled_diagnostic,SJC-panALL,total_RNA,"B-ALL, MYC-r",/home/mariya/Data/pallas/raw/SJC-panALL/BALL-1988S-HTSeq/SJBALL048062_D1.HTSeq,,,,,
