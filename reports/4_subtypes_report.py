@@ -55,6 +55,8 @@ for subtype in unique_subtypes:
     dnam_samples = subtype_df[subtype_df['DNAm data split'].notna()].shape[0]
     gex_samples = subtype_df[subtype_df['GEX data split'].notna()].shape[0]
     bimodal_samples = subtype_df[subtype_df['GEX data split'].notna() & subtype_df['DNAm data split'].notna()].shape[0]
+    if bimodal_samples < MIN_SAMPLES_PER_CLASS:
+        bimodal_samples = 0
     total_samples = dnam_samples + gex_samples
     mean_age = subtype_df['age'].mean()
     sd_age = subtype_df['age'].std()
@@ -63,9 +65,9 @@ for subtype in unique_subtypes:
     report_rows.append({
         'Subtype': subtype,
         'Total samples': total_samples,
-        'GEX samples': gex_samples,
-        'DNAm samples': dnam_samples,
-        'Bimodal samples': bimodal_samples,
+        'GEX': gex_samples,
+        'DNAm': dnam_samples,
+        'Bimodal': bimodal_samples,
         'Mean age (sd)': f"{mean_age:.1f} ({sd_age:.1f})",
         'Male/Female': f"{male_female_ratio.get('Male', 0)}/{male_female_ratio.get('Female', 0)}"
     })
@@ -95,9 +97,9 @@ report_df.loc[report_df['Subtype'] == 'Non-leukemic', ['Mean age (sd)', 'Male/Fe
 
 # The last row should have "All subtypes" as the subtype and the sum of all samples, mean age and sex
 total_samples = report_df['Total samples'].sum()
-total_dnam_samples = report_df['DNAm samples'].sum()
-total_gex_samples = report_df['GEX samples'].sum()
-total_bimodal_samples = report_df['Bimodal samples'].sum()
+total_dnam_samples = report_df['DNAm'].sum()
+total_gex_samples = report_df['GEX'].sum()
+total_bimodal_samples = report_df['Bimodal'].sum()
 mean_age = labeled_diagnostic_df['age'].mean()
 sd_age = labeled_diagnostic_df['age'].std()
 male_female_ratio = labeled_diagnostic_df['sex'].value_counts().to_dict()
