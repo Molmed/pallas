@@ -11,6 +11,7 @@ sample_report_path = REPORTS_PATH / "sample_report.csv"
 private_reports_dir = Path(os.getenv("PRIVATE_REPORTS_DIR"))
 patient_details_report_path = private_reports_dir / "cohorts_report" / "patient_summaries.csv"
 output_report_path = REPORTS_PATH / "subtypes_report.csv"
+MIN_SAMPLES_PER_CLASS = 7
 
 # Read in sample report
 all_samples_df = pd.read_csv(sample_report_path, index_col=0)
@@ -53,8 +54,8 @@ for subtype in unique_subtypes:
     # All samples where 'DNAm data split' is not empty
     dnam_samples = subtype_df[subtype_df['DNAm data split'].notna()].shape[0]
     gex_samples = subtype_df[subtype_df['GEX data split'].notna()].shape[0]
-    bimodal_samples = subtype_df[subtype_df['Bimodal data split'].notna()].shape[0]
-    total_samples = subtype_df.shape[0]
+    bimodal_samples = subtype_df[subtype_df['GEX data split'].notna() & subtype_df['DNAm data split'].notna()].shape[0]
+    total_samples = dnam_samples + gex_samples
     mean_age = subtype_df['age'].mean()
     sd_age = subtype_df['age'].std()
     male_female_ratio = subtype_df['sex'].value_counts().to_dict()
@@ -103,9 +104,9 @@ male_female_ratio = labeled_diagnostic_df['sex'].value_counts().to_dict()
 report_df = pd.concat([report_df, pd.DataFrame([{
     'Subtype': 'TOTALS',
     'Total samples': total_samples,
-    'DNAm samples': total_dnam_samples,
-    'GEX samples': total_gex_samples,
-    'Bimodal samples': total_bimodal_samples,
+    'DNAm': total_dnam_samples,
+    'GEX': total_gex_samples,
+    'Bimodal': total_bimodal_samples,
     'Mean age (sd)': f"{mean_age:.1f} ({sd_age:.1f})",
     'Male/Female': f"{male_female_ratio.get('Male', 0)}/{male_female_ratio.get('Female', 0)}"
 }])], ignore_index=True)
