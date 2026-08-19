@@ -451,20 +451,28 @@ def plot_per_class_calibration_curves(
         class_color = class_colors.get(str(class_label).strip(), line_color)
 
         ax = axes[i]
-        ax.plot([0, 1], [0, 1], "k--", label="Perfectly calibrated")
+        ax.plot([0, 1], [0, 1], color='#d3d1c7', linewidth=0.8,
+                linestyle='--', label="Perfectly calibrated")
         ax.plot(mean_predicted_prob,
                 fraction_of_positives,
                 "s-",
                 label="Actual calibration for subtype",
-                color=class_color)
-        ax.tick_params(axis="both", labelsize=8)
-        ax.set_title(class_label, fontsize=8)
+                color=class_color,
+                linewidth=0.8)
+        ax.tick_params(axis="both", labelsize=8, colors='#d3d1c7')
+        ax.set_title(class_label, fontsize=8, color='#444441')
         ax.set_xlim([0, 1])
         ax.set_ylim([0, 1])
+        ax.set_xticks([0, 0.5, 1.0])
+        ax.set_yticks([0, 0.5, 1.0])
+        ax.xaxis.set_major_formatter(plt.FormatStrFormatter('%.1f'))
+        ax.yaxis.set_major_formatter(plt.FormatStrFormatter('%.1f'))
+        for spine in ax.spines.values():
+            spine.set_color('#d3d1c7')
 
     for ax in axes:
         ax.set_aspect("equal", adjustable="box")
-        ax.tick_params(axis="both", labelsize=8)
+        ax.tick_params(axis="both", labelsize=8, colors='#d3d1c7')
 
     # Hide unused subplots
     for j in range(i + 1, len(axes)):
