@@ -413,12 +413,27 @@ def plot_per_class_calibration_curves(
         classes,
         save_path=None,
         title=None,
+        color_tsv_path=None,
         line_color='#667ec8',
         n_bins=10):
 
-    figsize = (8, 12)
+    class_colors = {}
+    if color_tsv_path is not None:
+        color_tsv_path = str(color_tsv_path)
+        try:
+            color_df = pd.read_csv(color_tsv_path, sep='\t', header=None,
+                                  names=['class', 'color'])
+            color_df['class'] = color_df['class'].astype(str).str.strip()
+            color_df['color'] = color_df['color'].astype(str).str.strip()
+            class_colors = dict(zip(color_df['class'], color_df['color']))
+        except FileNotFoundError:
+            print(f"Warning: color TSV not found at {color_tsv_path}. Falling back to line_color.")
+        except Exception as exc:
+            print(f"Warning: could not read color TSV at {color_tsv_path}: {exc}. Falling back to line_color.")
+
+    figsize = (8, 10)
     n_classes = len(classes)
-    ncols = 3
+    ncols = 5
     nrows = int(np.ceil(n_classes / ncols))
 
     fig, axes = plt.subplots(nrows, ncols, figsize=figsize)
@@ -433,13 +448,16 @@ def plot_per_class_calibration_curves(
             y_binary, prob_pos, n_bins=n_bins, strategy="uniform"
         )
 
+        class_color = class_colors.get(str(class_label).strip(), line_color)
+
         ax = axes[i]
         ax.plot([0, 1], [0, 1], "k--", label="Perfectly calibrated")
         ax.plot(mean_predicted_prob,
                 fraction_of_positives,
                 "s-",
                 label="Actual calibration for subtype",
-                color=line_color)
+                color=class_color)
+        ax.tick_params(axis="both", labelsize=8)
         ax.set_title(class_label, fontsize=8)
         ax.set_xlim([0, 1])
         ax.set_ylim([0, 1])

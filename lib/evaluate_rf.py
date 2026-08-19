@@ -165,7 +165,8 @@ def main():
         y_pred_proba,
         model.classes_,
         save_path=output_dir / "calibration_curves.svg",
-        title=args.human_readable_title
+        title=args.human_readable_title,
+        color_tsv_path=Path(__file__).resolve().parent.parent / "configs" / "class_colors.tsv"
     )
 
     if not args.enable_mlflow:
