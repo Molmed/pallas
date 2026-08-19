@@ -462,6 +462,10 @@ def plot_per_class_calibration_curves(
         ax.set_xlim([0, 1])
         ax.set_ylim([0, 1])
 
+    for ax in axes:
+        ax.set_aspect("equal", adjustable="box")
+        ax.tick_params(axis="both", labelsize=8)
+
     # Hide unused subplots
     for j in range(i + 1, len(axes)):
         axes[j].set_visible(False)
