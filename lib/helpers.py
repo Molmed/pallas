@@ -431,7 +431,7 @@ def plot_per_class_calibration_curves(
         except Exception as exc:
             print(f"Warning: could not read color TSV at {color_tsv_path}: {exc}. Falling back to line_color.")
 
-    figsize = (8, 10)
+    figsize = (8, 11)
     n_classes = len(classes)
     ncols = 5
     nrows = int(np.ceil(n_classes / ncols))
@@ -460,7 +460,10 @@ def plot_per_class_calibration_curves(
                 color=class_color,
                 linewidth=0.8)
         ax.tick_params(axis="both", labelsize=8, colors='#d3d1c7')
-        ax.set_title(class_label, fontsize=8, color='#444441')
+        ax.set_title(class_label, fontsize=8, color='#444441', pad=12)
+        sample_count = int(np.sum(y_test == class_label))
+        ax.text(0.5, 1.05, f'n={sample_count}', transform=ax.transAxes,
+                ha='center', va='bottom', fontsize=7, color='#888780')
         ax.set_xlim([0, 1])
         ax.set_ylim([0, 1])
         ax.set_xticks([0, 0.5, 1.0])
