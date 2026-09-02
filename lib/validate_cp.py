@@ -40,6 +40,12 @@ def parse_args():
         help=output_dir_help,
     )
     parser.add_argument(
+        "--class_color_tsv_path",
+        type=str,
+        default=None,
+        help="Path to TSV file containing class colors",
+    )
+    parser.add_argument(
         "--min_samples_per_class",
         type=int,
         default=10,
@@ -63,6 +69,7 @@ def parse_args():
 def validate_conformal_prediction(
         predictions_path,
         output_dir,
+        class_color_tsv_path=None,
         min_samples_per_class=10,
         n_runs=1000,
         error_rate_alpha=0.05):
@@ -96,7 +103,7 @@ def validate_conformal_prediction(
 
     mcp = FNRCoP(calpd, alpha=error_rate_alpha)
     trial = mcp.do_validation_trial(n_runs=n_runs)
-    trial.run_reports(output_dir)
+    trial.run_reports(output_dir, class_color_tsv_path=class_color_tsv_path)
 
 
 def main():
@@ -106,10 +113,11 @@ def main():
     n_runs = args.n_runs
     error_rate_alpha = args.error_rate_alpha
     min_samples_per_class = args.min_samples_per_class
-
+    class_color_tsv_path = args.class_color_tsv_path
     validate_conformal_prediction(
         predictions_path,
         output_dir,
+        class_color_tsv_path=class_color_tsv_path,
         min_samples_per_class=min_samples_per_class,
         n_runs=n_runs,
         error_rate_alpha=error_rate_alpha)

@@ -6,3 +6,6 @@ python lib/predict.py \
     --y_path=/home/mariya/Data/pallas/mlomix_datasets/cal-gex/labels.csv \
     --dataset_name="cal-gex" \
     --output_dir=/home/mariya/Development/pallas/reports/output/predictions
+
+# Validate GEX conformal prediction
+python lib/validate_cp.py --predictions_path=/home/mariya/Development/pallas/reports/output/predictions/rf_GEX_20260606_190416/cal-and-test-gex/cal-and-test-gex_predictions.csv --output_dir=/home/mariya/Development/pallas/reports/output/cp/rf_GEX_20260606_190416 --class_color_tsv_path=/home/mariya/Development/pallas/configs/class_colors.tsv > logs/validate_cp_gex.log
