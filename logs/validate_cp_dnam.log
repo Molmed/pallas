@@ -1,0 +1,21 @@
+13 classes under threshold (10 samples): ['B-ALL, BCR::ABL1', 'AML, DEK::NUP214', 'AML, APL-PML::RARA', 'AML, ETV6-r', 'B-ALL, iAMP21', 'B-ALL, BCR::ABL1-like', 'B-ALL, ZNF384-r', 'B-ALL, ETV6::RUNX1-like', 'B-ALL, MEF2D-r', 'AML, PICALM::MLLT10', 'AML, KAT6A-r', 'B-ALL, PAX5 P80R', 'AML, FUS::ERG']
+New dataset has 666 samples and 15 classes.
+New class distribution:
+true_label
+AML, KMT2A-r                103
+B-ALL, high hyperdiploid     98
+B-ALL, ETV6::RUNX1           85
+AML, RUNX1::RUNX1T1          74
+AML, NPM1alt                 56
+AML, CBFB::MYH11             54
+Non-leukemic                 41
+T-ALL                        32
+AML, NUP98-r                 30
+AML, CEBPAalt                23
+B-ALL, PAX5alt               20
+B-ALL, KMT2A-r               19
+B-ALL, TCF3::PBX1            11
+B-ALL, DUX4-r                10
+AML, CBFA2T3::GLIS2          10
+Name: count, dtype: int64
+Reports saved to /home/mariya/Development/pallas/reports/output/cp/rf_DNAm_20260606_193214/ValidationTrial/2026-09-02_16-19-08
