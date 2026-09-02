@@ -31,9 +31,9 @@ modules = [
     "preprocessing.mlomix_pre.Safavi-2015",
 ]
 
-for mod in modules:
-    print(f"\n\n\n*****RUNNING ML_OMIX_PRE FOR DATASET {mod}...*****\n\n")
-    runpy.run_module(mod, run_name="__main__")
+# for mod in modules:
+#     print(f"\n\n\n*****RUNNING ML_OMIX_PRE FOR DATASET {mod}...*****\n\n")
+#     runpy.run_module(mod, run_name="__main__")
 
 # All the samplesheets we will save:
 # - all
@@ -229,24 +229,19 @@ for modality in ["gex", "dnam"]:
 
     # Save the splits
     sample_splits[f'train_{modality}'] = y_train.index
+    sample_splits[f'calibrate_and_test_{modality}'] = y_calib.index.union(y_test.index)
+
+    # Now remove the excluded classes from the calibration set
+    y_calib = y_calib[~y_calib.isin(classes_to_exclude_from_split)]
+    y_test = y_test[~y_test.isin(classes_to_exclude_from_split)]
     sample_splits[f'calibrate_{modality}'] = y_calib.index
     sample_splits[f'test_{modality}'] = y_test.index
 
 # For each sample_split, create entry in samplesheets_to_save with the corresponding samplesheet
 for split_name, indices in sample_splits.items():
-    modality = split_name.split('_')[1]
+    modality = split_name.rsplit('_', 1)[-1]
     samplesheets_to_save[split_name] = samplesheets_to_save[
         f'labeled_diagnostic_{modality}'].loc[indices]
-
-# Now save samplesheets that merge calibrate and test
-samplesheets_to_save['calibrate_and_test_gex'] = pd.concat([
-    samplesheets_to_save['calibrate_gex'],
-    samplesheets_to_save['test_gex'],
-])
-samplesheets_to_save['calibrate_and_test_dnam'] = pd.concat([
-    samplesheets_to_save['calibrate_dnam'],
-    samplesheets_to_save['test_dnam'],
-])
 
 
 # SAVE SAMPLESHEETS
