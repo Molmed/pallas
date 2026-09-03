@@ -1,7 +1,9 @@
 import pandas as pd
 import os
-from conformist import FNRCoP, PredictionDataset
+from conformist import FNRCoP, PredictionDataset, AlphaSelector
 import argparse
+
+from conformal_prediction.cp_gex import OUTPUT_DIR
 
 
 description = """
@@ -104,6 +106,13 @@ def validate_conformal_prediction(
     mcp = FNRCoP(calpd, alpha=error_rate_alpha)
     trial = mcp.do_validation_trial(n_runs=n_runs)
     trial.run_reports(output_dir, class_color_tsv_path=class_color_tsv_path)
+
+    asel = AlphaSelector(calpd,
+                         FNRCoP,
+                         base_output_dir=output_dir,
+                         n_runs_per_alpha=1000)
+    asel.run()
+    asel.run_reports()
 
 
 def main():

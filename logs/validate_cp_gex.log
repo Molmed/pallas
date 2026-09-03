@@ -1,3 +1,34 @@
+Classes in calibration set but not in test set: {'B-ALL, IKZF1 N159Y', 'AML, KAT6A-r', 'B-ALL, MYC-r', 'B-ALL, HLF-r', 'AML, FUS::ERG', 'AML, APL-PML::RARA', 'Non-leukemic', 'B-ALL, NUTM1-r', 'AML, ETV6-r'}
+Calibration set has 703 samples and 32 classes.
+After removing non-overlapping classes, calibration set has 666 samples and 23 classes.
+New class distribution in calibration data:
+true_label
+B-ALL, high hyperdiploid    84
+AML, KMT2A-r                77
+B-ALL, ETV6::RUNX1          69
+B-ALL, BCR::ABL1-like       58
+AML, RUNX1::RUNX1T1         54
+AML, NPM1alt                34
+B-ALL, KMT2A-r              33
+B-ALL, PAX5alt              33
+B-ALL, DUX4-r               26
+T-ALL                       26
+AML, CBFB::MYH11            25
+B-ALL, BCR::ABL1            21
+B-ALL, hypodiploid          19
+B-ALL, TCF3::PBX1           19
+AML, CEBPAalt               17
+AML, NUP98-r                14
+B-ALL, ZNF384-r             12
+B-ALL, ETV6::RUNX1-like     10
+B-ALL, MEF2D-r               9
+B-ALL, iAMP21                8
+AML, DEK::NUP214             7
+AML, CBFA2T3::GLIS2          6
+B-ALL, PAX5 P80R             5
+Name: count, dtype: int64
+Reports saved to /home/mariya/Development/pallas/reports/output/cp/rf_GEX_20260606_190416/ValidationTrial/2026-09-03_14-19-08
+Saving upset plot to /home/mariya/Development/pallas/reports/output/cp/rf_GEX_20260606_190416/FNRCoP/2026-09-03_14-19-10/upset_plot.pdf
 9 classes under threshold (10 samples): ['Non-leukemic', 'AML, APL-PML::RARA', 'B-ALL, NUTM1-r', 'B-ALL, MYC-r', 'AML, KAT6A-r', 'B-ALL, HLF-r', 'AML, ETV6-r', 'B-ALL, IKZF1 N159Y', 'AML, FUS::ERG']
 New dataset has 1332 samples and 23 classes.
 New class distribution:
@@ -26,4 +57,5 @@ AML, DEK::NUP214             13
 B-ALL, PAX5 P80R             11
 AML, CBFA2T3::GLIS2          11
 Name: count, dtype: int64
-Reports saved to /home/mariya/Development/pallas/reports/output/cp/rf_GEX_20260606_190416/ValidationTrial/2026-09-02_16-08-41
+Reports saved to /home/mariya/Development/pallas/reports/output/cp/rf_GEX_20260606_190416/ValidationTrial/2026-09-03_14-19-19
+Reports saved to /home/mariya/Development/pallas/reports/output/cp/rf_GEX_20260606_190416/AlphaSelector/2026-09-03_14-19-22
