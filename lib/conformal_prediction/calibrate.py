@@ -6,7 +6,9 @@ import mlflow
 import dotenv
 import joblib
 import sklearn
-import numpy
+import numpy as np
+import conformist
+from mlflow.models import infer_signature
 
 
 description = """
@@ -98,7 +100,7 @@ def calibrate_conformal_prediction(
     calpd = PredictionDataset(df=preds_cal, dataset_name='cal')
 
     crc = FNRCoP(calpd, alpha=error_rate_alpha)
-    crc.calibrate(output_dir=output_dir)
+    crc.calibrate()
 
     # Dump crc to joblib for later use
     # Save alpha as string with underscores instead of decimal point
@@ -120,10 +122,26 @@ def calibrate_conformal_prediction(
     run_name = f"calibrate_{base_classifier_name}_alpha{str_alpha}"
     pip_requirements = [
         f"scikit-learn=={sklearn.__version__}",
-        f"numpy=={numpy.__version__}",
+        f"numpy=={np.__version__}",
+        f"pandas=={pd.__version__}",
         f"joblib=={joblib.__version__}",
+        "git+https://github.com/Molmed/conformist.git@pallas#egg=conformist",
     ]
     path_to_wrapper = os.path.join(os.path.dirname(__file__), 'crc_model.py')
+
+    feature_names = model.feature_names_in_
+
+    X_example = pd.DataFrame(
+        np.zeros((1, len(feature_names)), dtype=np.float32),
+        columns=feature_names,
+    )
+
+    signature = infer_signature(
+        X_example,
+        [["example"]],
+        params={"error_rate_alpha": 0.05},
+    )
+
     with mlflow.start_run(run_name=run_name):
         base_model_info = mlflow.sklearn.log_model(
             model,
@@ -138,10 +156,9 @@ def calibrate_conformal_prediction(
             python_model=path_to_wrapper,
             artifacts={
                 "base_model": base_model_info.model_uri,
-                "lambdas": os.path.join(output_dir, "lambdas.json"),
-                "classes": os.path.join(output_dir, "class_names.json"),
-
+                "calibration_data": predictions_path,
             },
+            signature=signature,
             pip_requirements=pip_requirements,
         )
 
