@@ -2,60 +2,39 @@ import pandas as pd
 import os
 from preprocessing.taxonomy import Taxonomy
 from preprocessing.constants import \
-    RAW_DATA_DIR, PREPROCESSED_VALIDATION_DATA_DIR
+    RAW_DATA_DIR, PREPROCESSED_VALIDATION_DATA_DIR, \
+    GEX_EXCLUDE_SUBTYPES, MLOMIX_SAMPLESHEETS_DIR
 from preprocessing.helpers import format_mlomix_columns, \
     summarize_patient_details, summarize_modalities
 
 dataset_name = 'ClinicalGenomicsUppsala'
 
 # INPUT FILES ########
-data_path = f'{RAW_DATA_DIR}/{dataset_name}'
+data_path = f'{RAW_DATA_DIR}/validation/{dataset_name}'
 raw_data_path_1 = f'{data_path}/GeneCounts.GMS-Barn.table.csv'
 raw_data_path_2 = f'{data_path}/GeneCounts2.out'
-pheno_input_file = f'{data_path}/UPAL_UMAL_diagnosis info.xlsx'
+pheno_input_file = f'{data_path}/cg_phenotype.csv'
 
 # OUTPUT FILES ########
 preprocessed_dir = f'{PREPROCESSED_VALIDATION_DATA_DIR}/{dataset_name}'
 samplesheet_output_file = \
     f'{preprocessed_dir}/samplesheet.csv'
-details_file = \
-    f'{preprocessed_dir}/patient_details.csv'
 
 # Make processed dir if not exists
 os.makedirs(preprocessed_dir, exist_ok=True)
 
-# PROCESS PHENO ########
-# Load the data
-samplesheet_uppsala_df = pd.read_excel(
-    pheno_input_file,
-    sheet_name='Uppsala_barn',
-    header=2,
-    index_col='Study ID')
-samplesheet_umea_df = pd.read_excel(
-    pheno_input_file,
-    sheet_name='Umeå_barn',
-    header=2,
-    index_col='Study ID')
-
-samplesheet_df = pd.concat([samplesheet_uppsala_df,
-                            samplesheet_umea_df])
-
-details_df = samplesheet_df.copy()
-
-# Keep only index and subtype cols
-samplesheet_df = samplesheet_df.iloc[:, :1]
-
-# Rename columns
-samplesheet_df = samplesheet_df.rename(columns={'Diagnosis': 'class'})
-samplesheet_df.index.name = 'sample'
+# Read in phenotype file
+samplesheet_df = pd.read_csv(pheno_input_file, index_col=0, delimiter=',')
 
 # Get subtype translation
 samplesheet_df.fillna('', inplace=True)
 tax = Taxonomy()
-samplesheet_df['class'] = tax.translate_subtype_column(samplesheet_df['class'])
+samplesheet_df['class'] = tax.translate_subtype_column(
+    samplesheet_df['class'],
+    exclude_subtypes=GEX_EXCLUDE_SUBTYPES)
 
 
-def process_gex_file(raw_data_path, batch_name=None):
+def process_gex_file(raw_data_path):
     # PROCESS GEX ########
     # Break up the gene expression file
     gex_df = pd.read_csv(raw_data_path, index_col=0, delimiter=',')
@@ -68,14 +47,11 @@ def process_gex_file(raw_data_path, batch_name=None):
         output_file = f'{preprocessed_dir}/{col}.txt'
         # Set feature_counts column for this sample in samplesheet_df
         samplesheet_df.loc[col, 'gex_feature_counts_file'] = output_file
-        # Set batch column for this sample in samplesheet_df
-        if batch_name:
-            samplesheet_df.loc[col, 'batch'] = batch_name
         gex_df[[col]].to_csv(output_file, sep='\t', header=False, index=True)
 
 
-process_gex_file(raw_data_path_1, batch_name='batch1')
-process_gex_file(raw_data_path_2, batch_name='batch2')
+process_gex_file(raw_data_path_1)
+process_gex_file(raw_data_path_2)
 
 # Create a new column "pheno_id" which is the index id
 # but removing everything after a dash or underscore
@@ -104,18 +80,9 @@ samplesheet_df = format_mlomix_columns(samplesheet_df)
 # Save the samplesheet
 samplesheet_df.to_csv(samplesheet_output_file)
 
+# Copy samplesheet to mlomix samplesheets dir
+samplesheet_output_file_mlomix = \
+    f'{MLOMIX_SAMPLESHEETS_DIR}/{dataset_name}.csv'
+samplesheet_df.to_csv(samplesheet_output_file_mlomix)
+
 summarize_modalities(samplesheet_df)
-
-# Rename index to sample
-details_df.index.name = 'sample'
-
-# Rename columns
-details_df = details_df.rename(columns={'Sex': 'sex', 'Age': 'age'})
-details_df['sex'] = details_df['sex'].replace({'M': 'Male', 'F': 'Female'})
-details_df['dataset'] = dataset_name
-# Keep just those columns
-details_df = details_df[
-    ['dataset', 'sex', 'age']]
-summarize_patient_details(details_df)
-# Dump to CSV
-details_df.to_csv(details_file)

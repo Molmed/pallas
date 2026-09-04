@@ -37,6 +37,8 @@ class Taxonomy():
             found = False
             if node["name"] == target_name:
                 found = True
+            elif "display_name" in node and node["display_name"] == target_name:
+                found = True
             elif "aliases" in node and target_name in node["aliases"]:
                 found = True
             if found:
