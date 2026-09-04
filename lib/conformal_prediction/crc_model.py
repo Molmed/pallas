@@ -9,21 +9,11 @@ class CRCWrapper(mlflow.pyfunc.PythonModel):
         self.calibration_data = pd.read_csv(context.artifacts["calibration_data"])
 
     def predict(self, context, model_input, params=None):
-        label_names = set(self.calibration_data["true_label"].astype(str))
-
-        probability_columns = [
-            column
-            for column in self.calibration_data.columns
-            if column in label_names
-        ]
-
-        calibration_data = self.calibration_data[
-            ["true_label", "predicted_label", *probability_columns]
-        ].copy()
+        model_input = model_input[self.model.feature_names_in_]
 
         alpha = float((params or {}).get("error_rate_alpha", 0.05))
         calibration_dataset = PredictionDataset(
-            df=calibration_data,
+            df=self.calibration_data.copy(),
             dataset_name="cal",
         )
 
