@@ -1,0 +1,5 @@
+﻿Statistic,Total,Percentage
+Certain sets (size=1),309,92.8%
+Uncertain sets (size >= 2),22,6.6%
+Empty sets (size=0),2,0.6%
+Overall False Negative Rate (FNR),-,4.8%
