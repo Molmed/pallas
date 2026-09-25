@@ -1,0 +1,49 @@
+id,GEX_subtype,GEX_subtype_V2,GEX_subtype_comments
+UMAL001_R,multiclass,T-ALL,Passed control
+UMAL002_R,aneuploidy,iAMP21,Manual check is required
+UMAL003_R,multiclass,KMT2A-r,Passed control
+UMAL004_R,ETV6-group,ETV6::RUNX1,Passed control
+UMAL005_R,aneuploidy,high hyperdiploid,Passed control
+UMAL007_R,multiclass,TCF3::PBX1,Passed control
+UMAL008-1_R,aneuploidy,high hyperdiploid,Passed control
+UMAL008-2_R,aneuploidy,high hyperdiploid,Passed control
+UMAL009_R,aneuploidy,high hyperdiploid,Passed control
+UMAL010_R,ETV6-group,ETV6::RUNX1,Passed control
+UMAL012_R,multiclass,Control,Passed control
+UMAL014_R,T-ALL,T-ALL,Passed control
+UMAL015_R,multiclass,TCF3::PBX1,Passed control
+UMAL016_R,aneuploidy,high hyperdiploid,Passed control
+UMAL017_R,aneuploidy,high hyperdiploid,Passed control
+UMAL019_R,multiclass,ZNF384-r,Passed control
+UMAL020_R,no_class,no_class,No class prediction
+UMAL022_R,ETV6-group,ETV6::RUNX1,Passed control
+UPAL001_R,ETV6-group,ETV6::RUNX1,Manual check is required
+UPAL002_R,no_class,no_class,No class prediction
+UPAL003_R,ETV6-group,ETV6::RUNX1,Passed control
+UPAL004_R,DUX4-r,DUX4-r,Passed control
+UPAL005_R,multiclass,TCF3::PBX1,Passed control
+UPAL006_R,multiclass,PAX5 P80R,Passed control
+UPAL008_R,multiclass,KMT2A-r,Passed control
+UPAL009_R,DUX4-r,DUX4-r,Passed control
+UPAL010_R,ETV6-group,ETV6::RUNX1,Passed control
+UPAL011_R,NUTM1-r,NUTM1-r,Passed control
+UPAL012_R,PAX5alt,PAX5alt,Passed control
+UPAL013_R,multiclass,T-ALL,Passed control
+UPAL014_R,aneuploidy,high hyperdiploid,Passed control
+UPAL015_R,multiclass,PAX5alt,Passed control
+UPAL016_R,aneuploidy,high hyperdiploid,Passed control
+UPAL017_R,PAX5alt,PAX5alt,Passed control
+UPAL018_R,ETV6-group,ETV6::RUNX1,Passed control
+UPAL019_R,multiclass,ZNF384-r,Passed control
+UPAL020_R,ZNF384-r,ZNF384-r,Passed control
+UPAL021_R,multiclass,T-ALL,Passed control
+UPAL022_R,multiclass,PAX5alt,Passed control
+UPAL023_R,DUX4-r,DUX4-r,Passed control
+UPAL024_R,ETV6-group,ETV6::RUNX1,Manual check is required
+UPAL025_R,multiclass,BCR::ABL1,Passed control
+UPAL026_R,ph-group,BCR::ABL1-like,Passed control
+UPAL028_R,ETV6-group,ETV6::RUNX1,Passed control
+UPAL030_R,aneuploidy,iAMP21,Manual check is required
+UPAL031_R,aneuploidy,high hyperdiploid,Passed control
+UPAL032_R,aneuploidy,high hyperdiploid,Passed control
+UPAL033_R,multiclass,T-ALL,Passed control
