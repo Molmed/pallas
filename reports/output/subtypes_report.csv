@@ -1,4 +1,4 @@
-Subtype,Total samples,GEX,DNAm,Bimodal,Mean age (sd),Male/Female
+Subtype,Total samples,GEX,DNAm,Dual-modal,Mean age (sd),Male/Female
 "AML, KMT2A-r",858,514,344,295,7.2 (7.2),277/263
 "AML, RUNX1::RUNX1T1",609,361,248,220,11.9 (6.8),206/174
 "AML, NPM1alt",412,226,186,165,21.9 (19.0),102/129

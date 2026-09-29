@@ -54,9 +54,9 @@ for subtype in unique_subtypes:
     # All samples where 'DNAm data split' is not empty
     dnam_samples = subtype_df[subtype_df['DNAm data split'].notna()].shape[0]
     gex_samples = subtype_df[subtype_df['GEX data split'].notna()].shape[0]
-    bimodal_samples = subtype_df[subtype_df['GEX data split'].notna() & subtype_df['DNAm data split'].notna()].shape[0]
-    if bimodal_samples < MIN_SAMPLES_PER_CLASS:
-        bimodal_samples = 0
+    dualmodal_samples = subtype_df[subtype_df['GEX data split'].notna() & subtype_df['DNAm data split'].notna()].shape[0]
+    if dualmodal_samples < MIN_SAMPLES_PER_CLASS:
+        dualmodal_samples = 0
     total_samples = dnam_samples + gex_samples
     mean_age = subtype_df['age'].mean()
     sd_age = subtype_df['age'].std()
@@ -67,7 +67,7 @@ for subtype in unique_subtypes:
         'Total samples': total_samples,
         'GEX': gex_samples,
         'DNAm': dnam_samples,
-        'Bimodal': bimodal_samples,
+        'Dual-modal': dualmodal_samples,
         'Mean age (sd)': f"{mean_age:.1f} ({sd_age:.1f})",
         'Male/Female': f"{male_female_ratio.get('Male', 0)}/{male_female_ratio.get('Female', 0)}"
     })
@@ -99,7 +99,7 @@ report_df.loc[report_df['Subtype'] == 'Non-leukemic', ['Mean age (sd)', 'Male/Fe
 total_samples = report_df['Total samples'].sum()
 total_dnam_samples = report_df['DNAm'].sum()
 total_gex_samples = report_df['GEX'].sum()
-total_bimodal_samples = report_df['Bimodal'].sum()
+total_dualmodal_samples = report_df['Dual-modal'].sum()
 mean_age = labeled_diagnostic_df['age'].mean()
 sd_age = labeled_diagnostic_df['age'].std()
 male_female_ratio = labeled_diagnostic_df['sex'].value_counts().to_dict()
@@ -108,7 +108,7 @@ report_df = pd.concat([report_df, pd.DataFrame([{
     'Total samples': total_samples,
     'DNAm': total_dnam_samples,
     'GEX': total_gex_samples,
-    'Bimodal': total_bimodal_samples,
+    'Dual-modal': total_dualmodal_samples,
     'Mean age (sd)': f"{mean_age:.1f} ({sd_age:.1f})",
     'Male/Female': f"{male_female_ratio.get('Male', 0)}/{male_female_ratio.get('Female', 0)}"
 }])], ignore_index=True)
