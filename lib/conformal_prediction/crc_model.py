@@ -5,7 +5,10 @@ from conformist import FNRCoP, PredictionDataset
 
 class CRCWrapper(mlflow.pyfunc.PythonModel):
     def load_context(self, context):
-        self.model = mlflow.sklearn.load_model(context.artifacts["base_model"])
+        self.model = mlflow.sklearn.load_model(
+            context.artifacts["base_model"],
+            skops_trusted_types=["sklearn.tree._tree.Tree"]
+        )
         self.calibration_data = pd.read_csv(context.artifacts["calibration_data"])
 
     def predict(self, context, model_input, params=None):
