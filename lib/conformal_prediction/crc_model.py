@@ -1,14 +1,17 @@
 import mlflow
 import pandas as pd
 from conformist import FNRCoP, PredictionDataset
+import skops.io as sio
+from mlflow.models import Model
+import os
 
 
 class CRCWrapper(mlflow.pyfunc.PythonModel):
     def load_context(self, context):
-        self.model = mlflow.sklearn.load_model(
-            context.artifacts["base_model"],
-            skops_trusted_types=["sklearn.tree._tree.Tree"]
-        )
+        local_path = context.artifacts["base_model"]
+        flavor = Model.load(local_path).flavors["sklearn"]
+        model_file = os.path.join(local_path, flavor["pickled_model"])
+        self.model = sio.load(model_file, trusted=["sklearn.tree._tree.Tree"])
         self.calibration_data = pd.read_csv(context.artifacts["calibration_data"])
 
     def predict(self, context, model_input, params=None):

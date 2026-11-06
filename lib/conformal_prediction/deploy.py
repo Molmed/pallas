@@ -86,7 +86,11 @@ def deploy_conformal_prediction(
     with mlflow.start_run(run_name=run_name):
         base_model_info = mlflow.sklearn.log_model(
             model,
-            name=base_classifier_name)
+            name=base_classifier_name,
+            serialization_format="skops",
+            skops_trusted_types=["sklearn.tree._tree.Tree"],
+            signature=signature,
+        )
 
         mlflow.log_param("base_classifier_name", base_classifier_name)
         mlflow.log_param("base_classifier_path", base_classifier_path)
@@ -105,6 +109,7 @@ def deploy_conformal_prediction(
             },
             signature=signature,
             pip_requirements=pip_requirements,
+            registered_model_name=model_name,
         )
 
 
